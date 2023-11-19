@@ -3,7 +3,7 @@ Forked from [SSPanel UIM](https://github.com/Anankke/SSPanel-Uim)
 Web panel for Shadowsocks & ShadowsocksR and V2Ray, based on ss-panel-v3-mod.
 
 ## Requirements
-- ✅ PHP 7.2+
+- ✅ PHP 8.1+
 - ✅ Composer
 - ✅ MariaDB / MySQL
 - ✅ Nginx (or other web server supports PHP-CGI)
@@ -46,7 +46,7 @@ Rename to:
 
 `config/appprofile.php`
 
-Follow the notes and edit it. 
+Follow the notes and edit it.
 
 ### Create Admin User
 `php xcat User createAdmin`
