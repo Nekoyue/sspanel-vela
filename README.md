@@ -65,6 +65,16 @@ php xcat Tool initdownload
 */1 * * * * php /[webroot]/xcat Job CheckJob
 ```
 
+## Development (Linux)
+Rename the example config file to `.config.php`.
+
+```shell
+docker-compose up
+```
+The website will be served at http://localhost:8081
+
+
+
 ## Donate
 
 ### Anankke
