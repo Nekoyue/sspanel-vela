@@ -255,14 +255,6 @@ class Tools
         return substr($origin_text, $begin_pos + strlen($begin_text), $end_pos - $begin_pos - strlen($begin_text));
     }
 
-    public static function is_param_validate($type, $str)
-    {
-        $list = Config::getSupportParam($type);
-        if (in_array($str, $list)) {
-            return true;
-        }
-        return false;
-    }
 
     public static function has_conflict_rule(
         $input_rule,
@@ -387,11 +379,6 @@ class Tools
         return $object;
     }
 
-    public static function checkNoneProtocol($user)
-    {
-        return !($user->method == 'none' && !in_array($user->protocol, Config::getSupportParam('allow_none_protocol')));
-    }
-
     public static function getRealIp($rawIp)
     {
         return str_replace('::ffff:', '', $rawIp);
@@ -404,165 +391,6 @@ class Tools
         }
 
         return ctype_digit($str);
-    }
-
-    public static function v2Array($node)
-    {
-        $server = explode(';', $node);
-        $item = [
-            'host' => '',
-            'path' => '',
-            'tls' => '',
-            'verify_cert' => true
-        ];
-        $item['add'] = $server[0];
-        if ($server[1] == '0' || $server[1] == '') {
-            $item['port'] = 443;
-        } else {
-            $item['port'] = (int)$server[1];
-        }
-        $item['aid'] = (int)$server[2];
-        $item['net'] = 'tcp';
-        $item['headerType'] = 'none';
-        if (count($server) >= 4) {
-            $item['net'] = $server[3];
-            if ($item['net'] == 'ws') {
-                $item['path'] = '/';
-            } elseif ($item['net'] == 'tls') {
-                $item['tls'] = 'tls';
-            }
-            if ($server[4] == 'grpc') {
-                $item['net'] = 'grpc';
-            }
-        }
-        if (count($server) >= 5) {
-            if (in_array($item['net'], array('kcp', 'http', 'mkcp'))) {
-                $item['headerType'] = $server[4];
-            } else {
-                switch ($server[4]) {
-                    case 'ws':
-                        $item['net'] = $server[4];
-                        break;
-                    case 'tls':
-                    case 'xtls':
-                        $item['tls'] = $server[4];
-                        break;
-                }
-            }
-        }
-        if (count($server) >= 6 && $server[5] != '') {
-            $item = array_merge($item, URL::parse_args($server[5]));
-            if (array_key_exists('server', $item)) {
-                $item['add'] = $item['server'];
-                unset($item['server']);
-            }
-            if (array_key_exists('relayserver', $item)) {
-                $item['localserver'] = $item['add'];
-                $item['add'] = $item['relayserver'];
-                unset($item['relayserver']);
-                if ($item['tls'] == 'tls') {
-                    $item['verify_cert'] = false;
-                }
-            }
-            if (array_key_exists('outside_port', $item)) {
-                $item['port'] = (int)$item['outside_port'];
-                unset($item['outside_port']);
-            }
-            if (isset($item['inside_port'])) {
-                unset($item['inside_port']);
-            }
-
-            if (array_key_exists('servicename', $item)) {
-                $item['servicename'] = $item['servicename'];
-            } else {
-                $item['servicename'] = "";
-            }
-
-            if (array_key_exists('enable_xtls', $item)) {
-                $item['enable_xtls'] = $item['enable_xtls'];
-            } else {
-                $item['enable_xtls'] = "";
-            }
-
-            if (array_key_exists('flow', $item)) {
-                $item['flow'] = $item['flow'];
-            } else {
-                $item['flow'] = "xtls-rprx-direct";
-            }
-
-            if (array_key_exists('enable_vless', $item)) {
-                $item['vtype'] = 'vless://';
-            } else {
-                $item['vtype'] = 'vmess://';
-            }
-
-            if (!array_key_exists('sni', $item)) {
-                $item['sni'] = $item['host'];
-            }
-        }
-        return $item;
-    }
-
-    public static function checkTls($node)
-    {
-        $server = self::v2Array($node);
-        return !($server['tls'] == 'tls' && self::is_ip($server['add']));
-    }
-
-    public static function ssv2Array($node)
-    {
-        $server = explode(';', $node);
-        $item = [
-            'host' => 'microsoft.com',
-            'path' => '',
-            'net' => 'ws',
-            'tls' => ''
-        ];
-        $item['add'] = $server[0];
-        if ($server[1] == '0' || $server[1] == '') {
-            $item['port'] = 443;
-        } else {
-            $item['port'] = (int)$server[1];
-        }
-        if (count($server) >= 4) {
-            $item['net'] = $server[3];
-            if ($item['net'] == 'ws') {
-                $item['path'] = '/';
-            } elseif ($item['net'] == 'tls') {
-                $item['tls'] = 'tls';
-            }
-        }
-        if (count($server) >= 5) {
-            if ($server[4] == 'ws') {
-                $item['net'] = 'ws';
-            } elseif ($server[4] == 'tls') {
-                $item['tls'] = 'tls';
-            }
-        }
-        if (count($server) >= 6) {
-            $item = array_merge($item, URL::parse_args($server[5]));
-            if (array_key_exists('server', $item)) {
-                $item['add'] = $item['server'];
-                unset($item['server']);
-            }
-            if (array_key_exists('relayserver', $item)) {
-                $item['add'] = $item['relayserver'];
-                unset($item['relayserver']);
-            }
-            if (array_key_exists('outside_port', $item)) {
-                $item['port'] = (int)$item['outside_port'];
-                unset($item['outside_port']);
-            }
-        }
-        if ($item['net'] == 'obfs') {
-            if (stripos($server[4], 'http') !== false) {
-                $item['obfs'] = 'simple_obfs_http';
-            }
-            if (stripos($server[4], 'tls') !== false) {
-                $item['obfs'] = 'simple_obfs_tls';
-            }
-        }
-        return $item;
     }
 
     public static function OutPort($server, $node_name, $mu_port)

@@ -127,26 +127,6 @@
                                 <input class="form-control maxwidth-edit" id="method" type="text"
                                        value="{$edit_user->method}">
                             </div>
-                            <div class="form-group form-group-label">
-                                <label class="floating-label" for="protocol">自定义协议</label>
-                                <input class="form-control maxwidth-edit" id="protocol" type="text"
-                                       value="{$edit_user->protocol}">
-                            </div>
-                            <div class="form-group form-group-label">
-                                <label class="floating-label" for="protocol_param">自定义协议参数</label>
-                                <input class="form-control maxwidth-edit" id="protocol_param" type="text"
-                                       value="{$edit_user->protocol_param}">
-                            </div>
-                            <div class="form-group form-group-label">
-                                <label class="floating-label" for="obfs">自定义混淆方式</label>
-                                <input class="form-control maxwidth-edit" id="obfs" type="text"
-                                       value="{$edit_user->obfs}">
-                            </div>
-                            <div class="form-group form-group-label">
-                                <label class="floating-label" for="obfs_param">自定义混淆参数</label>
-                                <input class="form-control maxwidth-edit" id="obfs_param" type="text"
-                                       value="{$edit_user->obfs_param}">
-                            </div>
                         </div>
                     </div>
                 </div>
@@ -334,10 +314,6 @@
                     class_expire: $$getValue('class_expire'),
                     expire_in: $$getValue('expire_in'),
                     node_connector: $$getValue('node_connector'),
-                    protocol: $$getValue('protocol'),
-                    protocol_param: $$getValue('protocol_param'),
-                    obfs: $$getValue('obfs'),
-                    obfs_param: $$getValue('obfs_param'),
                 },
                 success: data => {
                     if (data.ret) {

@@ -551,17 +551,9 @@ class Callback
                 [
                     'text'          => '更改加密方式',
                     'callback_data' => 'user.edit.encrypt'
-                ],
-                [
-                    'text'          => '更改协议类型',
-                    'callback_data' => 'user.edit.protocol'
                 ]
             ],
             [
-                [
-                    'text'          => '更改混淆类型',
-                    'callback_data' => 'user.edit.obfs'
-                ],
                 [
                     'text'          => '每日邮件接收',
                     'callback_data' => 'user.edit.sendemail'
@@ -746,47 +738,6 @@ class Callback
                     ),
                 ];
                 break;
-            case 'obfs':
-                // 混淆更改
-                $keyboard = $back;
-                if (isset($CallbackDataExplode[1])) {
-                    if (in_array($CallbackDataExplode[1], Config::getSupportParam('obfs'))) {
-                        $temp = $this->User->setObfs($CallbackDataExplode[1]);
-                        if ($temp['ok'] === true) {
-                            $text = '您当前的协议为：' . $this->User->obfs . PHP_EOL . PHP_EOL . $temp['msg'];
-                        } else {
-                            $text = '发生错误，请重新选择.' . PHP_EOL . PHP_EOL . $temp['msg'];
-                        }
-                    } else {
-                        $text = '发生错误，请重新选择.';
-                    }
-                } else {
-                    $Obfss = [];
-                    foreach (Config::getSupportParam('obfs') as $value) {
-                        $Obfss[] = [
-                            'text'          => $value,
-                            'callback_data' => 'user.edit.obfs|' . $value
-                        ];
-                    }
-                    $Obfss    = array_chunk($Obfss, 1);
-                    $keyboard = [];
-                    foreach ($Obfss as $Obfs) {
-                        $keyboard[] = $Obfs;
-                    }
-                    $keyboard[] = $back[0];
-                    $text       = '您当前的协议为：' . $this->User->obfs;
-                }
-                $sendMessage = [
-                    'text'                     => $text,
-                    'disable_web_page_preview' => false,
-                    'reply_to_message_id'      => null,
-                    'reply_markup'             => json_encode(
-                        [
-                            'inline_keyboard' => $keyboard
-                        ]
-                    ),
-                ];
-                break;
             case 'sendemail':
                 // 每日邮件设置更改
                 $keyboard = [
@@ -883,8 +834,6 @@ class Callback
                 $text .= '端口：' . $this->User->port . PHP_EOL;
                 $text .= '密码：' . $this->User->passwd . PHP_EOL;
                 $text .= '加密：' . $this->User->method . PHP_EOL;
-                $text .= '协议：' . $this->User->protocol . PHP_EOL;
-                $text .= '混淆：' . $this->User->obfs;
                 $sendMessage = [
                     'text'                     => $text,
                     'disable_web_page_preview' => false,
@@ -913,29 +862,9 @@ class Callback
         $keyboard = [
             [
                 [
-                    'text'          => 'SSR 订阅',
-                    'callback_data' => 'user.subscribe|?sub=1'
-                ],
-            ],
-            [
-                [
-                    'text'          => 'SS-Android 订阅',
-                    'callback_data' => 'user.subscribe|?list=ssa'
-                ],
-                [
-                    'text'          => 'V2RayN 订阅',
-                    'callback_data' => 'user.subscribe|?sub=3'
-                ],
-            ],
-            [
-                [
                     'text'          => 'Shadowrocket',
                     'callback_data' => 'user.subscribe|?list=shadowrocket'
                 ],
-                [
-                    'text'          => 'Kitsunebi',
-                    'callback_data' => 'user.subscribe|?list=kitsunebi'
-                ]
             ],
             [
                 [
@@ -951,39 +880,17 @@ class Callback
             ],
             [
                 [
-                    'text'          => 'Surge List',
-                    'callback_data' => 'user.subscribe|?list=surge'
-                ],
-                [
                     'text'          => 'Surge 4',
                     'callback_data' => 'user.subscribe|?surge=4'
                 ],
             ],
             [
                 [
-                    'text'          => 'Surge 2',
-                    'callback_data' => 'user.subscribe|?surge=2'
-                ],
-                [
-                    'text'          => 'Surge 3',
-                    'callback_data' => 'user.subscribe|?surge=3'
-                ],
-            ],
-            [
-                [
-                    'text'          => 'Quantumult',
-                    'callback_data' => 'user.subscribe|?list=quantumult'
-                ],
-                [
                     'text'          => 'QuantumultX',
                     'callback_data' => 'user.subscribe|?list=quantumultx'
                 ],
             ],
             [
-                [
-                    'text'          => 'Quantumult Conf',
-                    'callback_data' => 'user.subscribe|?quantumult=3'
-                ],
                 [
                     'text'          => 'Surfboard',
                     'callback_data' => 'user.subscribe|?surfboard=1'
@@ -1038,57 +945,6 @@ class Callback
                     $filepath     = BASE_PATH . '/storage/SendTelegram/' . $filename;
                     $fh           = fopen($filepath, 'w+');
                     $string       = LinkController::getClash($this->User, 1, [], []);
-                    fwrite($fh, $string);
-                    fclose($fh);
-                    $this->bot->sendDocument(
-                        [
-                            'chat_id'  => $this->ChatID,
-                            'document' => $filepath,
-                            'caption'  => $temp['text'],
-                        ]
-                    );
-                    unlink($filepath);
-                    break;
-                case '?quantumult=3':
-                    $temp['text'] = '点击打开配置文件，选择分享 拷贝到 Quantumult，选择更新配置.';
-                    $filename     = 'Quantumult_' . $token . '_' . time() . '.conf';
-                    $filepath     = BASE_PATH . '/storage/SendTelegram/' . $filename;
-                    $fh           = fopen($filepath, 'w+');
-                    $string       = LinkController::GetQuantumult($this->User, 3, [], []);
-                    fwrite($fh, $string);
-                    fclose($fh);
-                    $this->bot->sendDocument(
-                        [
-                            'chat_id'  => $this->ChatID,
-                            'document' => $filepath,
-                            'caption'  => $temp['text'],
-                        ]
-                    );
-                    unlink($filepath);
-                    break;
-                case '?surge=2':
-                    $temp['text'] = '点击打开配置文件，选择分享 拷贝到 Surge，点击启动.';
-                    $filename     = 'Surge_' . $token . '_' . time() . '.conf';
-                    $filepath     = BASE_PATH . '/storage/SendTelegram/' . $filename;
-                    $fh           = fopen($filepath, 'w+');
-                    $string       = LinkController::getSurge($this->User, 2, [], []);
-                    fwrite($fh, $string);
-                    fclose($fh);
-                    $this->bot->sendDocument(
-                        [
-                            'chat_id'  => $this->ChatID,
-                            'document' => $filepath,
-                            'caption'  => $temp['text'],
-                        ]
-                    );
-                    unlink($filepath);
-                    break;
-                case '?surge=3':
-                    $temp['text'] = '点击打开配置文件，选择分享 拷贝到 Surge，点击启动.';
-                    $filename     = 'Surge_' . $token . '_' . time() . '.conf';
-                    $filepath     = BASE_PATH . '/storage/SendTelegram/' . $filename;
-                    $fh           = fopen($filepath, 'w+');
-                    $string       = LinkController::getSurge($this->User, 3, [], []);
                     fwrite($fh, $string);
                     fclose($fh);
                     $this->bot->sendDocument(

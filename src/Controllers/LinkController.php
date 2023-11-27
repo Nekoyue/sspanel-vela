@@ -151,7 +151,7 @@ class LinkController extends BaseController
 
         $getBody = '';
 
-        $sub_type_array = ['list', 'clash', 'surge', 'surfboard','anxray', 'quantumult', 'quantumultx', 'sub'];
+        $sub_type_array = ['list', 'clash', 'surge', 'surfboard', 'quantumultx', 'sub'];
         foreach ($sub_type_array as $key) {
             if (isset($opts[$key])) {
                 $query_value = $opts[$key];
@@ -204,32 +204,8 @@ class LinkController extends BaseController
     public static function getSubscribeExtend($type, $value = null)
     {
         switch ($type) {
-            case 'ss':
-                $return = [
-                    'filename' => 'SS',
-                    'suffix'   => 'txt',
-                    'class'    => 'Sub'
-                ];
-                break;
-            case 'ssa':
-                $return = [
-                    'filename' => 'SSA',
-                    'suffix'   => 'json',
-                    'class'    => 'Lists'
-                ];
-                break;
-            case 'ssr':
-                $return = [
-                    'filename' => 'SSR',
-                    'suffix'   => 'txt',
-                    'class'    => 'Sub'
-                ];
-                break;
             case 'sub':
                 $strArray = [
-                    1 => 'ssr',
-                    2 => 'ss',
-                    3 => 'v2rayn',
                     4 => 'trojan',
                 ];
                 $str = (!in_array($value, $strArray) ? $strArray[$value] : $strArray[1]);
@@ -263,32 +239,11 @@ class LinkController extends BaseController
                     ];
                 }
                 break;
-            case 'v2rayn':
-                $return = [
-                    'filename' => 'V2RayN',
-                    'suffix'   => 'txt',
-                    'class'    => 'Sub'
-                ];
-                break;
             case 'trojan':
                 $return = [
                     'filename' => 'Trojan',
                     'suffix'   => 'txt',
                     'class'    => 'Sub'
-                ];
-                break;
-            case 'kitsunebi':
-                $return = [
-                    'filename' => 'Kitsunebi',
-                    'suffix'   => 'txt',
-                    'class'    => 'Lists'
-                ];
-                break;
-            case 'anxray':
-                $return = [
-                    'filename' => 'AnXray',
-                    'suffix'   => 'txt',
-                    'class'    => 'AnXray'
                 ];
                 break;
             case 'surfboard':
@@ -297,21 +252,6 @@ class LinkController extends BaseController
                     'suffix'   => 'conf',
                     'class'    => 'Surfboard'
                 ];
-                break;
-            case 'quantumult':
-                if ($value !== null) {
-                    if ((int) $value == 2) {
-                        $return = self::getSubscribeExtend('quantumult_sub');
-                    } else {
-                        $return = self::getSubscribeExtend('quantumult_conf');
-                    }
-                } else {
-                    $return = [
-                        'filename' => 'Quantumult',
-                        'suffix'   => 'conf',
-                        'class'    => 'Lists'
-                    ];
-                }
                 break;
             case 'quantumultx':
                 $return = [
@@ -335,20 +275,6 @@ class LinkController extends BaseController
                     'filename' => 'ClashProvider',
                     'suffix'   => 'yaml',
                     'class'    => 'Lists'
-                ];
-                break;
-            case 'quantumult_sub':
-                $return = [
-                    'filename' => 'QuantumultSub',
-                    'suffix'   => 'conf',
-                    'class'    => 'Quantumult'
-                ];
-                break;
-            case 'quantumult_conf':
-                $return = [
-                    'filename' => 'QuantumultConf',
-                    'suffix'   => 'conf',
-                    'class'    => 'Quantumult'
                 ];
                 break;
             default:
@@ -436,28 +362,14 @@ class LinkController extends BaseController
         $return_info = [
             'link'            => '',
             // sub
-            'ss'              => '?sub=2',
-            'ssr'             => '?sub=1',
-            'v2ray'           => '?sub=3',
             'trojan'          => '?sub=4',
             // apps
-            'ssa'             => '?list=ssa',
-            'anxray'          => '?anxray=1',
             'clash'           => '?clash=1',
             'clash_provider'  => '?list=clash',
-            'surge'           => '?surge=' . $int,
             'surge_node'      => '?list=surge',
-            'surge2'          => '?surge=2',
-            'surge3'          => '?surge=3',
             'surge4'          => '?surge=4',
             'surfboard'       => '?surfboard=1',
-            'quantumult'      => '?quantumult=' . $int,
-            'quantumult_v2'   => '?list=quantumult',
-            'quantumult_sub'  => '?quantumult=2',
-            'quantumult_conf' => '?quantumult=3',
             'quantumultx'     => '?list=quantumultx',
-            'shadowrocket'    => '?list=shadowrocket',
-            'kitsunebi'       => '?list=kitsunebi'
         ];
 
         return array_map(
@@ -472,35 +384,14 @@ class LinkController extends BaseController
     {
         $return = null;
         switch ($list) {
-            case 'ss':
-                $return = AppURI::getItemUrl($item, 1);
-                break;
-            case 'ssr':
-                $return = AppURI::getItemUrl($item, 0);
-                break;
-            case 'ssa':
-                $return = AppURI::getSSJSON($item);
-                break;
-            case 'anxray':
-                $return = AppURI::getAnXrayURI($item);
-                break;
             case 'surge':
                 $return = AppURI::getSurgeURI($item, 3);
                 break;
             case 'clash':
                 $return = AppURI::getClashURI($item);
                 break;
-            case 'v2rayn':
-                $return = AppURI::getV2RayNURI($item);
-                break;
             case 'trojan':
                 $return = AppURI::getTrojanURI($item);
-                break;
-            case 'kitsunebi':
-                $return = AppURI::getKitsunebiURI($item);
-                break;
-            case 'quantumult':
-                $return = AppURI::getQuantumultURI($item, true);
                 break;
             case 'quantumultx':
                 $return = AppURI::getQuantumultXURI($item);
@@ -515,12 +406,6 @@ class LinkController extends BaseController
     public static function getLists($user, $list, $opts, $Rule)
     {
         $list = strtolower($list);
-        if ($list == 'ssa') {
-            $Rule['type'] = 'ss';
-        }
-        if ($list == 'quantumult') {
-            $Rule['type'] = 'vmess';
-        }
         if ($list == 'shadowrocket') {
             // Shadowrocket 自带 emoji
             $Rule['emoji'] = false;
@@ -529,7 +414,6 @@ class LinkController extends BaseController
         $return = [];
         if ($Rule['extend'] === true) {
             switch ($list) {
-                case 'ssa':
                 case 'clash':
                     $return = array_merge($return, self::getListExtend($user, $list));
                     break;
@@ -545,13 +429,8 @@ class LinkController extends BaseController
             }
         }
         switch ($list) {
-            case 'ssa':
-                return json_encode($return, 320);
-                break;
             case 'clash':
                 return \Symfony\Component\Yaml\Yaml::dump(['proxies' => $return], 4, 2);
-            case 'kitsunebi':
-            case 'quantumult':
             case 'shadowrocket':
                 return base64_encode(implode(PHP_EOL, $return));
             default:
@@ -580,7 +459,7 @@ class LinkController extends BaseController
             $unusedTraffic  = '账户已过期，请续费后使用';
             $expire_in      = '账户已过期，请续费后使用';
         }
-        if (!in_array($list, ['quantumult', 'quantumultx', 'shadowrocket'])) {
+        if (!in_array($list, ['quantumultx', 'shadowrocket'])) {
             $info_array[] = $unusedTraffic;
             $info_array[] = $expire_in;
         }
@@ -601,10 +480,6 @@ class LinkController extends BaseController
             'host'            => '',
             'path'            => '/',
             'tls'             => '',
-            'protocol'        => 'origin',
-            'protocol_param'  => '',
-            'obfs'            => 'plain',
-            'obfs_param'      => '',
             'group'           => $_ENV['appName']
         ];
         if ($list == 'shadowrocket') {
@@ -612,19 +487,11 @@ class LinkController extends BaseController
         }
         foreach ($info_array as $remark) {
             $Extend['remark'] = $remark;
-            if (in_array($list, ['kitsunebi', 'quantumult', 'v2rayn'])) {
-                $Extend['type'] = 'vmess';
-                $out = self::getListItem($Extend, $list);
-            } elseif ($list == 'trojan') {
+            if ($list == 'trojan') {
                 $Extend['type'] = 'trojan';
                 $out = self::getListItem($Extend, $list);
-            } elseif ($list == 'ssr') {
-                $Extend['type'] = 'ssr';
-                $out = self::getListItem($Extend, $list);
-            } else {
-                $Extend['type'] = 'ss';
-                $out = self::getListItem($Extend, $list);
             }
+
             if ($out !== null) $return[] = $out;
         }
         return $return;
@@ -644,9 +511,7 @@ class LinkController extends BaseController
     {
         $subInfo = self::getSubinfo($user, $surge);
         $userapiUrl = $subInfo['surge'];
-        if ($surge != 4) {
-            $Rule['type'] = 'ss';
-        }
+
         $items = URL::getNew_AllItems($user, $Rule);
         $Nodes = [];
         $All_Proxy = '';
@@ -666,74 +531,6 @@ class LinkController extends BaseController
         }
 
         return ConfGenerate::getSurgeConfs($user, $All_Proxy, $Nodes, $_ENV[$variable][$Profiles]);
-    }
-
-    /**
-     * Quantumult 配置
-     *
-     * @param User  $user       用户
-     * @param int   $quantumult 订阅类型
-     * @param array $opts       request
-     * @param array $Rule       节点筛选规则
-     *
-     * @return string
-     */
-    public static function getQuantumult($user, $quantumult, $opts, $Rule)
-    {
-        switch ($quantumult) {
-            case 2:
-                $subUrl = self::getSubinfo($user, 0);
-                $str = [
-                    '[SERVER]',
-                    '',
-                    '[SOURCE]',
-                    $_ENV['appName'] . ', server ,' . $subUrl['ssr'] . ', false, true, false',
-                    $_ENV['appName'] . '_ss, server ,' . $subUrl['ss'] . ', false, true, false',
-                    $_ENV['appName'] . '_VMess, server ,' . $subUrl['quantumult_v2'] . ', false, true, false',
-                    'Hackl0us Rules, filter, https://raw.githubusercontent.com/Hackl0us/Surge-Rule-Snippets/master/LAZY_RULES/Quantumult.conf, true',
-                    '',
-                    '[DNS]',
-                    'system, 119.29.29.29, 223.6.6.6, 114.114.114.114',
-                    '',
-                    '[STATE]',
-                    'STATE,AUTO'
-                ];
-                return implode(PHP_EOL, $str);
-                break;
-            case 3:
-                $items = URL::getNew_AllItems($user, $Rule);
-                break;
-            default:
-                return self::getLists($user, 'quantumult', $opts, $Rule);
-                break;
-        }
-
-        $All_Proxy          = '';
-        $All_Proxy_name     = '';
-        $BackChina_name     = '';
-        foreach ($items as $item) {
-            $out = AppURI::getQuantumultURI($item);
-            if ($out !== null) {
-                $All_Proxy .= $out . PHP_EOL;
-                if (strpos($item['remark'], '回国') || strpos($item['remark'], 'China')) {
-                    $BackChina_name .= "\n" . $item['remark'];
-                } else {
-                    $All_Proxy_name .= "\n" . $item['remark'];
-                }
-            }
-        }
-        $ProxyGroups = [
-            'proxy_group'       => base64_encode("🍃 Proxy  :  static, 🏃 Auto\n🏃 Auto\n🚀 Direct\n" . $All_Proxy_name),
-            'domestic_group'    => base64_encode("🍂 Domestic  :  static, 🚀 Direct\n🚀 Direct\n🍃 Proxy\n" . $BackChina_name),
-            'others_group'      => base64_encode("☁️ Others  :   static, 🍃 Proxy\n🚀 Direct\n🍃 Proxy"),
-            'direct_group'      => base64_encode("🚀 Direct : static, DIRECT\nDIRECT"),
-            'apple_group'       => base64_encode("🍎 Only  :  static, 🚀 Direct\n🚀 Direct\n🍃 Proxy"),
-            'auto_group'        => base64_encode("🏃 Auto  :  auto\n" . $All_Proxy_name),
-        ];
-        $render = ConfRender::getTemplateRender();
-        $render->assign('All_Proxy', $All_Proxy)->assign('ProxyGroups', $ProxyGroups);
-
-        return $render->fetch('quantumult/quantumult.tpl');
     }
 
     /**
@@ -832,7 +629,7 @@ class LinkController extends BaseController
         return base64_encode($All_Proxy);
     }
     /**
-     * 通用订阅，ssr & v2rayn
+     * 通用订阅
      *
      * @param User   $user 用户
      * @param int    $sub  订阅类型
@@ -845,21 +642,9 @@ class LinkController extends BaseController
     {
         $return_url = '';
         switch ($sub) {
-            case 2: // SS
-                $Rule['type'] = 'ss';
-                $getListExtend = $Rule['extend'] ? self::getListExtend($user, 'ss') : [];
-                break;
-            case 3: // V2
-                $Rule['type'] = 'vmess';
-                $getListExtend = $Rule['extend'] ? self::getListExtend($user, 'v2rayn') : [];
-                break;
             case 4: // Trojan
                 $Rule['type'] = 'trojan';
                 $getListExtend = $Rule['extend'] ? self::getListExtend($user, 'trojan') : [];
-                break;
-            default: // SSR
-                $Rule['type'] = 'ssr';
-                $getListExtend = $Rule['extend'] ? self::getListExtend($user, 'ssr') : [];
                 break;
         }
         if ($Rule['extend']) {

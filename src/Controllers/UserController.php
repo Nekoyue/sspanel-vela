@@ -18,7 +18,6 @@ use App\Models\{
     Token,
     Bought,
     Coupon,
-    Product,
     Payback,
     BlockIp,
     LoginIp,
@@ -29,7 +28,6 @@ use App\Models\{
     InviteCode,
     StreamMedia,
     EmailVerify,
-    ProductOrder,
     UserSubscribeLog
 };
 use App\Utils\{
@@ -41,7 +39,6 @@ use App\Utils\{
     Tools,
     Cookie,
     Telegram,
-    ClientProfiles,
     DatatablesHelper,
     TelegramSessionManager
 };
@@ -512,16 +509,16 @@ class UserController extends BaseController
         $results = [];
         $db = new DatatablesHelper;
         $nodes = $db->query('SELECT DISTINCT node_id FROM stream_media');
-        
+
         foreach ($nodes as $node_id)
         {
             $node = Node::where('id', $node_id)->first();
-            
+
             $unlock = StreamMedia::where('node_id', $node_id)
             ->orderBy('id', 'desc')
             ->where('created_at', '>', time() - 86460) // 只获取最近一天零一分钟内上报的数据
             ->first();
-            
+
             if ($unlock != null && $node != null) {
                 $details = json_decode($unlock->result, true);
                 $details = str_replace('Originals Only', '仅限自制', $details);
@@ -535,7 +532,7 @@ class UserController extends BaseController
                         'unlock_item' => $details
                     ];
                 }
-                
+
                 array_push($results, $info);
             }
         }
@@ -553,20 +550,20 @@ class UserController extends BaseController
                     $details = json_decode($value_node->result, true);
                     $details = str_replace('Originals Only', '仅限自制', $details);
                     $details = str_replace('Oversea Only', '仅限海外', $details);
-                    
+
                     $info = [
                         'node_name' => $key_node->name,
                         'created_at' => $value_node->created_at,
                         'unlock_item' => $details
                     ];
-                    
+
                     array_push($results, $info);
                 }
            }
         }
 
         array_multisort(array_column($results, 'node_name'), SORT_ASC, $results);
-        
+
         return $this->view()
             ->assign('results', $results)
             ->display('user/media.tpl');
@@ -1257,74 +1254,6 @@ class UserController extends BaseController
         return $response->withJson($res);
     }
 
-    /**
-     * @param Request   $request
-     * @param Response  $response
-     * @param array     $args
-     */
-    public function updateSSR($request, $response, $args)
-    {
-        $protocol = $request->getParam('protocol');
-        $obfs = $request->getParam('obfs');
-        $obfs_param = $request->getParam('obfs_param');
-        $obfs_param = trim($obfs_param);
-
-        $user = $this->user;
-
-        if ($obfs == '' || $protocol == '') {
-            $res['ret'] = 0;
-            $res['msg'] = '非法输入';
-            return $response->withJson($res);
-        }
-
-        if (!Tools::is_param_validate('obfs', $obfs)) {
-            $res['ret'] = 0;
-            $res['msg'] = '混淆无效';
-            return $response->withJson($res);
-        }
-
-        if (!Tools::is_param_validate('protocol', $protocol)) {
-            $res['ret'] = 0;
-            $res['msg'] = '协议无效';
-            return $response->withJson($res);
-        }
-
-        $antiXss = new AntiXSS();
-
-        $user->protocol = $antiXss->xss_clean($protocol);
-        $user->obfs = $antiXss->xss_clean($obfs);
-        $user->obfs_param = $antiXss->xss_clean($obfs_param);
-
-        if (!Tools::checkNoneProtocol($user)) {
-            $res['ret'] = 0;
-            $res['msg'] = '系统检测到您目前的加密方式为 none ，但您将要设置为的协议并不在以下协议<br>' . implode(',', Config::getSupportParam('allow_none_protocol')) . '<br>之内，请您先修改您的加密方式，再来修改此处设置。';
-            return $response->withJson($res);
-        }
-
-        if (!URL::SSCanConnect($user) && !URL::SSRCanConnect($user)) {
-            $res['ret'] = 0;
-            $res['msg'] = '您这样设置之后，就没有客户端能连接上了，所以系统拒绝了您的设置，请您检查您的设置之后再进行操作。';
-            return $response->withJson($res);
-        }
-
-        $user->save();
-
-        if (!URL::SSCanConnect($user)) {
-            $res['ret'] = 1;
-            $res['msg'] = '设置成功，但您目前的协议，混淆，加密方式设置会导致 Shadowsocks原版客户端无法连接，请您自行更换到 ShadowsocksR 客户端。';
-            return $response->withJson($res);
-        }
-
-        if (!URL::SSRCanConnect($user)) {
-            $res['ret'] = 1;
-            $res['msg'] = '设置成功，但您目前的协议，混淆，加密方式设置会导致 ShadowsocksR 客户端无法连接，请您自行更换到 Shadowsocks 客户端。';
-            return $response->withJson($res);
-        }
-
-        $res['ret'] = 1;
-        $res['msg'] = '设置成功，您可自由选用客户端来连接。';
-        return $response->withJson($res);
-    }
 
     /**
      * @param Request   $request
@@ -1689,37 +1618,6 @@ class UserController extends BaseController
     }
 
     /**
-     * @param Request   $request
-     * @param Response  $response
-     * @param array     $args
-     */
-    public function getUserAllURL($request, $response, $args)
-    {
-        $user = $this->user;
-        $type = $request->getQueryParams()["type"];
-        $return = '';
-        switch ($type) {
-            case 'ss':
-                $return .= URL::get_NewAllUrl($user, ['type' => 'ss']) . PHP_EOL;
-                break;
-            case 'ssr':
-                $return .= URL::get_NewAllUrl($user, ['type' => 'ssr']) . PHP_EOL;
-                break;
-            case 'v2ray':
-                $return .= URL::get_NewAllUrl($user, ['type' => 'vmess']) . PHP_EOL;
-                break;
-            default:
-                $return .= '悟空别闹！';
-                break;
-        }
-        $response = $response->withHeader('Content-type', ' application/octet-stream; charset=utf-8')
-            ->withHeader('Cache-Control', 'no-store, no-cache, must-revalidate')
-            ->withHeader('Content-Disposition', ' attachment; filename=node.txt');
-
-        return $response->write($return);
-    }
-
-    /**
      * 订阅记录
      *
      * @param Request  $request
@@ -1761,18 +1659,6 @@ class UserController extends BaseController
         // 客户端文件存放路径
         $client_path = BASE_PATH . '/resources/clients/';
         switch ($type) {
-            case 'ss-win':
-                $user_config_file_name = 'gui-config.json';
-                $content = ClientProfiles::getSSPcConf($this->user);
-                break;
-            case 'ssr-win':
-                $user_config_file_name = 'gui-config.json';
-                $content = ClientProfiles::getSSRPcConf($this->user);
-                break;
-            case 'v2rayn-win':
-                $user_config_file_name = 'guiNConfig.json';
-                $content = ClientProfiles::getV2RayNPcConf($this->user);
-                break;
             default:
                 return 'gg';
         }

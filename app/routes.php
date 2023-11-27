@@ -61,7 +61,6 @@ return function (SlimApp $app) {
         $this->post('/password',                App\Controllers\UserController::class . ':updatePassword');
         $this->post('/send',                    App\Controllers\AuthController::class . ':sendVerify');
         $this->post('/wechat',                  App\Controllers\UserController::class . ':updateWechat');
-        $this->post('/ssr',                     App\Controllers\UserController::class . ':updateSSR');
         $this->post('/theme',                   App\Controllers\UserController::class . ':updateTheme');
         $this->post('/mail',                    App\Controllers\UserController::class . ':updateMail');
         $this->post('/sspwd',                   App\Controllers\UserController::class . ':updateSsPwd');
@@ -94,9 +93,6 @@ return function (SlimApp $app) {
 
         // 订阅记录
         $this->get('/subscribe_log',            App\Controllers\UserController::class . ':subscribe_log');
-
-        // getUserAllURL
-        $this->get('/getUserAllURL',            App\Controllers\UserController::class . ':getUserAllURL');
 
         // getPcClient
         $this->get('/getPcClient',              App\Controllers\UserController::class . ':getPcClient');
@@ -178,13 +174,13 @@ return function (SlimApp $app) {
         $this->delete('/bought',                App\Controllers\Admin\ShopController::class . ':deleteBoughtGet');
         $this->post('/bought/ajax',             App\Controllers\Admin\ShopController::class . ':ajax_bought');
 
-        // Product
-        $this->get('/product',                  App\Controllers\Admin\ProductController::class . ':index');
-        $this->get('/product/create',           App\Controllers\Admin\ProductController::class . ':create');
-        $this->post('/product',                 App\Controllers\Admin\ProductController::class . ':save');
-        $this->get('/product/{id}/edit',        App\Controllers\Admin\ProductController::class . ':edit');
-        $this->put('/product/{id}',             App\Controllers\Admin\ProductController::class . ':update');
-        $this->delete('/product/{id}',          App\Controllers\Admin\ProductController::class . ':delete');
+//        // Product
+//        $this->get('/product',                  App\Controllers\Admin\ProductController::class . ':index');
+//        $this->get('/product/create',           App\Controllers\Admin\ProductController::class . ':create');
+//        $this->post('/product',                 App\Controllers\Admin\ProductController::class . ':save');
+//        $this->get('/product/{id}/edit',        App\Controllers\Admin\ProductController::class . ':edit');
+//        $this->put('/product/{id}',             App\Controllers\Admin\ProductController::class . ':update');
+//        $this->delete('/product/{id}',          App\Controllers\Admin\ProductController::class . ':delete');
 
         // Ann Mange
         $this->get('/announcement',             App\Controllers\Admin\AnnController::class . ':index');

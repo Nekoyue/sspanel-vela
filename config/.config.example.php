@@ -64,8 +64,8 @@ $_ENV['random_group']              = '0';                       //注册时随�
 $_ENV['enable_reg_im']             = false;                      //注册时是否要求用户输入IM联系方式
 
 $_ENV['reg_forbidden_ip']          = '127.0.0.0/8,::1/128';     //注册时默认禁止访问IP列表，半角英文逗号分割
-$_ENV['min_port']                  = 10000;                     //用户端口池最小值，如果该数值为0则用户在注册的时候不会被分配多用户端口，适合纯V2Ray/Trojan机场
-$_ENV['max_port']                  = 65535;                     //用户端口池最大值，如果该数值为0则用户在注册的时候不会被分配多用户端口，适合纯V2Ray/Trojan机场
+$_ENV['min_port'] = 10000;                     //用户端口池最小值，如果该数值为0则用户在注册的时候不会被分配多用户端口，适合纯 Trojan 机场
+$_ENV['max_port'] = 65535;                     //用户端口池最大值，如果该数值为0则用户在注册的时候不会被分配多用户端口，适合纯 Trojan 机场
 $_ENV['reg_forbidden_port']        = '';                        //注册时默认禁止访问端口列表，半角英文逗号分割，支持端口段
 
 $_ENV['mu_suffix']                 = 'microsoft.com';           //单端口多用户混淆参数后缀，可以随意修改，但请保持前后端一致
@@ -207,10 +207,6 @@ $_ENV['remark_user_option_port']            = ['端口'];                     //
 $_ENV['remark_user_option_transfer_enable'] = ['流量'];                     //用户搜索字段 transfer_enable 的别名，可多个，格式为 PHP 数组
 $_ENV['remark_user_option_passwd']          = ['连接密码'];                 //用户搜索字段 passwd 的别名，可多个，格式为 PHP 数组
 $_ENV['remark_user_option_method']          = ['加密'];                     //用户搜索字段 method 的别名，可多个，格式为 PHP 数组
-$_ENV['remark_user_option_protocol']        = ['协议'];                     //用户搜索字段 protocol 的别名，可多个，格式为 PHP 数组
-$_ENV['remark_user_option_protocol_param']  = ['协参', '协议参数'];         //用户搜索字段 protocol_param 的别名，可多个，格式为 PHP 数组
-$_ENV['remark_user_option_obfs']            = ['混淆'];                     //用户搜索字段 obfs 的别名，可多个，格式为 PHP 数组
-$_ENV['remark_user_option_obfs_param']      = ['混参', '混淆参数'];         //用户搜索字段 obfs_param 的别名，可多个，格式为 PHP 数组
 $_ENV['remark_user_option_invite_num']      = ['邀请数量'];                 //用户搜索字段 invite_num 的别名，可多个，格式为 PHP 数组
 $_ENV['remark_user_option_node_group']      = ['用户组', '用户分组'];       //用户搜索字段 node_group 的别名，可多个，格式为 PHP 数组
 $_ENV['remark_user_option_class']           = ['等级'];                     //用户搜索字段 class 的别名，可多个，格式为 PHP 数组
@@ -278,11 +274,6 @@ $_ENV['enable_offline_mail_notify']      = -1;                                  
 #离线检测是否推送到Server酱 请配置好上文的Server配置
 $_ENV['enable_detect_offline_useScFtqq'] = false;
 
-//V2Ray相关设置------------------------------------------------------------------------------------------
-$_ENV['v2ray_port']     = 443;                  //V2Ray端口
-$_ENV['v2ray_protocol'] = 'HTTP/2 + TLS';       //V2Ray协议
-$_ENV['v2ray_alter_id'] = 32;
-$_ENV['v2ray_level']    = 0;
 
 //以下所有均为高级设置（一般用不上，不用改---------------------------------------------------------------------
 

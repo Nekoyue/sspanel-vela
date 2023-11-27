@@ -54,9 +54,6 @@ class UserController extends AdminController
             'passwd'                => '连接密码',
             'port'                  => '连接端口',
             'method'                => '加密方式',
-            'protocol'              => '连接协议',
-            'obfs'                  => '混淆方式',
-            'obfs_param'            => '混淆参数',
             'online_ip_count'       => '在线IP数',
             'last_ss_time'          => '上次使用时间',
             'used_traffic'          => '已用流量/GB',
@@ -123,10 +120,6 @@ class UserController extends AdminController
         $user->u                    = 0;
         $user->d                    = 0;
         $user->method               = $configs['sign_up_for_method'];
-        $user->protocol             = $configs['sign_up_for_protocol'];
-        $user->protocol_param       = $configs['sign_up_for_protocol_param'];
-        $user->obfs                 = $configs['sign_up_for_obfs'];
-        $user->obfs_param           = $configs['sign_up_for_obfs_param'];
         $user->forbidden_ip         = $_ENV['reg_forbidden_ip'];
         $user->forbidden_port       = $_ENV['reg_forbidden_port'];
         $user->im_type              = 2;
@@ -239,10 +232,6 @@ class UserController extends AdminController
         $user->addMoneyLog($request->getParam('money') - $user->money);
 
         $user->passwd           = $request->getParam('passwd');
-        $user->protocol         = $request->getParam('protocol');
-        $user->protocol_param   = $request->getParam('protocol_param');
-        $user->obfs             = $request->getParam('obfs');
-        $user->obfs_param       = $request->getParam('obfs_param');
         $user->is_multi_user    = $request->getParam('is_multi_user');
         $user->transfer_enable  = Tools::toGB($request->getParam('transfer_enable'));
         $user->invite_num       = $request->getParam('invite_num');
@@ -406,9 +395,6 @@ class UserController extends AdminController
             $tempdata['passwd']                 = $value->passwd;
             $tempdata['port']                   = $value->port;
             $tempdata['method']                 = $value->method;
-            $tempdata['protocol']               = $value->protocol;
-            $tempdata['obfs']                   = $value->obfs;
-            $tempdata['obfs_param']             = $value->obfs_param;
             $tempdata['online_ip_count']        = $value->online_ip_count();
             $tempdata['last_ss_time']           = $value->lastSsTime();
             $tempdata['used_traffic']           = Tools::flowToGB($value->u + $value->d);

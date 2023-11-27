@@ -5,7 +5,6 @@ title: "[BUG]"
 
 ---
 
-<!--请不要提交任何关于 V2Ray 后端的 issue，V2Ray 并不是官方支持，有任何问题请找相关后端作者。-->
 
 请将  [ ] 替换为 [x] 。Please relpace [ ] with [x] .
 

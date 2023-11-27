@@ -129,68 +129,6 @@ class NodeController extends UserController
             }
         }
         switch ($node->sort) {
-            case 0:
-                return $response->write(
-                    $this->view()
-                        ->assign('node', $node)
-                        ->assign('mu', $request->getQueryParams()['ismu'])
-                        ->registerClass('URL', URL::class)
-                        ->display('user/node/node_ss_ssr.tpl')
-                );
-            case 11:
-                $server = $node->getV2RayItem($user);
-                $nodes  = [
-                    'url'  => URL::getV2Url($user, $node),
-                    'info' => [
-                        '连接地址：' => $server['add'],
-                        '连接端口：' => $server['port'],
-                        'UUID：'    => $user->uuid,
-                        'AlterID：' => $server['aid'],
-                        '传输协议：' => $server['net'],
-                    ],
-                ];
-                if ($server['net'] == 'ws') {
-                    $nodes['info']['PATH：'] = $server['path'];
-                    $nodes['info']['HOST：'] = $server['host'];
-                }
-                if ($server['net'] == 'kcp') {
-                    $nodes['info']['伪装类型：'] = $server['type'];
-                }
-                if ($server['tls'] == 'tls') {
-                    $nodes['info']['TLS：'] = 'TLS';
-                }
-                return $response->write(
-                    $this->view()
-                        ->assign('node', $nodes)
-                        ->display('user/node/node_v2ray.tpl')
-                );
-            case 13:
-                $server = $node->getV2RayPluginItem($user);
-                if ($server != null) {
-                    $nodes  = [
-                        'url'  => URL::getItemUrl($server, 1),
-                        'info' => [
-                            '连接地址：' => $server['address'],
-                            '连接端口：' => $server['port'],
-                            '加密方式：' => $server['method'],
-                            '连接密码：' => $server['passwd'],
-                            '混淆方式：' => $server['obfs'],
-                            '混淆参数：' => $server['obfs_param'],
-                        ],
-                    ];
-                } else {
-                    $nodes  = [
-                        'url'  => '',
-                        'info' => [
-                            '您的加密方式非 AEAD 系列' => '无法使用此节点.',
-                        ],
-                    ];
-                }
-                return $response->write(
-                    $this->view()
-                        ->assign('node', $nodes)
-                        ->display('user/node/node_ss_v2ray_plugin.tpl')
-                );
             case 14:
                 $server = $node->getTrojanItem($user);
                 $nodes  = [

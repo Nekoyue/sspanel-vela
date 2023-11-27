@@ -20,7 +20,7 @@ class SettingController extends AdminController
     {
         $config = array();
         $settings = Setting::get(['item', 'value', 'type']);
-        
+
         foreach ($settings as $setting)
         {
         	if ($setting->type == 'bool') {
@@ -29,7 +29,7 @@ class SettingController extends AdminController
                 $config[$setting->item] = (string) $setting->value;
             }
         }
-        
+
         return $response->write(
             $this->view()
                 //->registerClass('Setting', Setting::class)
@@ -39,11 +39,11 @@ class SettingController extends AdminController
                 ->display('admin/setting.tpl')
         );
     }
-    
+
     public function save($request, $response, $args)
     {
         $class = $request->getParam('class');
-        
+
         switch ($class) {
             // 支付
             case 'f2f_pay':
@@ -113,7 +113,7 @@ class SettingController extends AdminController
                 $list = array('reg_mode', 'reg_email_verify', 'email_verify_ttl', 'email_verify_ip_limit');
                 break;
             case 'register_default_value':
-                $list = array('sign_up_for_free_traffic', 'sign_up_for_free_time', 'sign_up_for_class', 'sign_up_for_class_time', 'sign_up_for_invitation_codes', 'connection_device_limit', 'connection_rate_limit', 'sign_up_for_method', 'sign_up_for_protocol', 'sign_up_for_protocol_param', 'sign_up_for_obfs', 'sign_up_for_obfs_param', 'sign_up_for_daily_report');
+                $list = array('sign_up_for_free_traffic', 'sign_up_for_free_time', 'sign_up_for_class', 'sign_up_for_class_time', 'sign_up_for_invitation_codes', 'connection_device_limit', 'connection_rate_limit', 'sign_up_for_method', 'sign_up_for_daily_report');
                 break;
             // 邀请设置
             case 'invitation_reward':
@@ -124,11 +124,11 @@ class SettingController extends AdminController
                 $list = array('invitation_mode', 'invite_rebate_mode', 'rebate_ratio', 'rebate_frequency_limit', 'rebate_amount_limit', 'rebate_time_range_limit');
                 break;
         }
-        
+
         foreach ($list as $item)
         {
             $setting = Setting::where('item', '=', $item)->first();
-            
+
             if ($setting->type == 'array') {
                 $setting->value = json_encode($request->getParam("$item"));
             } else {
@@ -142,7 +142,7 @@ class SettingController extends AdminController
                 ]);
             }
         }
-        
+
         return $response->withJson([
             'ret' => 1,
             'msg' => "保存成功"
@@ -152,7 +152,7 @@ class SettingController extends AdminController
     public function test($request, $response, $args)
     {
         $to = $request->getParam('recipient');
-        
+
         try {
             Mail::send(
                 $to,

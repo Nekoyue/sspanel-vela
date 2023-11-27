@@ -1,6 +1,6 @@
 # SSPanel Vela
 Forked from [SSPanel UIM](https://github.com/Anankke/SSPanel-Uim)
-Web panel for Shadowsocks & ShadowsocksR and V2Ray, based on ss-panel-v3-mod.
+Web panel for Trojan, based on ss-panel-v3-mod.
 
 ## Requirements
 - ✅ PHP 8.1+

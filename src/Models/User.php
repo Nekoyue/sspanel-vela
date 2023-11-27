@@ -3,16 +3,10 @@
 namespace App\Models;
 
 use App\Controllers\LinkController;
-use App\Utils\{
-    Tools,
-    Hash,
-    GA,
-    Telegram,
-    URL
-};
 use App\Services\{Config, Mail};
-use Ramsey\Uuid\Uuid;
+use App\Utils\{GA, Hash, Telegram, Tools, URL};
 use Exception;
+use Ramsey\Uuid\Uuid;
 
 /**
  * User Model
@@ -118,25 +112,6 @@ class User extends Model
         }
     }
 
-    public function getMuMd5()
-    {
-        $str = str_replace(
-            array('%id', '%suffix'),
-            array($this->id, $_ENV['mu_suffix']),
-            $_ENV['mu_regex']
-        );
-        preg_match_all("|%-?[1-9]\d*m|U", $str, $matches, PREG_PATTERN_ORDER);
-        foreach ($matches[0] as $key) {
-            $key_match = str_replace(array('%', 'm'), '', $key);
-            $md5 = substr(
-                MD5($this->id . $this->passwd . $this->method . $this->obfs . $this->protocol),
-                ($key_match < 0 ? $key_match : 0),
-                abs($key_match)
-            );
-            $str = str_replace($key, $md5, $str);
-        }
-        return $str;
-    }
 
     /**
      * 最后使用时间
@@ -194,34 +169,13 @@ class User extends Model
     public function updateMethod(string $method): array
     {
         $return = [
-            'ok' => false
+            'ok' => true,
+            'msg' => "updateMethod 未启用"
         ];
-        if ($method == '') {
-            $return['msg'] = '非法输入';
-            return $return;
-        }
-        if (!Tools::is_param_validate('method', $method)) {
-            $return['msg'] = '加密无效';
-            return $return;
-        }
+
         $this->method = $method;
-        if (!Tools::checkNoneProtocol($this)) {
-            $return['msg'] = '系统检测到您将要设置的加密方式为 none ，但您的协议并不在以下协议【' . implode(',', Config::getSupportParam('allow_none_protocol')) . '】之内，请您先修改您的协议，再来修改此处设置。';
-            return $return;
-        }
-        if (!URL::SSCanConnect($this) && !URL::SSRCanConnect($this)) {
-            $return['msg'] = '您这样设置之后，就没有客户端能连接上了，所以系统拒绝了您的设置，请您检查您的设置之后再进行操作。';
-            return $return;
-        }
         $this->save();
-        $return['ok'] = true;
-        if (!URL::SSCanConnect($this)) {
-            $return['msg']  = '设置成功，但您目前的协议，混淆，加密方式设置会导致 Shadowsocks 原版客户端无法连接，请您自行更换到 ShadowsocksR 客户端。';
-        }
-        if (!URL::SSRCanConnect($this)) {
-            $return['msg']  = '设置成功，但您目前的协议，混淆，加密方式设置会导致 ShadowsocksR 客户端无法连接，请您自行更换到 Shadowsocks 客户端。';
-        }
-        $return['msg'] = '设置成功，您可自由选用两种客户端来进行连接。';
+
         return $return;
     }
 
@@ -510,23 +464,13 @@ class User extends Model
      */
     public function calIncome(string $req): float
     {
-        switch ($req) {
-            case "yesterday":
-                $number = Code::whereDate('usedatetime', '=', date('Y-m-d', strtotime('-1 days')))->sum('number');
-                break;
-            case "today":
-                $number = Code::whereDate('usedatetime', '=', date('Y-m-d'))->sum('number');
-                break;
-            case "this month":
-                $number = Code::whereYear('usedatetime', '=', date('Y'))->whereMonth('usedatetime', '=', date('m'))->sum('number');
-                break;
-            case "last month":
-                $number = Code::whereYear('usedatetime', '=', date('Y'))->whereMonth('usedatetime', '=', date('m', strtotime('last month')))->sum('number');
-                break;
-            default:
-                $number = Code::sum('number');
-                break;
-        }
+        $number = match ($req) {
+            "yesterday" => Code::whereDate('usedatetime', '=', date('Y-m-d', strtotime('-1 days')))->sum('number'),
+            "today" => Code::whereDate('usedatetime', '=', date('Y-m-d'))->sum('number'),
+            "this month" => Code::whereYear('usedatetime', '=', date('Y'))->whereMonth('usedatetime', '=', date('m'))->sum('number'),
+            "last month" => Code::whereYear('usedatetime', '=', date('Y'))->whereMonth('usedatetime', '=', date('m', strtotime('last month')))->sum('number'),
+            default => Code::sum('number'),
+        };
         return is_null($number) ? 0.00 : round($number, 2);
     }
 
@@ -595,106 +539,22 @@ class User extends Model
      */
     public function checkin(): array
     {
-        $return = [
-            'ok'  => true,
-            'msg' => ''
-        ];
-        if (!$this->isAbleToCheckin()) {
-            $return['ok']  = false;
-            $return['msg'] = '您似乎已经签到过了...';
-        } else {
-            $traffic = random_int((int) $_ENV['checkinMin'], (int) $_ENV['checkinMax']);
+        $return = [];
+        if ($this->isAbleToCheckin()) {
+            $traffic = random_int((int)$_ENV['checkinMin'], (int)$_ENV['checkinMax']);
             $this->transfer_enable += Tools::toMB($traffic);
             $this->last_check_in_time = time();
             $this->save();
+            $return['ok'] = true;
             $return['msg'] = '获得了 ' . $traffic . 'MB 流量.';
+        } else {
+            $return['ok'] = false;
+            $return['msg'] = '您似乎已经签到过了...';
         }
 
         return $return;
     }
 
-    /**
-     * 更新协议
-     *
-     * @param string $Protocol
-     */
-    public function setProtocol($Protocol): array
-    {
-        $return = [
-            'ok'  => true,
-            'msg' => '设置成功，您可自由选用客户端来连接。'
-        ];
-        if ($Protocol == '') {
-            $return['ok']   = false;
-            $return['msg']  = '非法输入';
-            return $return;
-        }
-        if (!Tools::is_param_validate('protocol', $Protocol)) {
-            $return['ok']   = false;
-            $return['msg']  = '协议无效';
-            return $return;
-        }
-        $this->protocol = $Protocol;
-        if (!Tools::checkNoneProtocol($this)) {
-            $return['ok']   = false;
-            $return['msg']  = '系统检测到您目前的加密方式为 none ，但您将要设置为的协议并不在以下协议【' . implode(',', Config::getSupportParam('allow_none_protocol')) . '】之内，请您先修改您的加密方式，再来修改此处设置。';
-            return $return;
-        }
-        if (!URL::SSCanConnect($this) && !URL::SSRCanConnect($this)) {
-            $return['ok']   = false;
-            $return['msg']  = '您这样设置之后，就没有客户端能连接上了，所以系统拒绝了您的设置，请您检查您的设置之后再进行操作。';
-            return $return;
-        }
-        $this->save();
-        if (!URL::SSCanConnect($this)) {
-            $return['ok']   = true;
-            $return['msg']  = '设置成功，但您目前的协议，混淆，加密方式设置会导致 Shadowsocks 原版客户端无法连接，请您自行更换到 ShadowsocksR 客户端。';
-        }
-        if (!URL::SSRCanConnect($this)) {
-            $return['ok']   = true;
-            $return['msg']  = '设置成功，但您目前的协议，混淆，加密方式设置会导致 ShadowsocksR 客户端无法连接，请您自行更换到 Shadowsocks 客户端。';
-        }
-        return $return;
-    }
-
-    /**
-     * 更新混淆
-     *
-     * @param string $Obfs
-     */
-    public function setObfs($Obfs): array
-    {
-        $return = [
-            'ok'  => true,
-            'msg' => '设置成功，您可自由选用客户端来连接。'
-        ];
-        if ($Obfs == '') {
-            $return['ok']   = false;
-            $return['msg']  = '非法输入';
-            return $return;
-        }
-        if (!Tools::is_param_validate('obfs', $Obfs)) {
-            $return['ok']   = false;
-            $return['msg']  = '混淆无效';
-            return $return;
-        }
-        $this->obfs = $Obfs;
-        if (!URL::SSCanConnect($this) && !URL::SSRCanConnect($this)) {
-            $return['ok']   = false;
-            $return['msg']  = '您这样设置之后，就没有客户端能连接上了，所以系统拒绝了您的设置，请您检查您的设置之后再进行操作。';
-            return $return;
-        }
-        $this->save();
-        if (!URL::SSCanConnect($this)) {
-            $return['ok']   = true;
-            $return['msg']  = '设置成功，但您目前的协议，混淆，加密方式设置会导致 Shadowsocks 原版客户端无法连接，请您自行更换到 ShadowsocksR 客户端。';
-        }
-        if (!URL::SSRCanConnect($this)) {
-            $return['ok']   = true;
-            $return['msg']  = '设置成功，但您目前的协议，混淆，加密方式设置会导致 ShadowsocksR 客户端无法连接，请您自行更换到 Shadowsocks 客户端。';
-        }
-        return $return;
-    }
 
     /**
      * 解绑 Telegram

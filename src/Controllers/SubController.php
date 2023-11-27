@@ -44,7 +44,7 @@ class SubController extends BaseController
             ]);
         }
 
-        $subtype_list = ['all', 'ss', 'ssr', 'v2ray', 'trojan'];
+        $subtype_list = ['all', 'trojan'];
         if (!in_array($subtype, $subtype_list)) {
             return $response->withJson([
                 'ret' => 0,
@@ -89,113 +89,6 @@ class SubController extends BaseController
                         "encryption" => $user->method,
                         "plugin" => $plugin,
                         "plugin_option" => $plugin_option,
-                        "remark" => $node_raw->info
-                    ];
-                    break;
-                //單獨加了一種SSR節點類型用來同時處理多端口和單端口SSR的訂閲下發
-                case "1":
-                    if (!in_array($subtype, ['ssr', 'all'])) {
-                        $node = null;
-                        break;
-                    }
-                    //判斷一下是普通SSR節點還是單端口SSR節點，混淆式单端就去掉了，配起来怪麻烦的
-                    if ($node_raw->mu_only == -1) {
-                        $node = [
-                            "name" => $node_raw->name,
-                            "id" => $node_raw->id,
-                            "type" => "ssr",
-                            "address" => $server,
-                            "port" => $user->port,
-                            "password" => $user->passwd,
-                            "encryption" => $user->method,
-                            "protocol" => $user->protocol,
-                            "protocol_param" => $user->protocol_param,
-                            "obfs" => $user->obfs,
-                            "obfs_param" => $user->obfs_param,
-                            "remark" => $node_raw->info
-                        ];
-                    } else {
-                        //優先級是 mu_port > offset_port_user > offset_port_node ，v2 和 trojan 同理
-                        if (!array_key_exists('mu_port', $node_custom_config)
-                            && !array_key_exists('offset_port_user', $node_custom_config)) {
-                            $mu_port = $node_custom_config['offset_port_node'];
-                        } elseif (!array_key_exists('mu_port', $node_custom_config)) {
-                            $mu_port = $node_custom_config['offset_port_user'];
-                        } else {
-                            $mu_port = $node_custom_config['mu_port'];
-                        }
-                        $mu_password = $node_custom_config['mu_password'] ?? '';
-                        $mu_encryption = $node_custom_config['mu_encryption'] ?? '';
-                        $mu_protocol = $node_custom_config['mu_protocol'] ?? '';
-                        $mu_obfs = $node_custom_config['mu_obfs'] ?? '';
-                        $mu_suffix = $node_custom_config['mu_suffix'] ?? '';
-                        //現在就只能用協議式單端口。理論上應該加個協議式單端口和混淆式單端口的配置項，然後這裏寫個判斷切換的。先咕了，SSR不是重點。
-                        $user_protocol_param = $user->id . ':' . $user->passwd;
-                        $node = [
-                            "name" => $node_raw->name,
-                            "id" => $node_raw->id,
-                            "type" => "ssr",
-                            "address" => $server,
-                            "port" => $mu_port,
-                            "password" => $mu_password,
-                            "encryption" => $mu_encryption,
-                            "protocol" => $mu_protocol,
-                            "protocol_param" => $user_protocol_param,
-                            "obfs" => $mu_obfs,
-                            "obfs_param" => $mu_suffix,
-                            "remark" => $node_raw->info
-                        ];
-                    }
-                    break;
-                case "11":
-                    if (!in_array($subtype, ['v2ray', 'all'])) {
-                        $node = null;
-                        break;
-                    }
-                    if (!array_key_exists('v2_port', $node_custom_config)
-                        && !array_key_exists('offset_port_user', $node_custom_config)
-                        && !array_key_exists('offset_port_node', $node_custom_config)) {
-                        $v2_port = 443;
-                    } elseif (!array_key_exists('v2_port', $node_custom_config)
-                        && !array_key_exists('offset_port_user', $node_custom_config)) {
-                        $v2_port = $node_custom_config['offset_port_node'];
-                    } elseif (!array_key_exists('v2_port', $node_custom_config)) {
-                        $v2_port = $node_custom_config['offset_port_user'];
-                    } else {
-                        $v2_port = $node_custom_config['v2_port'];
-                    }
-                    //V2Ray 真給我整不會了，有好好的 Trojan 不用用什麽 V2。默認值有問題的請懂 V2 怎麽用的人來改一改。
-                    $alter_id = $node_custom_config['alter_id'] ?? '0';
-                    $security = $node_custom_config['security'] ?? 'none';
-                    $flow = $node_custom_config['flow'] ?? '';
-                    $encryption = $node_custom_config['encryption'] ?? '';
-                    $network = $node_custom_config['network'] ?? '';
-                    $header = $node_custom_config['header'] ?? ["type" => "none"];
-                    $header_type = $header['type'] ?? '';
-                    $host = $node_custom_config['host'] ?? '';
-                    $servicename = $node_custom_config['servicename'] ?? '';
-                    $path = $node_custom_config['path'] ?? '/';
-                    $tls = in_array($security, ['tls', 'xtls']) ? '1' : '0';
-                    $enable_vless = $node_custom_config['enable_vless'] ?? '0';
-                    $node = [
-                        "name" => $node_raw->name,
-                        "id" => $node_raw->id,
-                        "type" => "v2ray",
-                        "address" => $server,
-                        "port" => $v2_port,
-                        "uuid" => $user->uuid,
-                        "alterid" => $alter_id,
-                        "security" => $security,
-                        "flow" => $flow,
-                        "encryption" => $encryption,
-                        "network" => $network,
-                        "header" => $header,
-                        "header_type" => $header_type,
-                        "host" => $host,
-                        "path" => $path,
-                        "servicename" => $servicename,
-                        "tls" => $tls,
-                        "enable_vless" => $enable_vless,
                         "remark" => $node_raw->info
                     ];
                     break;
