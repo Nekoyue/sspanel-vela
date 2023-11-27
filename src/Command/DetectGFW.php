@@ -11,7 +11,7 @@ use App\Utils\Telegram;
 
 class DetectGFW extends Command
 {
-    public $description = '├─=: php xcat DetectGFW      - 节点被墙检测定时任务' . PHP_EOL;
+    public string $description = '├─=: php xcat DetectGFW      - 节点被墙检测定时任务' . PHP_EOL;
 
     public function boot()
     {
@@ -28,7 +28,7 @@ class DetectGFW extends Command
                     if (
                         $node->node_ip == '' ||
                         $node->node_ip == null ||
-                        $node->online == false
+                        !$node->online
                     ) {
                         continue;
                     }
@@ -48,11 +48,11 @@ class DetectGFW extends Command
                             break;
                         }
                     }
-                    if ($result_tcping == false) {
+                    if (!$result_tcping) {
                         //被墙了
                         echo ($node->id . ':false' . PHP_EOL);
                         //判断有没有发送过邮件
-                        if ($node->gfw_block == true) {
+                        if ($node->gfw_block) {
                             continue;
                         }
                         foreach ($adminUser as $user) {
@@ -75,11 +75,10 @@ class DetectGFW extends Command
                             Telegram::Send($notice_text);
                         }
                         $node->gfw_block = true;
-                        $node->save();
                     } else {
                         //没有被墙
                         echo ($node->id . ':true' . PHP_EOL);
-                        if ($node->gfw_block == false) {
+                        if (!$node->gfw_block) {
                             continue;
                         }
                         foreach ($adminUser as $user) {
@@ -102,13 +101,13 @@ class DetectGFW extends Command
                             Telegram::Send($notice_text);
                         }
                         $node->gfw_block = false;
-                        $node->save();
                     }
+                    $node->save();
                 }
                 break;
             }
 
-            echo ($node->id . 'interval skip' . PHP_EOL);
+            echo('interval skip' . PHP_EOL);
             sleep(3);
         }
     }

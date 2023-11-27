@@ -17,12 +17,12 @@ use App\Utils\URL;
 
 class PortAutoChange extends Command
 {
-    public $description = '├─=: php xcat PortAutoChange - 端口被墙则自动更换端口' . PHP_EOL;
+    public string $description = '├─=: php xcat PortAutoChange - 端口被墙则自动更换端口' . PHP_EOL;
 
     /**
      *  配置
      */
-    private $Config = [
+    private array $Config = [
         // 取端口范围最小值，新的端口将是之间的随机数
         'port_min' => 23333,
 
@@ -102,7 +102,7 @@ class PortAutoChange extends Command
                 ->where('type', '1')
                 ->get();
             for ($i = 0; $i <= 10; $i++) {
-                $new_port = rand((int) $this->Config['port_min'], (int) $this->Config['port_max']);
+                $new_port = rand($this->Config['port_min'], $this->Config['port_max']);
                 if (Node::where('sort', 9)->where('server', '=', $new_port)->first() == null && User::where('port', '=', $new_port)->first() == null) {
                     break;
                 }
@@ -121,9 +121,9 @@ class PortAutoChange extends Command
                     if (in_array($mu_port_node->id, $array) && !in_array($mu_port_node->id, $this->Config['exception_node_id'])) {
                         if ($node_port != $port) {
                             if ($node_port == $new_port) {
-                                if (strpos($mu_port_node->server, ($port . '#')) !== false) {
+                                if (str_contains($mu_port_node->server, ($port . '#'))) {
                                     for ($i = 0; $i <= 10; $i++) {
-                                        $new_mu_node_port = rand((int) $this->Config['port_min'], (int) $this->Config['port_max']);
+                                        $new_mu_node_port = rand($this->Config['port_min'], $this->Config['port_max']);
                                         if ($new_mu_node_port != $new_port && Node::where('port', '=', $new_mu_node_port)->first() == null && User::where('port', '=', $new_mu_node_port)->first() == null) {
                                             break;
                                         }
@@ -132,7 +132,7 @@ class PortAutoChange extends Command
                                     echo ('#' . $mu_port_node->id . ' - 节点 - ' . $mu_port_node->name . ' - 端口从 ' . $node_port . ' 偏移到了新的端口 ' . $new_mu_node_port . PHP_EOL);
                                 }
                             } else {
-                                if (strpos($mu_port_node->server, ($port . '#')) !== false) {
+                                if (str_contains($mu_port_node->server, ($port . '#'))) {
                                     $mu_port_node->server = str_replace(('+' . $port . '#' . $node_port), '', $mu_port_node->server);
                                     $mu_port_node->server = str_replace(($port . '#' . $node_port . '+'), '', $mu_port_node->server);
                                     $mu_port_node->server = str_replace(($port . '#' . $node_port), '', $mu_port_node->server);
@@ -142,8 +142,8 @@ class PortAutoChange extends Command
                         }
                     } else {
                         if ($node_port == $port) {
-                            if (strpos($mu_port_node->server, ';') !== false) {
-                                if (strpos($mu_port_node->server, 'port=') !== false) {
+                            if (str_contains($mu_port_node->server, ';')) {
+                                if (str_contains($mu_port_node->server, 'port=')) {
                                     $mu_port_node->server = str_replace('port=', ('port=' . $new_port . '#' . $port . '+'), $mu_port_node->server);
                                 } else {
                                     $mu_port_node->server = ($mu_port_node->server . ';port=' . $new_port . '#' . $port);
@@ -152,7 +152,7 @@ class PortAutoChange extends Command
                                 $mu_port_node->server = ($mu_port_node->server . ';port=' . $new_port . '#' . $port);
                             }
                         } else {
-                            if (strpos($mu_port_node->server, ($port . '#')) !== false) {
+                            if (str_contains($mu_port_node->server, ($port . '#'))) {
                                 $mu_port_node->server = str_replace(($port . '#'), ($new_port . '#'), $mu_port_node->server);
                             }
                         }
@@ -166,13 +166,13 @@ class PortAutoChange extends Command
                     $node = Node::find($node_id);
                     $node_port = $this->OutPort($node->server, $port);
                     if ($node_port != $port) {
-                        if (strpos($node->server, ('#' . $node_port)) !== false) {
+                        if (str_contains($node->server, ('#' . $node_port))) {
                             echo ('#' . $node->id . ' - 节点 - ' . $node->name . ' - 端口从' . $node_port . '偏移到了新的端口 ' . $new_port . PHP_EOL);
                             $node->server = str_replace(('#' . $node_port), ('#' . $new_port), $node->server);
                         }
                     } else {
-                        if (strpos($node->server, ';') !== false) {
-                            if (strpos($node->server, 'port=') !== false) {
+                        if (str_contains($node->server, ';')) {
+                            if (str_contains($node->server, 'port=')) {
                                 $node->server = str_replace('port=', ('port=' . $port . '#' . $new_port . '+'), $node->server);
                             } else {
                                 $node->server = ($node->server . ';port=' . $port . '#' . $new_port);
@@ -191,12 +191,12 @@ class PortAutoChange extends Command
     public function OutPort($server, $mu_port)
     {
         $node_port = $mu_port;
-        if (strpos($server, ';') !== false) {
+        if (str_contains($server, ';')) {
             $node_server = explode(';', $server);
-            if (strpos($node_server[1], 'port') !== false) {
+            if (str_contains($node_server[1], 'port')) {
                 $item = URL::parse_args($node_server[1]);
-                if (strpos($item['port'], '#') !== false) {
-                    if (strpos($item['port'], '+') !== false) {
+                if (str_contains($item['port'], '#')) {
+                    if (str_contains($item['port'], '+')) {
                         $args_explode = explode('+', $item['port']);
                         foreach ($args_explode as $arg) {
                             if ((int) substr($arg, 0, strpos($arg, '#')) == $mu_port) {

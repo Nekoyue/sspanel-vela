@@ -9,13 +9,13 @@ use Illuminate\Database\Schema\Blueprint;
 
 class Update extends Command
 {
-    public $description = '├─=: php xcat Update         - 更新并迁移配置' . PHP_EOL;
+    public string $description = '├─=: php xcat Update         - 更新并迁移配置' . PHP_EOL;
 
     public function boot()
     {
         global $_ENV;
         $copy_result = copy(BASE_PATH . '/config/.config.php', BASE_PATH . '/config/.config.php.bak');
-        if ($copy_result == true) {
+        if ($copy_result) {
             echo ('备份成功' . PHP_EOL);
         } else {
             echo ('备份失败，迁移终止' . PHP_EOL);
@@ -51,7 +51,7 @@ class Update extends Command
             $regex = '/_ENV\[\'' . $key . '\'\].*?;/s';
             $matches_new = array();
             preg_match($regex, $config_new, $matches_new);
-            if (isset($matches_new[0]) == false) {
+            if (!isset($matches_new[0])) {
                 echo ('未找到配置项：' . $key . ' 未能在新config文件中找到，可能已被更名或废弃' . PHP_EOL);
                 continue;
             }
@@ -135,6 +135,7 @@ class Update extends Command
         echo ('升级composer依赖结束，请自行根据上方输出确认是否升级成功' . PHP_EOL);
         system('rm -rf ' . BASE_PATH . '/storage/framework/smarty/compile/*');
         system('chown -R ' . $_ENV['php_user_group'] . ' ' . BASE_PATH . '/storage');
+        return true;
     }
 
     public function addColumns($table, $columu, $type, $isnull, $default, $comment, $after)

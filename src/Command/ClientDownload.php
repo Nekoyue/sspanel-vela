@@ -11,19 +11,19 @@ use Exception;
  */
 class ClientDownload extends Command
 {
-    public $description   = '├─=: php xcat ClientDownload - 定时更新客户端' . PHP_EOL;
+    public string $description = '├─=: php xcat ClientDownload - 定时更新客户端' . PHP_EOL;
 
     private $client;
 
     /**
      * 保存基本路径
      */
-    private $basePath     = BASE_PATH . '/';
+    private string $basePath = BASE_PATH . '/';
 
     /**
      * 下载配置
      */
-    private $softs        = [
+    private array $softs = [
         // [
         //     'name'      => '示例名称备注',
         //     'tagMethod' => 'github_release | github_pre_release | apkpure',
@@ -180,7 +180,7 @@ class ClientDownload extends Command
         $request = $this->client->get($url);
         preg_match('#(?<=\<span\sitemprop="version">)[^<]+#', $request->getBody()->getContents(), $tagName);
         preg_match('#[\d\.]+#', $tagName[0], $tagNum);
-        return (string) $tagNum[0];
+        return $tagNum[0];
     }
 
     /**
@@ -230,6 +230,7 @@ class ClientDownload extends Command
     /**
      * 储存本地软体版本库
      *
+     * @param array $versions
      * @return bool
      */
     private function setLocalVersions(array $versions): bool
@@ -248,17 +249,11 @@ class ClientDownload extends Command
     {
         $savePath = $this->basePath . $task['savePath'];
         echo '====== ' . $task['name'] . ' 开始 ======' . PHP_EOL;
-        switch ($task['tagMethod']) {
-            case 'github_pre_release':
-                $tagMethod = 'getLatestPreReleaseTagName';
-                break;
-            case 'apkpure':
-                $tagMethod = 'getApkpureTagName';
-                break;
-            default:
-                $tagMethod = 'getLatestReleaseTagName';
-                break;
-        }
+        $tagMethod = match ($task['tagMethod']) {
+            'github_pre_release' => 'getLatestPreReleaseTagName',
+            'apkpure' => 'getApkpureTagName',
+            default => 'getLatestReleaseTagName',
+        };
         $tagName = $this->$tagMethod($task['gitRepo']);
         if (!isset($this->version[$task['name']])) {
             echo '- 本地不存在 ' . $task['name'] . '，检测到当前最新版本为 ' . $tagName . PHP_EOL;

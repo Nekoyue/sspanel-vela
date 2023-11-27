@@ -28,7 +28,7 @@ use Exception;
 
 class Job extends Command
 {
-    public $description = ''
+    public string $description = ''
         . '├─=: php xcat Job [选项]' . PHP_EOL
         . '│ ├─ SendMail                - 处理邮件队列' . PHP_EOL
         . '│ ├─ DailyJob                - 每日任务' . PHP_EOL
@@ -58,7 +58,7 @@ class Job extends Command
     {
         if (file_exists(BASE_PATH . '/storage/email_queue')) {
             echo "程序正在运行中" . PHP_EOL;
-            return false;
+            return;
         }
         $myfile = fopen(BASE_PATH . '/storage/email_queue', 'wb+') or die('Unable to open file!');
         $txt = '1';
@@ -196,13 +196,13 @@ class Job extends Command
     public function CheckJob()
     {
         //节点掉线检测
-        if ($_ENV['enable_detect_offline'] == true) {
+        if ($_ENV['enable_detect_offline']) {
             echo '节点掉线检测开始' . PHP_EOL;
             $adminUser = User::where('is_admin', '=', '1')->get();
             $nodes = Node::all();
             foreach ($nodes as $node) {
-                if ($node->isNodeOnline() === false && $node->online == true) {
-                    if ($_ENV['useScFtqq'] == true && $_ENV['enable_detect_offline_useScFtqq'] == true) {
+                if ($node->isNodeOnline() === false && $node->online) {
+                    if ($_ENV['useScFtqq'] && $_ENV['enable_detect_offline_useScFtqq']) {
                         $ScFtqq_SCKEY = $_ENV['ScFtqq_SCKEY'];
                         $text = '管理员您好，系统发现节点 ' . $node->name . ' 掉线了，请您及时处理。';
                         $postdata = http_build_query(
@@ -277,8 +277,8 @@ class Job extends Command
 
                     $node->online = false;
                     $node->save();
-                } elseif ($node->isNodeOnline() === true && $node->online == false) {
-                    if ($_ENV['useScFtqq'] == true && $_ENV['enable_detect_offline_useScFtqq'] == true) {
+                } elseif ($node->isNodeOnline() === true && !$node->online) {
+                    if ($_ENV['useScFtqq'] && $_ENV['enable_detect_offline_useScFtqq']) {
                         $ScFtqq_SCKEY = $_ENV['ScFtqq_SCKEY'];
                         $text = '管理员您好，系统发现节点 ' . $node->name . ' 恢复上线了。';
                         $postdata = http_build_query(
@@ -347,7 +347,7 @@ class Job extends Command
                             Config::getconfig('Telegram.string.NodeOnline')
                         );
                     }
-                    
+
                     if (Config::getconfig('Telegram.bool.NodeOnline')) {
                         Telegram::Send($notice_text);
                     }
@@ -379,7 +379,7 @@ class Job extends Command
     {
         $users = User::all();
         foreach ($users as $user) {
-            if (strtotime($user->expire_in) < time() && $user->expire_notified == false) {
+            if (strtotime($user->expire_in) < time() && !$user->expire_notified) {
                 $user->transfer_enable = 0;
                 $user->u = 0;
                 $user->d = 0;
@@ -395,13 +395,13 @@ class Job extends Command
                 );
                 $user->expire_notified = true;
                 $user->save();
-            } elseif (strtotime($user->expire_in) > time() && $user->expire_notified == true) {
+            } elseif (strtotime($user->expire_in) > time() && $user->expire_notified) {
                 $user->expire_notified = false;
                 $user->save();
             }
 
             //余量不足检测
-            if ($_ENV['notify_limit_mode'] != false) {
+            if ($_ENV['notify_limit_mode']) {
                 $user_traffic_left = $user->transfer_enable - $user->u - $user->d;
                 $under_limit = false;
 
@@ -421,7 +421,7 @@ class Job extends Command
                     }
                 }
 
-                if ($under_limit == true && $user->traffic_notified == false) {
+                if ($under_limit && !$user->traffic_notified) {
                     $result = $user->sendMail(
                         $_ENV['appName'] . '-您的剩余流量过低',
                         'news/warn.tpl',
@@ -435,7 +435,7 @@ class Job extends Command
                         $user->traffic_notified = true;
                         $user->save();
                     }
-                } elseif ($under_limit == false && $user->traffic_notified == true) {
+                } elseif (!$under_limit && $user->traffic_notified) {
                     $user->traffic_notified = false;
                     $user->save();
                 }
@@ -592,7 +592,7 @@ class Job extends Command
 
                 $bought->is_notified = true;
                 $bought->save();
-            } elseif ($bought->is_notified == false) {
+            } elseif (!$bought->is_notified) {
                 $user->sendMail(
                     $_ENV['appName'] . '-续费失败',
                     'news/warn.tpl',

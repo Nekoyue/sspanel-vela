@@ -5,10 +5,12 @@ namespace App\Command;
 use App\Utils\QQWry;
 use App\Models\Setting;
 use App\Utils\DatatablesHelper;
+use Telegram\Bot\Exceptions\TelegramSDKException;
+use TelegramBot\Api\Exception;
 
 class Tool extends Command
 {
-    public $description = ''
+    public string $description = ''
         . '├─=: php xcat Tool [选项]' . PHP_EOL
         . '│ ├─ initQQWry               - 下载 IP 解析库' . PHP_EOL
         . '│ ├─ setTelegram             - 设置 Telegram 机器人' . PHP_EOL
@@ -30,7 +32,11 @@ class Tool extends Command
             }
         }
     }
-    
+
+    /**
+     * @throws Exception
+     * @throws TelegramSDKException
+     */
     public function setTelegram()
     {
         if ($_ENV['use_new_telegram_bot'] === true) {
@@ -53,7 +59,7 @@ class Tool extends Command
             }
         }
     }
-    
+
     public function initQQWry()
     {
         echo ('正在下载或更新纯真ip数据库...') . PHP_EOL;
@@ -84,16 +90,16 @@ class Tool extends Command
             echo ('纯真ip数据库下载失败，请检查下载地址') . PHP_EOL;
         }
     }
-    
+
     public function detectConfigs()
     {
         echo \App\Services\DefaultConfig::detectConfigs();
     }
-    
+
     public function resetAllSettings()
     {
         $settings = Setting::all();
-        
+
         foreach ($settings as $setting)
         {
             $setting->value = $setting->default;
@@ -114,7 +120,7 @@ class Tool extends Command
             // 避免开发者调试配置泄露
             $setting->value = $setting->default;
         }
-        
+
         $json_settings = json_encode($settings, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE);
         file_put_contents('./config/settings.json', $json_settings);
 
@@ -124,16 +130,16 @@ class Tool extends Command
     public function importAllSettings()
     {
         $db = new DatatablesHelper();
-        
+
         $json_settings = file_get_contents('./config/settings.json');
         $settings      = json_decode($json_settings, true);
         $number        = count($settings);
         $counter       = '0';
-        
+
         for ($i = 0; $i < $number; $i++)
         {
             $item = $settings[$i]['item'];
-            
+
             if ($db->query("SELECT id FROM config WHERE item = '$item'") == null) {
                 $new_item            = new Setting;
                 $new_item->id        = null;
@@ -145,7 +151,7 @@ class Tool extends Command
                 $new_item->default   = $settings[$i]['default'];
                 $new_item->mark      = $settings[$i]['mark'];
                 $new_item->save();
-                
+
                 echo "添加新设置：$item" . PHP_EOL;
                 $counter += 1;
             }

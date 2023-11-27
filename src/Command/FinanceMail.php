@@ -9,7 +9,7 @@ use Ozdemir\Datatables\Datatables;
 
 class FinanceMail extends Command
 {
-    public $description = ''
+    public string $description = ''
         . '├─=: php xcat FinanceMail [选项]' . PHP_EOL
         . '│ ├─ day                     - 日报' . PHP_EOL
         . '│ ├─ week                    - 周报' . PHP_EOL

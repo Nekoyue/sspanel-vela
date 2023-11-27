@@ -11,7 +11,7 @@ use App\Services\Analytics;
 
 class SendDiaryMail extends Command
 {
-    public $description = '├─=: php xcat SendDiaryMail  - 每日流量报告' . PHP_EOL;
+    public string $description = '├─=: php xcat SendDiaryMail  - 每日流量报告' . PHP_EOL;
 
     public function boot()
     {
@@ -20,7 +20,7 @@ class SendDiaryMail extends Command
         $text1 = '';
 
         foreach ($logs as $log) {
-            if (strpos($log->content, 'Links') === false) {
+            if (!str_contains($log->content, 'Links')) {
                 $text1 = $text1 . $log->content . '<br><br>';
             }
         }

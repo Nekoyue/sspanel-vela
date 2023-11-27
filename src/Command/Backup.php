@@ -10,7 +10,7 @@ use RuntimeException;
 
 class Backup extends Command
 {
-    public $description = ''
+    public string $description = ''
         . '├─=: php xcat Backup [选项]' . PHP_EOL
         . '│ ├─ full                    - 整体数据备份' . PHP_EOL
         . '│ ├─ simple                  - 只备份核心数据' . PHP_EOL;
@@ -32,7 +32,7 @@ class Backup extends Command
     public function backup($full = false)
     {
         $configs = Setting::getClass('backup');
-        
+
         ini_set('memory_limit', '-1');
         $to = $configs['auto_backup_email'];
         if ($to == null) {
@@ -73,8 +73,9 @@ class Backup extends Command
         system('rm -rf /tmp/ssmodbackup', $ret);
         system('rm /tmp/ssmodbackup.zip', $ret);
 
-        if ($configs['auto_backup_notify'] == true) {
+        if ($configs['auto_backup_notify']) {
             Telegram::Send('备份工作已经完成');
         }
+        return true;
     }
 }

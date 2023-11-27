@@ -13,7 +13,7 @@ use App\Models\User as ModelsUser;
 
 class User extends Command
 {
-    public $description = ''
+    public string $description = ''
         . '├─=: php xcat User [选项]' . PHP_EOL
         . '│ ├─ getCookie               - 获取指定用户的 Cookie' . PHP_EOL
         . '│ ├─ resetPort               - 重置单个用户端口' . PHP_EOL
@@ -148,7 +148,7 @@ class User extends Command
             if ($passwd == null) {
                 die("必须输入管理员密码.\r\n");
             }
-            
+
             fwrite(STDOUT, "(3/3) 按 Y 或 y 确认创建：");
             $y = trim(fgets(STDIN));
         } elseif (count($this->argv) === 5) {

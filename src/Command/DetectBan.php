@@ -10,7 +10,7 @@ use App\Models\{
 
 class DetectBan extends Command
 {
-    public $description = '├─=: php xcat DetectBan      - 审计封禁定时任务' . PHP_EOL;
+    public string $description = '├─=: php xcat DetectBan      - 审计封禁定时任务' . PHP_EOL;
 
     /**
      * 审计封禁任务
@@ -76,7 +76,7 @@ class DetectBan extends Command
                 } else {
                     $number = $user->all_detect_number;
                     $tmp = 0;
-                    foreach ($_ENV['auto_detect_ban'] as $key => $value) {
+                    foreach ($_ENV['auto_detect_ban'] as $key => $v) {
                         if ($number >= $key) {
                             if ($key >= $tmp) {
                                 $tmp = $key;
