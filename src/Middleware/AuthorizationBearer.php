@@ -2,26 +2,26 @@
 
 namespace App\Middleware;
 
-use App\Services\Config;
+use Psr\Http\Message\ResponseInterface;
+use Psr\Http\Message\ServerRequestInterface;
+use Psr\Http\Server\MiddlewareInterface;
+use Psr\Http\Server\RequestHandlerInterface;
+use Slim\Factory\AppFactory;
 
-class AuthorizationBearer {
+class AuthorizationBearer implements MiddlewareInterface
+{
     protected string $token;
 
     function __construct(string $token) {
         $this->token = $token;
     }
 
-    /**
-     * @param \Slim\Http\Request    $request
-     * @param \Slim\Http\Response   $response
-     * @param callable              $next
-     *
-     * @return \Slim\Http\Response
-     */
-    public function __invoke($request, $response, $next) {
+    public
+    function process(ServerRequestInterface $request, RequestHandlerInterface $handler): ResponseInterface
+    {
         if (!$request->hasHeader('Authorization')) {
-            return $response->withStatus(401)->withJson([
-                'ret'  => 0,
+            return AppFactory::determineResponseFactory()->createResponse(401)->withJson([
+                'ret' => 0,
                 'data' => 'Authorization failed',
             ]);
         }
@@ -30,8 +30,8 @@ class AuthorizationBearer {
 
         // Bearer method token verify
         if (strtoupper(substr($authHeader, 0, 6)) != 'BEARER') {
-            return $response->withStatus(401)->withJson([
-                'ret'  => 0,
+            return AppFactory::determineResponseFactory()->createResponse(401)->withJson([
+                'ret' => 0,
                 'data' => 'Authorization failed',
             ]);
         }
@@ -39,12 +39,12 @@ class AuthorizationBearer {
         $realToken = substr($authHeader, 7);
 
         if ($realToken != $this->token) {
-            return $response->withStatus(401)->withJson([
-                'ret'  => 0,
+            return AppFactory::determineResponseFactory()->createResponse(401)->withJson([
+                'ret' => 0,
                 'data' => 'Authorization failed',
             ]);
         }
 
-        return $next($request, $response);
+        return $handler->handle($request);
     }
 }

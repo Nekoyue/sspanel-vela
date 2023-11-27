@@ -2,10 +2,9 @@
 
 declare(strict_types=1);
 
-use Slim\App as SlimApp;
 use App\Middleware\{Auth, Guest, Admin, Mod_Mu, AuthorizationBearer};
 
-return function (SlimApp $app) {
+return function (Slim\App $app) {
     // Home
     $app->get('/',          App\Controllers\HomeController::class . ':index');
     $app->get('/404',       App\Controllers\HomeController::class . ':page404');

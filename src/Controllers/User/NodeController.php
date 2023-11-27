@@ -12,7 +12,7 @@ use App\Utils\{
     Tools
 };
 use Slim\Http\{
-    Request,
+    ServerRequest,
     Response
 };
 use Psr\Http\Message\ResponseInterface;
@@ -82,15 +82,14 @@ class NodeController extends UserController
             $all_node[$node->node_class + 1000][] = $array_node;
         }
 
-        return $response->write(
-            $this->view()
-                ->assign('nodes', $all_node)
-                ->display('user/node/index.tpl')
-        );
+        $this->view()
+            ->assign('nodes', $all_node)
+            ->display('user/node/index.tpl');
+        return $response->write(200);
     }
 
     /**
-     * @param Request   $request
+     * @param ServerRequest $request
      * @param Response  $response
      * @param array     $args
      */
@@ -99,19 +98,19 @@ class NodeController extends UserController
         $id           = $args['id'];
         $point_node   = Node::find($id);
         $prefix       = explode(' - ', $point_node->name);
-        return $response->write(
-            $this->view()
-                ->assign('point_node', $point_node)
-                ->assign('prefix', $prefix[0])
-                ->assign('id', $id)
-                ->display('user/node/nodeajax.tpl')
-        );
+        $this->view()
+            ->assign('point_node', $point_node)
+            ->assign('prefix', $prefix[0])
+            ->assign('id', $id)
+            ->display('user/node/nodeajax.tpl');
+        return $response->write(200);
     }
 
     /**
-     * @param Request   $request
-     * @param Response  $response
-     * @param array     $args
+     * @param ServerRequest $request
+     * @param Response $response
+     * @param array $args
+     * @throws \SmartyException
      */
     public function user_node_info($request, $response, $args): ResponseInterface
     {
@@ -142,11 +141,10 @@ class NodeController extends UserController
                 if ($server['host'] != $server['address']) {
                     $nodes['info']['HOST&PEER：'] = $server['host'];
                 }
-                return $response->write(
-                    $this->view()
-                        ->assign('node', $nodes)
-                        ->display('user/node/node_trojan.tpl')
-                );
+                $this->view()
+                    ->assign('node', $nodes)
+                    ->display('user/node/node_trojan.tpl');
+                return $response->write(200);
             default:
                 return $response->write(404);
         }

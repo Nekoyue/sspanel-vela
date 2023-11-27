@@ -2,24 +2,23 @@
 
 namespace App\Middleware;
 
-use App\Services\Config;
 use App\Models\Node;
+use App\Services\Config;
+use Psr\Http\Message\ResponseInterface;
+use Psr\Http\Message\ServerRequestInterface;
+use Psr\Http\Server\MiddlewareInterface;
+use Psr\Http\Server\RequestHandlerInterface;
+use Slim\Factory\AppFactory;
 
-class Mod_Mu
+class Mod_Mu implements MiddlewareInterface
 {
-    /**
-     * @param \Slim\Http\Request    $request
-     * @param \Slim\Http\Response   $response
-     * @param callable              $next
-     *
-     * @return \Slim\Http\Response
-     */
-    public function __invoke($request, $response, $next)
+    public function process(ServerRequestInterface $request, RequestHandlerInterface $handler): ResponseInterface
     {
         $key = $request->getQueryParam('key');
         if ($key === null) {
             // 未提供 key
-            return $response->withjson([
+            return AppFactory::determineResponseFactory()->createResponse(401)
+                ->withjson([
                 'ret'  => 0,
                 'data' => 'Your key is null.'
             ]);
@@ -27,7 +26,8 @@ class Mod_Mu
 
         if (!in_array($key, Config::getMuKey())) {
             // key 不存在
-            return $response->withJson([
+            return AppFactory::determineResponseFactory()->createResponse(401)
+                ->withJson([
                 'ret'  => 0,
                 'data' => 'Token is invalid.'
             ]);
@@ -35,7 +35,8 @@ class Mod_Mu
 
         if ($_ENV['WebAPI'] === false) {
             // 主站不提供 WebAPI
-            return $response->withJson([
+            return AppFactory::determineResponseFactory()->createResponse(403)
+                ->withJson([
                 'ret'  => 0,
                 'data' => 'WebAPI is disabled.'
             ]);
@@ -45,7 +46,8 @@ class Mod_Mu
             if ($_SERVER['REMOTE_ADDR'] != '127.0.0.1') {
                 $node = Node::where('node_ip', 'LIKE', $_SERVER['REMOTE_ADDR'] . '%')->first();
                 if ($node === null) {
-                    return $response->withJson([
+                    return AppFactory::determineResponseFactory()->createResponse(401)
+                        ->withJson([
                         'ret'  => 0,
                         'data' => 'IP is invalid. Now, your IP address is ' . $_SERVER['REMOTE_ADDR']
                     ]);
@@ -53,6 +55,6 @@ class Mod_Mu
             }
         }
 
-        return $next($request, $response);
+        return $handler->handle($request);
     }
 }

@@ -3,26 +3,24 @@
 namespace App\Middleware;
 
 use App\Services\Auth as AuthService;
+use Psr\Http\Message\ResponseInterface;
+use Psr\Http\Message\ServerRequestInterface;
+use Psr\Http\Server\MiddlewareInterface;
+use Psr\Http\Server\RequestHandlerInterface;
+use Slim\Factory\AppFactory;
 
-class Auth
+class Auth implements MiddlewareInterface
 {
-    /**
-     * @param \Slim\Http\Request    $request
-     * @param \Slim\Http\Response   $response
-     * @param callable              $next
-     *
-     * @return \Slim\Http\Response
-     */
-    public function __invoke($request, $response, $next)
+    public function process(ServerRequestInterface $request, RequestHandlerInterface $handler): ResponseInterface
     {
         $user = AuthService::getUser();
         if (!$user->isLogin) {
-            return $response->withStatus(302)->withHeader('Location', '/auth/login');
+            return AppFactory::determineResponseFactory()->createResponse(302)->withHeader('Location', '/auth/login');
         }
         $enablePages = array('/user/disable', '/user/backtoadmin', '/user/logout');
         if ($user->enable == 0 && !in_array($_SERVER['REQUEST_URI'], $enablePages)) {
-            return $response->withStatus(302)->withHeader('Location', '/user/disable');
+            return AppFactory::determineResponseFactory()->createResponse(302)->withHeader('Location', '/user/disable');
         }
-        return $next($request, $response);
+        return $handler->handle($request);
     }
 }

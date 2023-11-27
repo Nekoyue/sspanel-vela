@@ -1,7 +1,7 @@
 <?php
 
 // make replace _ENV with env
-function searchEnvName($name)
+function searchEnvName($name): int|string|null
 {
     global $_ENV;
     foreach ($_ENV as $configKey => $configValue) {
@@ -17,7 +17,7 @@ if (getenv('UIM_ENV_REPLACE_ENABLE')) {
         global $_ENV;
         $envUpKey = strtoupper($envKey);
         // Key starts with UIM_
-        if (strpos($envUpKey, "UIM_") === 0) {
+        if (str_starts_with($envUpKey, "UIM_")) {
             // Valid env key, set to _ENV
             $configKey = substr($envUpKey, 4);
             $realKey = searchEnvName($configKey);
