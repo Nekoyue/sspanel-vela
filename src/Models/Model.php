@@ -2,18 +2,20 @@
 
 namespace App\Models;
 
+use App\Utils\Telegram\Callbacks\Callback;
 use Closure;
 use Illuminate\Contracts\Pagination;
 use Illuminate\Database\Eloquent;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
-use Illuminate\Database\Eloquent\Model as EloquentMedel;
+use Illuminate\Database\Eloquent\Model as EloquentModel;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
 use Illuminate\Database\Query\Expression as QueryExpression;
 use Illuminate\Database\Query\Builder as QueryBuilder;
 use Illuminate\Support\Collection as SupportCollection;
 use Illuminate\Support\LazyCollection;
 use Illuminate\Database\Capsule\Manager as Capsule;
+use Slim\Http\ServerRequest;
 
 /**
  * All function below could be staticly called via this function.\
@@ -69,7 +71,7 @@ use Illuminate\Database\Capsule\Manager as Capsule;
  * @method static bool                              hasNamedScope(string $scope)                                                                                        Determine if the given model has a scope.
  * @method static Builder|mixed                     scopes(array|string $scopes)                                                                                        Call the given local model scopes.
  * @method static $this                             applyScopes()                                                                                                       Apply the scopes to the Eloquent builder instance and return it.
- * @method static $this                             with(string|array $relations, string|?Closure $callback = null)                                                     Set the relationships that should be eager loaded.
+ * @method static $this                             with(string|array $relations, string|Closure $callback = null)                                                     Set the relationships that should be eager loaded.
  * @method static $this                             without($relations)                                                                                                 Prevent the specified relations from being eager loaded.
  * @method static static                            newModelInstance(array $attributes = [])                                                                            Create a new instance of the model being queried.
  * @method static $this                             withCasts(array $casts)                                                                                             Apply query-time casts to the model instance.
@@ -122,13 +124,12 @@ use Illuminate\Database\Capsule\Manager as Capsule;
  * @method static bool              chunkById(int $count, callable $callback, ?string $column = null, ?string $alias = null)        Chunk the results of a query by comparing IDs.
  * @method static bool              eachById(callable $callback, int $count = 1000, ?string $column = null, ?string $alias = null)  Execute a callback over each item while chunking by ID.
  * @method static static|null       first(array|string $columns = ['*'])                                                            Execute the query and get the first result.
- * @method static static|null       sole(array|string $columns = ['*'])                                                             Execute the query and get the first result if it's the sole matching record.
  * @method static mixed|$this       when(mixed $value, callback $callback, ?callback $default = null)                               Apply the callback's query changes if the given "value" is true.
  * @method static $this             tap(callback $callback)                                                                         Pass the query to a given callback.
  * @method static mixed|$this       unless(mixed $value, callback $callback, ?callback $default = null)                             Apply the callback's query changes if the given "value" is false.
  * @codingStandardsIgnoreEnd
  */
-class Model extends EloquentMedel
+class Model extends EloquentModel
 {
     public $timestamps = false;
 
@@ -144,9 +145,9 @@ class Model extends EloquentMedel
     /**
      * 获取表数据
      *
-     * @param \Slim\Http\Request $request
-     * @param callable           $callback
-     * @param callable           $precondition
+     * @param ServerRequest $request
+     * @param callable|null $callback
+     * @param callable|null $precondition
      *
      * @return array
      * [
@@ -154,7 +155,7 @@ class Model extends EloquentMedel
      *  'count' => int
      * ]
      */
-    public static function getTableDataFromAdmin(\Slim\Http\Request $request, $callback = null, $precondition = null): array
+    public static function getTableDataFromAdmin(ServerRequest $request, callable $callback = null, callable $precondition = null): array
     {
         //得到排序的方式
         $order        = $request->getParam('order')[0]['dir'];

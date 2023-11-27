@@ -2,25 +2,29 @@
 
 namespace App\Utils\Telegram;
 
+use App\Models\User;
 use App\Services\Config;
 use App\Utils\TelegramSessionManager;
+use Illuminate\Support\Collection;
+use Telegram\Bot\Api;
+use Telegram\Bot\Exceptions\TelegramSDKException;
 
 class Message
 {
     /**
      * Bot
      */
-    protected $bot;
+    protected Api $bot;
 
     /**
      * 触发用户
      */
-    protected $User;
+    protected User $User;
 
     /**
      * 触发用户TG信息
      */
-    protected $triggerUser;
+    protected array $triggerUser;
 
     /**
      * 消息会话 ID
@@ -30,7 +34,7 @@ class Message
     /**
      * 触发源信息
      */
-    protected $Message;
+    protected \Telegram\Bot\Objects\Message $Message;
 
     /**
      * 触发源信息 ID
@@ -38,10 +42,12 @@ class Message
     protected $MessageID;
 
     /**
-     * @param \Telegram\Bot\Api             $bot
+     * @param Api $bot
      * @param \Telegram\Bot\Objects\Message $Message
+     * @throws TelegramSDKException
+     * @throws TelegramSDKException
      */
-    public function __construct($bot, $Message)
+    public function __construct(Api $bot, Collection $Message)
     {
         $this->bot         = $bot;
         $this->triggerUser = [
@@ -119,6 +125,8 @@ class Message
      * 回复讯息 | 默认已添加 chat_id 和 message_id
      *
      * @param array $sendMessage
+     * @throws TelegramSDKException
+     * @throws TelegramSDKException
      */
     public function replyWithMessage(array $sendMessage): void
     {
@@ -134,6 +142,11 @@ class Message
 
     /**
      * 入群检测
+     * @throws TelegramSDKException
+     * @throws TelegramSDKException
+     * @throws TelegramSDKException
+     * @throws TelegramSDKException
+     * @throws TelegramSDKException
      */
     public function NewChatParticipant(): void
     {
@@ -187,7 +200,7 @@ class Message
                 &&
                 $NewUser == null
                 &&
-                $deNewChatMember['is_bot'] == false
+                !$deNewChatMember['is_bot']
             ) {
                 $this->replyWithMessage(
                     [

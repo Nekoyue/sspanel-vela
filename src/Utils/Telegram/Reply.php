@@ -3,17 +3,18 @@
 namespace App\Utils\Telegram;
 
 use App\Models\Bought;
+use App\Models\User;
 
 class Reply
 {
     /**
      * 用户的流量使用讯息
      *
-     * @param \App\Models\User $user
+     * @param User $user
      *
      * @return string
      */
-    public static function getUserTrafficInfo($user)
+    public static function getUserTrafficInfo(User $user): string
     {
         $text = [
             '您当前的流量状况：',
@@ -28,11 +29,11 @@ class Reply
     /**
      * 用户基本讯息
      *
-     * @param \App\Models\User $user
+     * @param User $user
      *
      * @return string
      */
-    public static function getUserInfo($user)
+    public static function getUserInfo(User $user): string
     {
         $text = [
             '当前余额：' . $user->money,
@@ -47,11 +48,11 @@ class Reply
     /**
      * 获取用户或管理的尊称
      *
-     * @param \App\Models\User $user
+     * @param User $user
      *
      * @return string
      */
-    public static function getUserTitle($user)
+    public static function getUserTitle(User $user): string
     {
         if ($user->class > 0) {
             $text = '尊敬的 VIP ' . $user->class . ' 您好：';
@@ -64,11 +65,11 @@ class Reply
     /**
      * [admin]获取用户购买记录
      *
-     * @param \App\Models\User $user
+     * @param User $user
      *
      * @return array
      */
-    public static function getUserBoughts($user)
+    public static function getUserBoughts(User $user): array
     {
         $boughts = Bought::where('userid', $user->id)->orderBy('id', 'desc')->get();
         $data = [];
@@ -95,12 +96,12 @@ class Reply
     /**
      * [admin]获取用户信息
      *
-     * @param \App\Models\User $user
-     * @param int              $ChatID
+     * @param User $user
+     * @param int $ChatID
      *
      * @return string
      */
-    public static function getUserInfoFromAdmin($user, $ChatID)
+    public static function getUserInfoFromAdmin(User $user, int $ChatID): string
     {
         $strArray = [
             '#' . $user->id . ' ' . $user->user_name . ' 的用户信息',

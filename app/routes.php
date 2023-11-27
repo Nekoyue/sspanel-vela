@@ -18,7 +18,7 @@ return function (SlimApp $app) {
     $app->post('/notify',               App\Controllers\HomeController::class . ':notify');
 
     // Telegram
-    $app->post('/telegram_callback',    App\Controllers\HomeController::class . ':telegram');
+    $app->post('/telegram_callback',    App\Controllers\CallbackController::class . ':telegram');
 
     // User Center
     $app->group('/user', function () {

@@ -2,8 +2,6 @@
 
 namespace App\Utils\Telegram\Commands;
 
-use App\Services\Config;
-use App\Utils\Telegram\TelegramTools;
 use Telegram\Bot\Actions;
 use Telegram\Bot\Commands\Command;
 
@@ -15,17 +13,17 @@ class HelpCommand extends Command
     /**
      * @var string Command Name
      */
-    protected $name = 'help';
+    protected string $name = 'help';
 
     /**
      * @var string Command Description
      */
-    protected $description = '[群组/私聊] 系统中可用的所有命令.';
+    protected string $description = '[群组/私聊] 系统中可用的所有命令.';
 
     /**
      * {@inheritdoc}
      */
-    public function handle()
+    public function handle(): void
     {
         $Update  = $this->getUpdate();
         $Message = $Update->getMessage();
@@ -46,7 +44,7 @@ class HelpCommand extends Command
         foreach ($commands as $name => $handler) {
             $text .= '/' . $name . PHP_EOL . '`    - ' . $handler->getDescription() . '`' . PHP_EOL;
         }
-        $response = $this->replyWithMessage(
+        $this->replyWithMessage(
             [
                 'text'                      => $text,
                 'parse_mode'                => 'Markdown',

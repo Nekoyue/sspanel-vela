@@ -3,16 +3,11 @@
 namespace App\Utils\Telegram\Callbacks;
 
 use App\Controllers\LinkController;
-use App\Models\{
-    Ip,
-    Node,
-    Payback,
-    LoginIp,
-    Setting,
-    InviteCode,
-    UserSubscribeLog
-};
+use App\Models\{Ip, Node, Payback, LoginIp, Setting, InviteCode, User, UserSubscribeLog};
 use App\Services\Config;
+use Telegram\Bot\Api;
+use Telegram\Bot\Exceptions\TelegramSDKException;
+use Telegram\Bot\Objects\CallbackQuery;
 use App\Utils\{
     Tools,
     QQWry,
@@ -25,22 +20,22 @@ class Callback
     /**
      * Bot
      */
-    protected $bot;
+    protected Api $bot;
 
     /**
      * 触发用户
      */
-    protected $User;
+    protected User $User;
 
     /**
      * 触发用户TG信息
      */
-    protected $triggerUser;
+    protected array $triggerUser;
 
     /**
      * 回调
      */
-    protected $Callback;
+    protected CallbackQuery $Callback;
 
     /**
      * 回调数据内容
@@ -60,13 +55,15 @@ class Callback
     /**
      * 源消息是否可编辑
      */
-    protected $AllowEditMessage;
+    protected bool $AllowEditMessage;
 
     /**
-     * @param \Telegram\Bot\Api                   $bot
-     * @param \Telegram\Bot\Objects\CallbackQuery $Callback
+     * @param Api $bot
+     * @param CallbackQuery $Callback
+     * @throws TelegramSDKException
+     * @throws TelegramSDKException
      */
-    public function __construct($bot, $Callback)
+    public function __construct(Api $bot, CallbackQuery $Callback)
     {
         $this->bot              = $bot;
         $this->triggerUser      = [
@@ -87,7 +84,7 @@ class Callback
         }
 
         switch (true) {
-            case (strpos($this->CallbackData, 'user.') === 0):
+            case (str_starts_with($this->CallbackData, 'user.')):
                 // 用户相关
                 $this->userCallback();
                 break;
@@ -104,7 +101,7 @@ class Callback
      *
      * @return array
      */
-    public static function getGuestIndexKeyboard()
+    public static function getGuestIndexKeyboard(): array
     {
         $Keyboard = [
             [
@@ -132,6 +129,9 @@ class Callback
      * @param array $sendMessage
      *
      * @return void
+     * @throws TelegramSDKException
+     * @throws TelegramSDKException
+     * @throws TelegramSDKException
      */
     public function replyWithMessage(array $sendMessage): void
     {
@@ -181,6 +181,9 @@ class Callback
      * 回调数据处理
      *
      * @return void
+     * @throws TelegramSDKException
+     * @throws TelegramSDKException
+     * @throws TelegramSDKException
      */
     public function guestCallback(): void
     {
@@ -230,7 +233,7 @@ class Callback
         $this->replyWithMessage($sendMessage);
     }
 
-    public static function getUserIndexKeyboard($user)
+    public static function getUserIndexKeyboard($user): array
     {
         $checkin = (!$user->isAbleToCheckin() ? '已签到' : '签到');
         $Keyboard = [
@@ -284,18 +287,20 @@ class Callback
      *
      * 用户相关回调数据处理
      *
+     * @throws TelegramSDKException
+     * @throws TelegramSDKException
      */
-    public function userCallback()
+    public function userCallback(): void
     {
         if ($this->User == null) {
             if ($this->ChatID < 0) {
                 // 群组内提示
-                return $this->answerCallbackQuery([
+                $this->answerCallbackQuery([
                     'text'       => '您好，您尚未绑定账户，无法进行操作.',
                     'show_alert' => true,
                 ]);
             } else {
-                return $this->guestCallback();
+                $this->guestCallback();
             }
         }
         $CallbackDataExplode = explode('|', $this->CallbackData);
@@ -343,11 +348,10 @@ class Callback
                         ]
                     )
                 ]);
-                return;
         }
     }
 
-    public function getUserCenterKeyboard()
+    public function getUserCenterKeyboard(): array
     {
         $text  = Reply::getUserTitle($this->User);
         $text .= PHP_EOL . PHP_EOL;
@@ -390,8 +394,9 @@ class Callback
      *
      * 用户中心
      *
+     * @throws TelegramSDKException
      */
-    public function UserCenter()
+    public function UserCenter(): void
     {
         $back = [
             [
@@ -526,10 +531,9 @@ class Callback
                 break;
         }
         $this->replyWithMessage($sendMessage);
-        return;
     }
 
-    public function getUserEditKeyboard()
+    public function getUserEditKeyboard(): array
     {
         $text     = Reply::getUserTitle($this->User);
         $keyboard = [
@@ -590,11 +594,12 @@ class Callback
      *
      * 用户编辑
      *
+     * @throws TelegramSDKException
      */
-    public function UserEdit()
+    public function UserEdit(): void
     {
         if ($this->ChatID < 0) {
-            return $this->answerCallbackQuery([
+            $this->answerCallbackQuery([
                 'text'       => '无法在群组中进行该操作.',
                 'show_alert' => true,
             ]);
@@ -827,7 +832,7 @@ class Callback
             case 'unbind':
                 // Telegram 账户解绑
                 $this->AllowEditMessage = false;
-                $text                   = '发送 **/unbind 账户邮箱** 进行解绑.';
+                $text                   = '发送 <strong>/unbind 账户邮箱</strong> 进行解绑.';
                 if (Config::getconfig('Telegram.bool.unbind_kick_member') === true) {
                     $text .= PHP_EOL . PHP_EOL . '根据管理员的设定，您解绑账户将会被自动移出用户群.';
                 }
@@ -835,7 +840,6 @@ class Callback
                     'text'                     => $text,
                     'disable_web_page_preview' => false,
                     'reply_to_message_id'      => null,
-                    'parse_mode'               => 'Markdown',
                     'reply_markup'             => null
                 ];
                 break;
@@ -903,7 +907,7 @@ class Callback
         );
     }
 
-    public function getUserSubscribeKeyboard()
+    public function getUserSubscribeKeyboard(): array
     {
         $text     = '订阅中心.';
         $keyboard = [
@@ -1002,8 +1006,12 @@ class Callback
      *
      * 用户订阅
      *
+     * @throws TelegramSDKException
+     * @throws TelegramSDKException
+     * @throws TelegramSDKException
+     * @throws TelegramSDKException
      */
-    public function UserSubscribe()
+    public function UserSubscribe(): void
     {
         $CallbackDataExplode = explode('|', $this->CallbackData);
         // 订阅中心
@@ -1029,7 +1037,7 @@ class Callback
                     $filename     = 'Clash_' . $token . '_' . time() . '.yaml';
                     $filepath     = BASE_PATH . '/storage/SendTelegram/' . $filename;
                     $fh           = fopen($filepath, 'w+');
-                    $string       = LinkController::getClash($this->User, 1, [], [], false);
+                    $string       = LinkController::getClash($this->User, 1, [], []);
                     fwrite($fh, $string);
                     fclose($fh);
                     $this->bot->sendDocument(
@@ -1046,7 +1054,7 @@ class Callback
                     $filename     = 'Quantumult_' . $token . '_' . time() . '.conf';
                     $filepath     = BASE_PATH . '/storage/SendTelegram/' . $filename;
                     $fh           = fopen($filepath, 'w+');
-                    $string       = LinkController::GetQuantumult($this->User, 3, [], [], false);
+                    $string       = LinkController::GetQuantumult($this->User, 3, [], []);
                     fwrite($fh, $string);
                     fclose($fh);
                     $this->bot->sendDocument(
@@ -1063,7 +1071,7 @@ class Callback
                     $filename     = 'Surge_' . $token . '_' . time() . '.conf';
                     $filepath     = BASE_PATH . '/storage/SendTelegram/' . $filename;
                     $fh           = fopen($filepath, 'w+');
-                    $string       = LinkController::getSurge($this->User, 2, [], [], false);
+                    $string       = LinkController::getSurge($this->User, 2, [], []);
                     fwrite($fh, $string);
                     fclose($fh);
                     $this->bot->sendDocument(
@@ -1080,7 +1088,7 @@ class Callback
                     $filename     = 'Surge_' . $token . '_' . time() . '.conf';
                     $filepath     = BASE_PATH . '/storage/SendTelegram/' . $filename;
                     $fh           = fopen($filepath, 'w+');
-                    $string       = LinkController::getSurge($this->User, 3, [], [], false);
+                    $string       = LinkController::getSurge($this->User, 3, [], []);
                     fwrite($fh, $string);
                     fclose($fh);
                     $this->bot->sendDocument(
@@ -1119,7 +1127,7 @@ class Callback
         );
     }
 
-    public function getUserInviteKeyboard()
+    public function getUserInviteKeyboard(): array
     {
         if (!$paybacks_sum = Payback::where('ref_by', $this->User->id)->sum('ref_get')) {
             $paybacks_sum = 0;
@@ -1158,8 +1166,9 @@ class Callback
      *
      * 分享计划
      *
+     * @throws TelegramSDKException
      */
-    public function UserInvite()
+    public function UserInvite(): void
     {
         $CallbackDataExplode = explode('|', $this->CallbackData);
         $Operate             = explode('.', $CallbackDataExplode[0]);
@@ -1209,8 +1218,9 @@ class Callback
      *
      * 每日签到
      *
+     * @throws TelegramSDKException
      */
-    public function UserCheckin()
+    public function UserCheckin(): void
     {
         $checkin = $this->User->checkin();
         $this->answerCallbackQuery([

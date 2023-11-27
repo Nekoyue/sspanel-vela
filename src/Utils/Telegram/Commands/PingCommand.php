@@ -2,7 +2,6 @@
 
 namespace App\Utils\Telegram\Commands;
 
-use App\Utils\Telegram\TelegramTools;
 use Telegram\Bot\Actions;
 use Telegram\Bot\Commands\Command;
 
@@ -14,17 +13,17 @@ class PingCommand extends Command
     /**
      * @var string Command Name
      */
-    protected $name = 'ping';
+    protected string $name = 'ping';
 
     /**
      * @var string Command Description
      */
-    protected $description = '[群组/私聊] 获取我或者群组的唯一 ID.';
+    protected string $description = '[群组/私聊] 获取我或者群组的唯一 ID.';
 
     /**
      * {@inheritdoc}
      */
-    public function handle()
+    public function handle(): void
     {
         $Update = $this->getUpdate();
         $Message = $Update->getMessage();
@@ -66,7 +65,7 @@ class PingCommand extends Command
             ];
 
             // 回送信息
-            $response = $this->replyWithMessage(
+            $this->replyWithMessage(
                 [
                     'text' => implode(PHP_EOL, $text),
                 ]

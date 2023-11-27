@@ -22,6 +22,28 @@ use Exception;
  * @property        bool    $is_admin           是否管理员
  * @property        bool    $expire_notified    If user is notified for expire
  * @property        bool    $traffic_notified   If user is noticed for low traffic
+ * @property string $user_name
+ * @property string $email
+ * @property string $pass
+ * @property string $passwd
+ * @property string $uuid
+ * @property int $port
+ * @property int $ga_enable
+ * @property string $ga_token
+ * @property string $theme
+ * @property int $node_speedlimit
+ * @property int $class
+ * @property string $im_value
+ * @property int $im_type
+ * @property int $money
+ * @property string $reg_date
+ * @property string $expire_in
+ * @property int $ref_by
+ * @property int $invite_num
+ * @property float|int $transfer_enable
+ * @property int $d
+ * @property int $u
+ * @property int $t
  */
 class User extends Model
 {

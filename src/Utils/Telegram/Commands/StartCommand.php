@@ -16,17 +16,17 @@ class StartCommand extends Command
     /**
      * @var string Command Name
      */
-    protected $name = 'start';
+    protected string $name = 'start';
 
     /**
      * @var string Command Description
      */
-    protected $description = '[群组/私聊] Bot 初始命令.';
+    protected string $description = '[群组/私聊] Bot 初始命令.';
 
     /**
      * {@inheritdoc}
      */
-    public function handle()
+    public function handle(): void
     {
         $Update = $this->getUpdate();
         $Message = $Update->getMessage();
@@ -47,14 +47,16 @@ class StartCommand extends Command
                 'username' => $Message->getFrom()->getUsername(),
             ];
             // 消息内容
-            $MessageText = implode(' ', array_splice(explode(' ', trim($Message->getText())), 1));
+            $explode = explode(' ', trim($Message->getText()));
+            $MessageText = implode(' ', array_splice($explode, 1));
             if (
                 $MessageText != ''
                 && TelegramTools::getUser($SendUser['id']) == null
                 && strlen($MessageText) == 16
             ) {
                 // 新用户绑定
-                return $this->bindingAccount($SendUser, $MessageText);
+                $this->bindingAccount($SendUser, $MessageText);
+                return;
             }
             // 回送信息
             $this->replyWithMessage(
@@ -71,7 +73,7 @@ class StartCommand extends Command
             // 发送 '输入中' 会话状态
             $this->replyWithChatAction(['action' => Actions::TYPING]);
             // 回送信息
-            $response = $this->replyWithMessage(
+            $this->replyWithMessage(
                 [
                     'text' => '喵喵喵.',
                 ]
@@ -79,7 +81,7 @@ class StartCommand extends Command
         }
     }
 
-    public function bindingAccount($SendUser, $MessageText)
+    public function bindingAccount($SendUser, $MessageText): void
     {
         $Uid = TelegramSessionManager::verify_bind_session($MessageText);
         if ($Uid == 0) {

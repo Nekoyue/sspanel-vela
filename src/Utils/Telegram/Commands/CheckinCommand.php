@@ -3,7 +3,6 @@
 namespace App\Utils\Telegram\Commands;
 
 use App\Models\User;
-use App\Utils\Telegram\TelegramTools;
 use Telegram\Bot\Actions;
 use Telegram\Bot\Commands\Command;
 
@@ -15,12 +14,12 @@ class CheckinCommand extends Command
     /**
      * @var string Command Name
      */
-    protected $name = 'checkin';
+    protected string $name = 'checkin';
 
     /**
      * @var string Command Description
      */
-    protected $description = '[群组/私聊] 每日签到.';
+    protected string $description = '[群组/私聊] 每日签到.';
 
     /**
      * {@inheritdoc}
@@ -36,11 +35,11 @@ class CheckinCommand extends Command
         if ($ChatID < 0) {
             if ($_ENV['telegram_group_quiet'] === true) {
                 // 群组中不回应
-                return;
+                return null;
             }
             if ($ChatID != $_ENV['telegram_chatid']) {
                 // 非我方群组
-                return;
+                return null;
             }
         }
 

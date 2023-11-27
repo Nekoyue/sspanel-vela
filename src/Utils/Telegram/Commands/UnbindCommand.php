@@ -4,7 +4,6 @@ namespace App\Utils\Telegram\Commands;
 
 use App\Models\User;
 use App\Services\Config;
-use App\Utils\Telegram\TelegramTools;
 use Telegram\Bot\Actions;
 use Telegram\Bot\Commands\Command;
 
@@ -16,17 +15,17 @@ class UnbindCommand extends Command
     /**
      * @var string Command Name
      */
-    protected $name = 'unbind';
+    protected string $name = 'unbind';
 
     /**
      * @var string Command Description
      */
-    protected $description = '[私聊]     解除账户绑定.';
+    protected string $description = '[私聊]     解除账户绑定.';
 
     /**
      * {@inheritdoc}
      */
-    public function handle()
+    public function handle(): void
     {
         $Update = $this->getUpdate();
         $Message = $Update->getMessage();
@@ -64,7 +63,8 @@ class UnbindCommand extends Command
             }
 
             // 消息内容
-            $MessageText = implode(' ', array_splice(explode(' ', trim($Message->getText())), 1));
+            $explode = explode(' ', trim($Message->getText()));
+            $MessageText = implode(' ', array_splice($explode, 1));
 
             if ($MessageText == $User->email) {
                 $temp = $User->TelegramReset();
@@ -94,7 +94,7 @@ class UnbindCommand extends Command
         }
     }
 
-    public function sendtext()
+    public function sendtext(): string
     {
         $text = '发送 **/unbind 账户邮箱** 进行解绑.';
         if (Config::getconfig('Telegram.bool.unbind_kick_member') === true) {

@@ -2,7 +2,7 @@
 
 namespace App\Utils\Telegram\Commands;
 
-use App\Utils\Telegram\{TelegramTools};
+use App\Utils\Telegram\{Callbacks\Callback, TelegramTools};
 use Telegram\Bot\Actions;
 use Telegram\Bot\Commands\Command;
 
@@ -14,17 +14,17 @@ class MenuCommand extends Command
     /**
      * @var string Command Name
      */
-    protected $name = 'menu';
+    protected string $name = 'menu';
 
     /**
      * @var string Command Description
      */
-    protected $description = '[私聊]     用户主菜单、个人中心.';
+    protected string $description = '[私聊]     用户主菜单、个人中心.';
 
     /**
      * {@inheritdoc}
      */
-    public function handle()
+    public function handle(): void
     {
         $Update  = $this->getUpdate();
         $Message = $Update->getMessage();
@@ -50,13 +50,13 @@ class MenuCommand extends Command
 
             $user = TelegramTools::getUser($SendUser['id']);
             if ($user == null) {
-                $reply = \App\Utils\Telegram\Callbacks\Callback::getGuestIndexKeyboard();
+                $reply = Callback::getGuestIndexKeyboard();
             } else {
-                $reply = \App\Utils\Telegram\Callbacks\Callback::getUserIndexKeyboard($user);
+                $reply = Callback::getUserIndexKeyboard($user);
             }
 
             // 回送信息
-            return $this->replyWithMessage(
+            $this->replyWithMessage(
                 [
                     'text'                      => $reply['text'],
                     'parse_mode'                => 'Markdown',

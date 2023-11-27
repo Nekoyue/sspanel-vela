@@ -3,9 +3,7 @@
 namespace App\Utils\Telegram\Commands;
 
 use App\Models\User;
-use App\Services\Config;
 use App\Utils\Telegram\Reply;
-use App\Utils\Telegram\TelegramTools;
 use Telegram\Bot\Actions;
 use Telegram\Bot\Commands\Command;
 
@@ -17,12 +15,12 @@ class MyCommand extends Command
     /**
      * @var string Command Name
      */
-    protected $name = 'my';
+    protected string $name = 'my';
 
     /**
      * @var string Command Description
      */
-    protected $description = '[群组/私聊] 我的个人信息.';
+    protected string $description = '[群组/私聊] 我的个人信息.';
 
     /**
      * {@inheritdoc}
@@ -41,11 +39,11 @@ class MyCommand extends Command
         if ($ChatID < 0) {
             if ($_ENV['telegram_group_quiet'] === true) {
                 // 群组中不回应
-                return;
+                return null;
             }
             if ($ChatID != $_ENV['telegram_chatid']) {
                 // 非我方群组
-                return;
+                return null;
             }
         }
 
