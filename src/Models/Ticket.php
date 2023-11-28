@@ -16,7 +16,7 @@ class Ticket extends Model
      *
      * @param Ticket $Ticket
      */
-    public static function user_is_null($Ticket): void
+    public static function user_is_null(Ticket $Ticket): void
     {
         $tickets = Ticket::where('userid', $Ticket->userid)->where('rootid', 0)->get();
         foreach ($tickets as $ticket) {

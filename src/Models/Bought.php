@@ -8,7 +8,7 @@ namespace App\Models;
  * @property-read   int     $id         id
  * @property        int     $userid     User id
  * @property        int     $shopid     Shop id
- * @property        string  $datetime   Bought complete datetime
+ * @property        int $datetime   Bought complete datetime
  * @property        int     $renew      Time to renew this bought
  * @property        string  $coupon     Coupon applied to this bought
  * @property        float   $price      Price after coupon applied
@@ -25,7 +25,7 @@ class Bought extends Model
      *
      * @param Bought $Bought
      */
-    public static function user_is_null($Bought): void
+    public static function user_is_null(Bought $Bought): void
     {
         self::where('userid', $Bought->userid)->delete();
     }
@@ -35,7 +35,7 @@ class Bought extends Model
      *
      * @param Bought $Bought
      */
-    public static function shop_is_null($Bought): void
+    public static function shop_is_null(Bought $Bought): void
     {
         self::where('shopid', $Bought->shopid)->delete();
     }
@@ -131,7 +131,7 @@ class Bought extends Model
     /*
      * 下一次流量重置时间
      */
-    public function reset_time($unix = false)
+    public function reset_time($unix = false): float|int|string
     {
         $shop = $this->shop();
         if ($shop->use_loop()) {
@@ -147,7 +147,7 @@ class Bought extends Model
     /*
      * 过期时间
      */
-    public function exp_time($unix = false)
+    public function exp_time($unix = false): float|int|string
     {
         $shop = $this->shop();
         if ($shop->use_loop()) {

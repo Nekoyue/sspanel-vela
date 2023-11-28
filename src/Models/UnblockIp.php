@@ -32,7 +32,8 @@ class UnblockIp extends Model
     /**
      * 获取 IP 位置
      *
-     * @param QQWry $QQWry
+     * @param QQWry|null $QQWry $QQWry
+     * @return string
      */
     public function location(QQWry $QQWry = null): string
     {

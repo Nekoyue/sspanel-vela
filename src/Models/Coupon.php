@@ -7,12 +7,12 @@ class Coupon extends Model
     protected $connection = 'default';
     protected $table = 'coupon';
 
-    public function expire()
+    public function expire(): string
     {
         return date('Y-m-d H:i:s', $this->attributes['expire']);
     }
 
-    public function order($shop)
+    public function order($shop): bool
     {
         if ($this->attributes['shop'] == '') {
             return true;
@@ -20,12 +20,6 @@ class Coupon extends Model
 
         $shop_array = explode(',', $this->attributes['shop']);
 
-        foreach ($shop_array as $shopid) {
-            if ($shopid == $shop) {
-                return true;
-            }
-        }
-
-        return false;
+        return in_array($shop, $shop_array);
     }
 }

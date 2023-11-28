@@ -10,12 +10,12 @@ class TelegramSession extends Model
     protected $connection = 'default';
     protected $table = 'telegram_session';
 
-    public function datetime()
+    public function datetime(): string
     {
         return date('Y-m-d H:i:s', $this->attributes['datetime']);
     }
 
-    public function User()
+    public function User(): ?User
     {
         $user = User::where('id', $this->attributes['user_id'])->first();
         if ($user == null) {

@@ -50,7 +50,7 @@ class User extends Model
      *
      * @var bool
      */
-    public $isLogin;
+    public bool $isLogin;
 
     /**
      * 强制类型转换
@@ -85,16 +85,12 @@ class User extends Model
      */
     public function im_type(): string
     {
-        switch ($this->im_type) {
-            case 1:
-                return '微信';
-            case 2:
-                return 'QQ';
-            case 5:
-                return 'Discord';
-            default:
-                return 'Telegram';
-        }
+        return match ($this->im_type) {
+            1 => '微信',
+            2 => 'QQ',
+            5 => 'Discord',
+            default => 'Telegram',
+        };
     }
 
     /**
@@ -102,14 +98,10 @@ class User extends Model
      */
     public function im_value(): string
     {
-        switch ($this->im_type) {
-            case 1:
-            case 2:
-            case 5:
-                return $this->im_value;
-            default:
-                return '<a href="https://telegram.me/' . $this->im_value . '">' . $this->im_value . '</a>';
-        }
+        return match ($this->im_type) {
+            1, 2, 5 => $this->im_value,
+            default => '<a href="https://telegram.me/' . $this->im_value . '">' . $this->im_value . '</a>',
+        };
     }
 
 
@@ -133,6 +125,7 @@ class User extends Model
      * 更新密码
      *
      * @param string $pwd
+     * @return bool
      */
     public function updatePassword(string $pwd): bool
     {
@@ -154,6 +147,7 @@ class User extends Model
      * 更新连接密码
      *
      * @param string $pwd
+     * @return bool
      */
     public function updateSsPwd(string $pwd): bool
     {
@@ -165,6 +159,7 @@ class User extends Model
      * 更新加密方式
      *
      * @param string $method
+     * @return array
      */
     public function updateMethod(string $method): array
     {
@@ -336,7 +331,7 @@ class User extends Model
         return date('Ymd') != date('Ymd', $this->last_check_in_time);
     }
 
-    public function getGAurl()
+    public function getGAurl(): string
     {
         $ga = new GA();
         $url = $ga->getUrl(
@@ -381,7 +376,7 @@ class User extends Model
     /**
      * 删除用户的订阅链接
      */
-    public function clean_link()
+    public function clean_link(): void
     {
         Link::where('userid', $this->id)->delete();
     }
@@ -389,7 +384,7 @@ class User extends Model
     /**
      * 获取用户的订阅链接
      */
-    public function getSublink()
+    public function getSublink(): string
     {
         return LinkController::GenerateSSRSubCode($this->id);
     }
@@ -397,7 +392,7 @@ class User extends Model
     /**
      * 删除用户的邀请码
      */
-    public function clear_inviteCodes()
+    public function clear_inviteCodes(): void
     {
         InviteCode::where('user_id', $this->id)->delete();
     }
@@ -461,6 +456,7 @@ class User extends Model
      * 获取累计收入
      *
      * @param string $req
+     * @return float
      */
     public function calIncome(string $req): float
     {
@@ -536,6 +532,7 @@ class User extends Model
 
     /**
      * 签到
+     * @throws \Random\RandomException
      */
     public function checkin(): array
     {
@@ -600,10 +597,10 @@ class User extends Model
      *
      * @param int $Port
      */
-    public function setPort($Port): array
+    public function setPort(int $Port): array
     {
         $PortOccupied = User::pluck('port')->toArray();
-        if (in_array($Port, $PortOccupied) == true) {
+        if (in_array($Port, $PortOccupied)) {
             return [
                 'ok'  => false,
                 'msg' => '端口已被占用'
@@ -644,7 +641,7 @@ class User extends Model
      *
      * @param int $Port
      */
-    public function SpecifyPort($Port): array
+    public function SpecifyPort(int $Port): array
     {
         $price = $_ENV['port_price_specify'];
         if ($this->money < $price) {
@@ -653,14 +650,14 @@ class User extends Model
                 'msg' => '余额不足'
             ];
         }
-        if ($Port < $_ENV['min_port'] || $Port > $_ENV['max_port'] || Tools::isInt($Port) == false) {
+        if ($Port < $_ENV['min_port'] || $Port > $_ENV['max_port'] || !Tools::isInt($Port)) {
             return [
                 'ok'  => false,
                 'msg' => '端口不在要求范围内'
             ];
         }
         $PortOccupied = User::pluck('port')->toArray();
-        if (in_array($Port, $PortOccupied) == true) {
+        if (in_array($Port, $PortOccupied)) {
             return [
                 'ok'  => false,
                 'msg' => '端口已被占用'
@@ -702,7 +699,7 @@ class User extends Model
      *
      * @param mixed $total 金额
      */
-    public function addMoneyLog($total): void
+    public function addMoneyLog(mixed $total): void
     {
         if ($_ENV['money_from_admin'] && $total != 0) {
             $codeq              = new Code();
@@ -721,10 +718,12 @@ class User extends Model
      *
      * @param string $subject
      * @param string $template
-     * @param array  $ary
-     * @param array  $files
+     * @param array $ary
+     * @param array $files
+     * @param bool $is_queue
+     * @return bool
      */
-    public function sendMail(string $subject, string $template, array $ary = [], array $files = [], $is_queue = false): bool
+    public function sendMail(string $subject, string $template, array $ary = [], array $files = [], bool $is_queue = false): bool
     {
         $result = false;
         if ($is_queue) {
@@ -766,6 +765,7 @@ class User extends Model
      * 发送 Telegram 讯息
      *
      * @param string $text
+     * @return bool
      */
     public function sendTelegram(string $text): bool
     {
@@ -800,8 +800,7 @@ class User extends Model
                         'user'    => $this,
                         'text'    => '下面是系统中目前的公告:<br><br>' . $ann . '<br><br>晚安！',
                         'lastday' => $lastday
-                    ],
-                    []
+                    ]
                 );
                 break;
             case 2:
@@ -822,7 +821,8 @@ class User extends Model
      * 记录登录 IP
      *
      * @param string $ip
-     * @param int    $type 登录失败为 1
+     * @param int $type 登录失败为 1
+     * @return bool
      */
     public function collectLoginIP(string $ip, int $type = 0): bool
     {

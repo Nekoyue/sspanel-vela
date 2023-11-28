@@ -13,7 +13,7 @@ class DetectBanLog extends Model
      *
      * @param DetectBanLog $DetectBanLog
      */
-    public static function user_is_null($DetectBanLog): void
+    public static function user_is_null(DetectBanLog $DetectBanLog): void
     {
         self::where('user_id', $DetectBanLog->user_id)->delete();
     }

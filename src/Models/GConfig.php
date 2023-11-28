@@ -27,7 +27,7 @@ class GConfig extends Model
      *
      * @return void
      */
-    public function recover($user)
+    public function recover(User $user): void
     {
         $this->oldvalue       = $this->value;
         $this->value          = DefaultConfig::default_value($this->key)['value'];
@@ -43,29 +43,25 @@ class GConfig extends Model
      *
      * @return mixed
      */
-    public function getValue()
+    public function getValue(): mixed
     {
-        switch ($this->type) {
-            case 'bool':
-                return (bool)      $this->value;
-            case 'array':
-                return json_decode($this->value, true);
-            case 'string':
-                return (string)    $this->value;
-            default:
-                return (string)    $this->value;
-        }
+        return match ($this->type) {
+            'bool' => (bool)$this->value,
+            'array' => json_decode($this->value, true),
+            'string' => (string)$this->value,
+            default => (string)$this->value,
+        };
     }
 
     /**
      * 设定配置值
      *
      * @param mixed $value
-     * @param User  $user
+     * @param User|null $user
      *
      * @return bool
      */
-    public function setValue($value, $user = null)
+    public function setValue(mixed $value, User $user = null): bool
     {
         $this->oldvalue = $this->value;
         $this->value    = $this->typeConversion($value);
@@ -90,19 +86,15 @@ class GConfig extends Model
      *
      * @param mixed $value
      *
-     * @return mixed
+     * @return false|string
      */
-    public function typeConversion($value)
+    public function typeConversion(mixed $value): bool|string
     {
-        switch ($this->type) {
-            case 'bool':
-                return (string) $value;
-            case 'array':
-                return json_encode($value, 320);
-            case 'string':
-                return (string) $value;
-            default:
-                return (string) $value;
-        }
+        return match ($this->type) {
+            'bool' => (string)$value,
+            'array' => json_encode($value, 320),
+            'string' => (string)$value,
+            default => (string)$value,
+        };
     }
 }

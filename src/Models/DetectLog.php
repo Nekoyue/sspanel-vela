@@ -13,7 +13,7 @@ class DetectLog extends Model
      *
      * @param DetectLog $DetectLog
      */
-    public static function node_is_null($DetectLog): void
+    public static function node_is_null(DetectLog $DetectLog): void
     {
         self::where('node_id', $DetectLog->node_id)->delete();
     }
@@ -23,7 +23,7 @@ class DetectLog extends Model
      *
      * @param DetectLog $DetectLog
      */
-    public static function rule_is_null($DetectLog): void
+    public static function rule_is_null(DetectLog $DetectLog): void
     {
         self::where('list_id', $DetectLog->list_id)->delete();
     }
@@ -33,7 +33,7 @@ class DetectLog extends Model
      *
      * @param DetectLog $DetectLog
      */
-    public static function user_is_null($DetectLog): void
+    public static function user_is_null(DetectLog $DetectLog): void
     {
         self::where('user_id', $DetectLog->user_id)->delete();
     }

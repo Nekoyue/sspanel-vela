@@ -17,7 +17,7 @@ class UserSubscribeLog extends Model
      *
      * @param UserSubscribeLog $UserSubscribeLog
      */
-    public static function user_is_null($UserSubscribeLog): void
+    public static function user_is_null(UserSubscribeLog $UserSubscribeLog): void
     {
         self::where('user_id', $UserSubscribeLog->user_id)->delete();
     }
@@ -33,9 +33,10 @@ class UserSubscribeLog extends Model
     /**
      * 获取 IP 位置
      *
-     * @param QQWry $QQWry
+     * @param QQWry|null $QQWry $QQWry
+     * @return false|string
      */
-    public function location(QQWry $QQWry = null)
+    public function location(QQWry $QQWry = null): bool|string
     {
         if ($QQWry === null) {
             $QQWry = new QQWry();
@@ -47,13 +48,13 @@ class UserSubscribeLog extends Model
     /**
      * 记录订阅日志
      *
-     * @param User   $user 用户
+     * @param User $user 用户
      * @param string $type 订阅类型
      * @param string $ua   UA
      *
      * @return void
      */
-    public static function addSubscribeLog($user, $type, $ua)
+    public static function addSubscribeLog(User $user, string $type, string $ua): void
     {
         $log                     = new UserSubscribeLog();
         $log->user_name          = $user->user_name;

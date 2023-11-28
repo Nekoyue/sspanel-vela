@@ -51,13 +51,10 @@ class Node extends Model
      */
     public function sort(): string
     {
-        switch ($this->sort) {
-            case 14:
-                $sort = 'Trojan';
-                break;
-            default:
-                $sort = '系统保留';
-        }
+        $sort = match ($this->sort) {
+            14 => 'Trojan',
+            default => '系统保留',
+        };
         return $sort;
     }
 
@@ -66,19 +63,12 @@ class Node extends Model
      */
     public function mu_only(): string
     {
-        switch ($this->mu_only) {
-            case -1:
-                $mu_only = '只启用普通端口';
-                break;
-            case 0:
-                $mu_only = '单端口多用户与普通端口并存';
-                break;
-            case 1:
-                $mu_only = '只启用单端口多用户';
-                break;
-            default:
-                $mu_only = '错误类型';
-        }
+        $mu_only = match ($this->mu_only) {
+            -1 => '只启用普通端口',
+            0 => '单端口多用户与普通端口并存',
+            1 => '只启用单端口多用户',
+            default => '错误类型',
+        };
         return $mu_only;
     }
 
@@ -112,7 +102,7 @@ class Node extends Model
         return $log;
     }
 
-    public function getNodeUptime()
+    public function getNodeUptime(): string
     {
         $log = $this->getLastNodeInfoLog();
         if ($log == null) {
@@ -121,7 +111,7 @@ class Node extends Model
         return Tools::secondsToTime((int) $log->uptime);
     }
 
-    public function getNodeUpRate()
+    public function getNodeUpRate(): float|int
     {
         $log = NodeOnlineLog::where('node_id', $this->id)->where('log_time', '>=', time() - 86400)->count();
         return $log / 1440;
@@ -234,6 +224,7 @@ class Node extends Model
      * 更新节点 IP
      *
      * @param string $server_name
+     * @return bool
      */
     public function changeNodeIp(string $server_name): bool
     {
@@ -272,10 +263,6 @@ class Node extends Model
      */
     public function get_entrance_address(): string
     {
-        if ($this->sort == 13) {
-            $server = Tools::ssv2Array($this->server);
-            return $server['add'];
-        }
         $explode = explode(';', $this->server);
         if (in_array($this->sort, [0]) && isset($explode[1])) {
             if (stripos($explode[1], 'server=') !== false) {
@@ -290,7 +277,7 @@ class Node extends Model
      *
      * @param mixed $port
      */
-    public function getOffsetPort($port)
+    public function getOffsetPort(mixed $port)
     {
         return Tools::OutPort($this->server, $this->name, $port)['port'];
     }
@@ -300,9 +287,10 @@ class Node extends Model
      * Trojan 节点
      *
      * @param User $user 用户
-     * @param int  $mu_port
-     * @param int  $is_ss
+     * @param int $mu_port
+     * @param int $is_ss
      * @param bool $emoji
+     * @return array
      */
     public function getTrojanItem(User $user, int $mu_port = 0, int $is_ss = 0, bool $emoji = false): array
     {
@@ -318,15 +306,15 @@ class Node extends Model
         $item['passwd']   = $user->uuid;
         $item['host']     = $item['address'];
         $item['net']      = (isset($opt['grpc']) ? "grpc" : '');
-        $item['servicename'] = (isset($opt['servicename']) ? $opt['servicename'] : '');
-        $item['flow']     = (isset($opt['flow']) ? $opt['flow'] : '');
-        $xtls             = (isset($opt['enable_xtls']) ? $opt['enable_xtls'] : '');
+        $item['servicename'] = ($opt['servicename'] ?? '');
+        $item['flow'] = ($opt['flow'] ?? '');
+        $xtls = ($opt['enable_xtls'] ?? '');
         if($xtls == 'true'){
           $item['tls'] =  'xtls';
         }else {
           $item['tls'] =  'tls';
         }
-        $item['allow_insecure'] = (isset($opt['allow_insecure']) ? $opt['allow_insecure'] : '');
+        $item['allow_insecure'] = ($opt['allow_insecure'] ?? '');
         if (isset($opt['host'])) {
           $item['host'] = $opt['host'];
         }

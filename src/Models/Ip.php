@@ -55,7 +55,8 @@ class Ip extends Model
     /**
      * 获取 IP 位置
      *
-     * @param QQWry $QQWry
+     * @param QQWry|null $QQWry $QQWry
+     * @return string
      */
     public function location(QQWry $QQWry = null): string
     {
@@ -82,7 +83,7 @@ class Ip extends Model
         return Node::where('node_ip', Tools::getRealIp($this->ip))->first() ? '是' : '否';
     }
 
-    public function getUserAliveIpCount()
+    public function getUserAliveIpCount(): array
     {
         $db = new DatatablesHelper();
         $res = [];
@@ -92,7 +93,7 @@ class Ip extends Model
         return $res;
     }
 
-    public function ip()
+    public function ip(): array|string
     {
         return str_replace('::ffff:', '', $this->attributes['ip']);
     }

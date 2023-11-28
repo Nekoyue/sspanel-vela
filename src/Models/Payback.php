@@ -7,7 +7,7 @@ class Payback extends Model
     protected $connection = 'default';
     protected $table = 'payback';
 
-    public function user()
+    public function user(): ?User
     {
         $user = User::where('id', $this->attributes['userid'])->first();
         if ($user == null) {
@@ -18,12 +18,12 @@ class Payback extends Model
         return $user;
     }
 
-    public function rebate($user_id, $order_amount)
+    public function rebate($user_id, $order_amount): void
     {
         $configs = Setting::getClass('invite');
         $user = User::where('id', $user_id)->first();
         $gift_user_id = $user->ref_by;
-        
+
         // 判断
         $invite_rebate_mode = $configs['invite_rebate_mode'];
         $rebate_ratio = $configs['rebate_ratio'];
@@ -59,7 +59,7 @@ class Payback extends Model
         }
     }
 
-    public function executeRebate($user_id, $gift_user_id, $order_amount, $adjust_rebate = null)
+    public function executeRebate($user_id, $gift_user_id, $order_amount, $adjust_rebate = null): void
     {
         $gift_user = User::where('id', $gift_user_id)->first();
         $rebate_amount = $order_amount * Setting::obtain('rebate_ratio');

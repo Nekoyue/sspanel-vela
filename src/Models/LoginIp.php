@@ -22,7 +22,7 @@ class LoginIp extends Model
      *
      * @param LoginIp $LoginIp
      */
-    public static function user_is_null($LoginIp): void
+    public static function user_is_null(LoginIp $LoginIp): void
     {
         self::where('userid', $LoginIp->userid)->delete();
     }
@@ -57,7 +57,8 @@ class LoginIp extends Model
     /**
      * 获取 IP 位置
      *
-     * @param QQWry $QQWry
+     * @param QQWry|null $QQWry $QQWry
+     * @return string
      */
     public function location(QQWry $QQWry = null): string
     {

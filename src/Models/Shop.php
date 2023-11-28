@@ -21,7 +21,7 @@ class Shop extends Model
         'content' => 'array',
     ];
 
-    public function content()
+    public function content(): string
     {
         $content_text = '';
         foreach ($this->content as $key => $value) {
@@ -86,18 +86,18 @@ class Shop extends Model
         return $this->content['reset_exp'] ?? 0;
     }
 
-    public function traffic_package()
+    public function traffic_package(): bool
     {
         return isset($this->content['traffic_package']);
     }
 
-    public function content_extra()
+    public function content_extra(): int|array
     {
         if (isset($this->content['content_extra'])) {
             $content_extra = explode(';', $this->content['content_extra']);
             $content_extra_new = [];
             foreach ($content_extra as $innerContent) {
-                if (false === strpos($innerContent, '-')) {
+                if (!str_contains($innerContent, '-')) {
                     $innerContent = 'check-' . $innerContent;
                 }
                 $innerContent = explode('-', $innerContent);
@@ -130,7 +130,7 @@ class Shop extends Model
         return $this->content['connector'] ?? 0;
     }
 
-    public function buy($user, $is_renew = 0)
+    public function buy($user, $is_renew = 0): void
     {
         if (isset($this->content['traffic_package'])) {
             $user->transfer_enable += $this->content['bandwidth'] * 1024 * 1024 * 1024;
@@ -142,7 +142,7 @@ class Shop extends Model
             switch ($key) {
                 case 'bandwidth':
                     if ($is_renew == 0) {
-                        if ($_ENV['enable_bought_reset'] == true) {
+                        if ($_ENV['enable_bought_reset']) {
                             $user->transfer_enable = $value * 1024 * 1024 * 1024;
                             $user->u = 0;
                             $user->d = 0;
@@ -167,7 +167,7 @@ class Shop extends Model
                     }
                     break;
                 case 'class':
-                    if ($_ENV['enable_bought_extend'] == true) {
+                    if ($_ENV['enable_bought_extend']) {
                         if ($user->class == $value) {
                             $user->class_expire = date('Y-m-d H:i:s', strtotime($user->class_expire) + $this->content['class_expire'] * 86400);
                         } else {
@@ -179,6 +179,7 @@ class Shop extends Model
                         $user->class_expire = date('Y-m-d H:i:s', time() + $this->content['class_expire'] * 86400);
                         break;
                     }
+                    break;
                 case 'speedlimit':
                     $user->node_speedlimit = $value;
                     break;
