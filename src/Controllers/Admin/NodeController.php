@@ -55,7 +55,7 @@ class NodeController extends AdminController
         return $response->write(
             $this->view()
                 ->assign('table_config', $table_config)
-                ->display('admin/node/index.tpl')
+                ->fetch('admin/node/index.tpl')
         );
     }
 
@@ -70,7 +70,7 @@ class NodeController extends AdminController
     {
         return $response->write(
             $this->view()
-                ->display('admin/node/create.tpl')
+                ->fetch('admin/node/create.tpl')
         );
     }
 
@@ -168,7 +168,7 @@ class NodeController extends AdminController
         return $response->write(
             $this->view()
                 ->assign('node', $node)
-                ->display('admin/node/edit.tpl')
+                ->fetch('admin/node/edit.tpl')
         );
     }
 

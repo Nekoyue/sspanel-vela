@@ -28,7 +28,7 @@ class PasswordController extends BaseController
     public function reset($request, $response, $args)
     {
         return $response->write(
-            $this->view()->display('password/reset.tpl')
+            $this->view()->fetch('password/reset.tpl')
         );
     }
 
@@ -68,7 +68,7 @@ class PasswordController extends BaseController
         $token = PasswordReset::where('token', $args['token'])->where('expire_time', '>', time())->orderBy('id', 'desc')->first();
         if ($token == null) return $response->withStatus(302)->withHeader('Location', '/password/reset');
         return $response->write(
-            $this->view()->display('password/token.tpl')
+            $this->view()->fetch('password/token.tpl')
         );
     }
 

@@ -38,7 +38,7 @@ class SubscribeLogController extends AdminController
         return $response->write(
             $this->view()
                 ->assign('table_config', $table_config)
-                ->display('admin/subscribe.tpl')
+                ->fetch('admin/subscribe.tpl')
         );
     }
 

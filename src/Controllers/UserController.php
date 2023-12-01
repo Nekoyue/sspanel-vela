@@ -2,52 +2,32 @@
 
 namespace App\Controllers;
 
-use App\Services\{
-    Auth,
-    Captcha,
-    Config,
-    Payment
-};
-use App\Models\{
-    Ip,
-    Ann,
-    Code,
-    Node,
-    Shop,
-    User,
-    Token,
-    Bought,
-    Coupon,
-    Payback,
+use App\Models\{Ann,
     BlockIp,
-    LoginIp,
-    Setting,
-    UnblockIp,
+    Bought,
+    Code,
+    Coupon,
     DetectLog,
     DetectRule,
-    InviteCode,
-    StreamMedia,
     EmailVerify,
+    InviteCode,
+    Ip,
+    LoginIp,
+    Node,
+    Payback,
+    Setting,
+    Shop,
+    StreamMedia,
+    Token,
+    UnblockIp,
+    User,
     UserSubscribeLog
 };
-use App\Utils\{
-    GA,
-    URL,
-    Hash,
-    Check,
-    QQWry,
-    Tools,
-    Cookie,
-    Telegram,
-    DatatablesHelper,
-    TelegramSessionManager
-};
-use voku\helper\AntiXSS;
+use App\Services\{Auth, Captcha, Config, Payment};
+use App\Utils\{Check, Cookie, DatatablesHelper, GA, Hash, QQWry, Telegram, TelegramSessionManager, Tools, URL};
 use Ramsey\Uuid\Uuid;
-use Slim\Http\{
-    ServerRequest,
-    Response
-};
+use Slim\Http\{Response, ServerRequest};
+use voku\helper\AntiXSS;
 
 /**
  *  HomeController
@@ -66,7 +46,7 @@ class UserController extends BaseController
             $this->view()
                 ->assign('orders', $orders)
                 ->assign('render', $render)
-                ->display('user/order.tpl')
+                ->fetch('user/order.tpl')
         );
     }
 
@@ -77,7 +57,7 @@ class UserController extends BaseController
         return $response->write(
             $this->view()
                 ->assign('products', $products)
-                ->display('user/product.tpl')
+                ->fetch('user/product.tpl')
         );
     }
 
@@ -137,7 +117,7 @@ class UserController extends BaseController
                 ->assign('getUniversalSub', SubController::getUniversalSub($this->user))
                 ->assign('getClient', $token)
                 ->assign('data', $data)
-                ->display('user/index.tpl')
+                ->fetch('user/index.tpl')
         );
     }
 
@@ -163,7 +143,7 @@ class UserController extends BaseController
                 ->assign('payments', Payment::getPaymentsEnabled())
                 // ->assign('pmw', Payment::purchaseHTML())
                 ->assign('render', $render)
-                ->display('user/code.tpl')
+                ->fetch('user/code.tpl')
         );
     }
 
@@ -193,7 +173,7 @@ class UserController extends BaseController
                 ->assign('total_in', Code::where('isused', 1)->where('type', -1)->sum('number'))
                 ->assign('total_out', Code::where('isused', 1)->where('type', -2)->sum('number'))
                 ->assign('render', $render)
-                ->display('user/donate.tpl')
+                ->fetch('user/donate.tpl')
         );
     }
 
@@ -472,7 +452,7 @@ class UserController extends BaseController
                 ->assign('userloginip', $totallogin)
                 ->assign('paybacks'   , $paybacks)
                 ->registerClass('Tools', Tools::class)
-                ->display('user/profile.tpl')
+                ->fetch('user/profile.tpl')
         );
     }
 
@@ -495,7 +475,7 @@ class UserController extends BaseController
         return $response->write(
             $this->view()
                 ->assign('anns', $Anns)
-                ->display('user/announcement.tpl')
+                ->fetch('user/announcement.tpl')
         );
     }
 
@@ -564,9 +544,11 @@ class UserController extends BaseController
 
         array_multisort(array_column($results, 'node_name'), SORT_ASC, $results);
 
-        return $this->view()
+        return $response->write(
+            $this->view()
             ->assign('results', $results)
-            ->display('user/media.tpl');
+                ->fetch('user/media.tpl')
+        );
     }
 
     /**
@@ -591,7 +573,8 @@ class UserController extends BaseController
 
         $config_service = new Config();
 
-        return $this->view()
+        return $response->write(
+            $this->view()
             ->assign('user', $this->user)
             ->assign('themes', $themes)
             ->assign('isBlock', $isBlock)
@@ -600,7 +583,8 @@ class UserController extends BaseController
             ->assign('telegram_bot', $_ENV['telegram_bot'])
             ->assign('config_service', $config_service)
             ->registerClass('URL', URL::class)
-            ->display('user/edit.tpl');
+                ->fetch('user/edit.tpl')
+        );
     }
 
     /**
@@ -631,13 +615,15 @@ class UserController extends BaseController
 
         $invite_url = $_ENV['baseUrl'] . '/auth/register?code=' . $code->code;
 
-        return $this->view()
+        return $response->write(
+            $this->view()
             ->assign('code', $code)
             ->assign('render', $render)
             ->assign('paybacks', $paybacks)
             ->assign('invite_url', $invite_url)
             ->assign('paybacks_sum', $paybacks_sum)
-            ->display('user/invite.tpl');
+                ->fetch('user/invite.tpl')
+        );
     }
 
     /**
@@ -732,7 +718,9 @@ class UserController extends BaseController
      */
     public function sys($request, $response, $args)
     {
-        return $this->view()->assign('ana', '')->display('user/sys.tpl');
+        return $response->write(
+            $this->view()->assign('ana', '')->fetch('user/sys.tpl')
+        );
     }
 
     /**
@@ -902,7 +890,9 @@ class UserController extends BaseController
     public function shop($request, $response, $args)
     {
         $shops = Shop::where('status', 1)->orderBy('name')->get();
-        return $this->view()->assign('shops', $shops)->display('user/shop.tpl');
+        return $response->write(
+            $this->view()->assign('shops', $shops)->fetch('user/shop.tpl')
+        );
     }
 
     /**
@@ -1176,10 +1166,12 @@ class UserController extends BaseController
             return $response->withJson($res);
         };
         $render = Tools::paginate_render($shops);
-        return $this->view()
+        return $response->write(
+            $this->view()
             ->assign('shops', $shops)
             ->assign('render', $render)
-            ->display('user/bought.tpl');
+                ->fetch('user/bought.tpl')
+        );
     }
 
     /**
@@ -1423,7 +1415,9 @@ class UserController extends BaseController
      */
     public function kill($request, $response, $args)
     {
-        return $this->view()->display('user/kill.tpl');
+        return $response->write(
+            $this->view()->fetch('user/kill.tpl')
+        );
     }
 
     /**
@@ -1476,10 +1470,12 @@ class UserController extends BaseController
 
         $logs->setPath('/user/detect');
         $render = Tools::paginate_render($logs);
-        return $this->view()
+        return $response->write(
+            $this->view()
             ->assign('rules', $logs)
             ->assign('render', $render)
-            ->display('user/detect_index.tpl');
+                ->fetch('user/detect_index.tpl')
+        );
     }
 
     /**
@@ -1517,10 +1513,12 @@ class UserController extends BaseController
 
         $logs->setPath('/user/detect/log');
         $render = Tools::paginate_render($logs);
-        return $this->view()
+        return $response->write(
+            $this->view()
             ->assign('logs', $logs)
             ->assign('render', $render)
-            ->display('user/detect_log.tpl');
+                ->fetch('user/detect_log.tpl')
+        );
     }
 
     /**
@@ -1530,7 +1528,9 @@ class UserController extends BaseController
      */
     public function disable($request, $response, $args)
     {
-        return $this->view()->display('user/disable.tpl');
+        return $response->write(
+            $this->view()->fetch('user/disable.tpl')
+        );
     }
 
     /**
@@ -1635,11 +1635,13 @@ class UserController extends BaseController
         $logs->setPath('/user/subscribe_log');
 
         $render = Tools::paginate_render($logs);
-        return $this->view()
+        return $response->write(
+            $this->view()
             ->assign('logs', $logs)
             ->assign('render', $render)
             ->registerClass('Tools', Tools::class)
-            ->fetch('user/subscribe_log.tpl');
+                ->fetch('user/subscribe_log.tpl')
+        );
     }
 
     /**

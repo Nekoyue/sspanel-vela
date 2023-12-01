@@ -46,7 +46,7 @@ class TicketController extends UserController
             $this->view()
                 ->assign('tickets', $tickets)
                 ->assign('render', $render)
-                ->display('user/ticket.tpl')
+                ->fetch('user/ticket.tpl')
         );
     }
 
@@ -59,7 +59,7 @@ class TicketController extends UserController
     {
         return $response->write(
             $this->view()
-                ->display('user/ticket_create.tpl')
+                ->fetch('user/ticket_create.tpl')
         );
     }
 
@@ -275,7 +275,7 @@ class TicketController extends UserController
                 ->assign('ticketset', $ticketset)
                 ->assign('id', $id)
                 ->assign('render', $render)
-                ->display('user/ticket_view.tpl')
+                ->fetch('user/ticket_view.tpl')
         );
     }
 }

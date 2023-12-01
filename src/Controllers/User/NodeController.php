@@ -82,10 +82,11 @@ class NodeController extends UserController
             $all_node[$node->node_class + 1000][] = $array_node;
         }
 
-        $this->view()
-            ->assign('nodes', $all_node)
-            ->display('user/node/index.tpl');
-        return $response->write(200);
+        return $response->write(
+            $this->view()
+                ->assign('nodes', $all_node)
+                ->fetch('user/node/index.tpl')
+        );
     }
 
     /**
@@ -98,12 +99,14 @@ class NodeController extends UserController
         $id           = $args['id'];
         $point_node   = Node::find($id);
         $prefix       = explode(' - ', $point_node->name);
-        $this->view()
-            ->assign('point_node', $point_node)
-            ->assign('prefix', $prefix[0])
-            ->assign('id', $id)
-            ->display('user/node/nodeajax.tpl');
-        return $response->write(200);
+
+        return $response->write(
+            $this->view()
+                ->assign('point_node', $point_node)
+                ->assign('prefix', $prefix[0])
+                ->assign('id', $id)
+                ->fetch('user/node/nodeajax.tpl')
+        );
     }
 
     /**
@@ -141,10 +144,12 @@ class NodeController extends UserController
                 if ($server['host'] != $server['address']) {
                     $nodes['info']['HOST&PEER：'] = $server['host'];
                 }
-                $this->view()
+
+                return $response->write(
+                    $this->view()
                     ->assign('node', $nodes)
-                    ->display('user/node/node_trojan.tpl');
-                return $response->write(200);
+                        ->fetch('user/node/node_trojan.tpl')
+                );
             default:
                 return $response->write(404);
         }

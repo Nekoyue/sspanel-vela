@@ -1,5 +1,4 @@
 {include file='user/main.tpl'}
-{$ssr_prefer = URL::SSRCanConnect($user, 0)}
 {$pre_user = URL::cloneUser($user)}
 
 <style>

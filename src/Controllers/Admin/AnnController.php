@@ -37,7 +37,7 @@ class AnnController extends AdminController
         return $response->write(
             $this->view()
                 ->assign('table_config', $table_config)
-                ->display('admin/announcement/index.tpl')
+                ->fetch('admin/announcement/index.tpl')
         );
     }
 
@@ -91,7 +91,7 @@ class AnnController extends AdminController
     {
         return $response->write(
             $this->view()
-                ->display('admin/announcement/create.tpl')
+                ->fetch('admin/announcement/create.tpl')
         );
     }
 
@@ -169,7 +169,7 @@ class AnnController extends AdminController
         return $response->write(
             $this->view()
                 ->assign('ann', $ann)
-                ->display('admin/announcement/edit.tpl')
+                ->fetch('admin/announcement/edit.tpl')
         );
     }
 

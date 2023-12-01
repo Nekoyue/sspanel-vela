@@ -60,14 +60,16 @@ class AuthController extends BaseController
             $geetest_html = null;
         }
 
-        return $this->view()
+        return $response->write(
+            $this->view()
             ->assign('geetest_html', $geetest_html)
             ->assign('login_token', $login_token)
             ->assign('login_number', $login_number)
             ->assign('telegram_bot', $_ENV['telegram_bot'])
             ->assign('base_url', $_ENV['baseUrl'])
             ->assign('recaptcha_sitekey', $captcha['recaptcha'])
-            ->display('auth/login.tpl');
+                ->fetch('auth/login.tpl')
+        );
     }
 
     /**
@@ -213,7 +215,8 @@ class AuthController extends BaseController
             $geetest_html = null;
         }
 
-        return $this->view()
+        return $response->write(
+            $this->view()
             ->assign('geetest_html', $geetest_html)
             ->assign('enable_email_verify', Setting::obtain('reg_email_verify'))
             ->assign('code', $code)
@@ -222,7 +225,8 @@ class AuthController extends BaseController
             ->assign('base_url', $_ENV['baseUrl'])
             ->assign('login_token', $login_token)
             ->assign('login_number', $login_number)
-            ->display('auth/register.tpl');
+                ->fetch('auth/register.tpl')
+        );
     }
 
     /**
@@ -573,11 +577,13 @@ class AuthController extends BaseController
                 $telegram_id = $auth_data['id'];
                 $user        = User::query()->where('telegram_id', $telegram_id)->firstOrFail(); // Welcome Back :)
                 if ($user == null) {
-                    return $this->view()
+                    return $response->write(
+                        $this->view()
                         ->assign('title', '您需要先进行邮箱注册后绑定Telegram才能使用授权登录')
                         ->assign('message', '很抱歉带来的不便，请重新试试')
                         ->assign('redirect', '/auth/login')
-                        ->display('telegram_error.tpl');
+                            ->fetch('telegram_error.tpl')
+                    );
                 }
                 Auth::login($user->id, 3600);
 
@@ -585,18 +591,21 @@ class AuthController extends BaseController
                 $user->collectLoginIP($_SERVER['REMOTE_ADDR']);
 
                 // 登陆成功！
-                return $this->view()
+                return $response->write($this->view()
                     ->assign('title', '登录成功')
                     ->assign('message', '正在前往仪表盘')
                     ->assign('redirect', '/user')
-                    ->display('telegram_success.tpl');
+                    ->fetch('telegram_success.tpl')
+                );
             }
             // 验证失败
-            return $this->view()
+            return $response->write(
+                $this->view()
                 ->assign('title', '登陆超时或非法构造信息')
                 ->assign('message', '很抱歉带来的不便，请重新试试')
                 ->assign('redirect', '/auth/login')
-                ->display('telegram_error.tpl');
+                    ->fetch('telegram_error.tpl')
+            );
         }
         return $response->withRedirect('/404');
     }

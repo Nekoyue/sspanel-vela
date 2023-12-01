@@ -75,7 +75,7 @@ class UserController extends AdminController
             $this->view()
                 ->assign('shops',        Shop::orderBy('name')->get())
                 ->assign('table_config', $table_config)
-                ->display('admin/user/index.tpl')
+                ->fetch('admin/user/index.tpl')
         );
     }
 
@@ -197,7 +197,7 @@ class UserController extends AdminController
         return $response->write(
             $this->view()
                 ->assign('edit_user', $user)
-                ->display('admin/user/edit.tpl')
+                ->fetch('admin/user/edit.tpl')
         );
     }
 

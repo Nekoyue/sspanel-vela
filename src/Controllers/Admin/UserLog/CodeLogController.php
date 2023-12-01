@@ -37,7 +37,7 @@ class CodeLogController extends AdminController
             $this->view()
                 ->assign('table_config', $table_config)
                 ->assign('user', $user)
-                ->display('admin/user/code.tpl')
+                ->fetch('admin/user/code.tpl')
         );
     }
 

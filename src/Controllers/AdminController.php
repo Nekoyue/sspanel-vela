@@ -36,7 +36,7 @@ class AdminController extends UserController
         return $response->write(
             $this->view()
                 ->assign('sts', new Analytics())
-                ->display('admin/index.tpl')
+                ->fetch('admin/index.tpl')
         );
     }
 
@@ -51,7 +51,7 @@ class AdminController extends UserController
     {
         return $response->write(
             $this->view()
-                ->display('admin/index.tpl')
+                ->fetch('admin/index.tpl')
         );
     }
 
@@ -82,7 +82,7 @@ class AdminController extends UserController
         return $response->write(
             $this->view()
                 ->assign('table_config', $table_config)
-                ->display('admin/invite.tpl')
+                ->fetch('admin/invite.tpl')
         );
     }
 
@@ -205,7 +205,7 @@ class AdminController extends UserController
         return $response->write(
             $this->view()
                 ->assign('table_config', $table_config)
-                ->display('admin/coupon.tpl')
+                ->fetch('admin/coupon.tpl')
         );
     }
 

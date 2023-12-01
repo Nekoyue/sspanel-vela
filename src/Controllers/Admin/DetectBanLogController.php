@@ -36,7 +36,7 @@ class DetectBanLogController extends AdminController
         return $response->write(
             $this->view()
                 ->assign('table_config', $table_config)
-                ->display('admin/detect/ban.tpl')
+                ->fetch('admin/detect/ban.tpl')
         );
     }
 

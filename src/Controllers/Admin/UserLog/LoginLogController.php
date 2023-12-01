@@ -39,7 +39,7 @@ class LoginLogController extends AdminController
             $this->view()
                 ->assign('table_config', $table_config)
                 ->assign('user', $user)
-                ->display('admin/user/login.tpl')
+                ->fetch('admin/user/login.tpl')
         );
     }
 

@@ -43,7 +43,7 @@ class IpController extends AdminController
         return $response->write(
             $this->view()
                 ->assign('table_config', $table_config)
-                ->display('admin/ip/login.tpl')
+                ->fetch('admin/ip/login.tpl')
         );
     }
 
@@ -122,7 +122,7 @@ class IpController extends AdminController
         return $response->write(
             $this->view()
                 ->assign('table_config', $table_config)
-                ->display('admin/ip/alive.tpl')
+                ->fetch('admin/ip/alive.tpl')
         );
     }
 
@@ -201,7 +201,7 @@ class IpController extends AdminController
         return $response->write(
             $this->view()
                 ->assign('table_config', $table_config)
-                ->display('admin/ip/block.tpl')
+                ->fetch('admin/ip/block.tpl')
         );
     }
 
@@ -294,7 +294,7 @@ class IpController extends AdminController
         return $response->write(
             $this->view()
                 ->assign('table_config', $table_config)
-                ->display('admin/ip/unblock.tpl')
+                ->fetch('admin/ip/unblock.tpl')
         );
     }
 

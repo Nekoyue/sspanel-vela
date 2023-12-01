@@ -9,12 +9,12 @@ use App\Models\Setting;
 
 class PAYJS extends AbstractPayment
 {
-    public static function _name() 
+    public static function _name()
     {
         return 'payjs';
     }
 
-    public static function _enable() 
+    public static function _enable()
     {
         return self::getActiveGateway('payjs');
     }
@@ -186,7 +186,9 @@ class PAYJS extends AbstractPayment
                 $success = 0;
             }
         }
-        return View::getSmarty()->assign('money', $money)->assign('success', $success)->fetch('user/pay_success.tpl');
+        return $response->write(
+            View::getSmarty()->assign('money', $money)->assign('success', $success)->fetch('user/pay_success.tpl')
+        );
     }
     public function getStatus($request, $response, $args)
     {

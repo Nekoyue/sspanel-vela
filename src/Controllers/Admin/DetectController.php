@@ -33,7 +33,7 @@ class DetectController extends AdminController
         return $response->write(
             $this->view()
                 ->assign('table_config', $table_config)
-                ->display('admin/detect/index.tpl')
+                ->fetch('admin/detect/index.tpl')
         );
     }
 
@@ -85,7 +85,7 @@ class DetectController extends AdminController
     {
         return $response->write(
             $this->view()
-                ->display('admin/detect/add.tpl')
+                ->fetch('admin/detect/add.tpl')
         );
     }
 
@@ -128,7 +128,7 @@ class DetectController extends AdminController
         return $response->write(
             $this->view()
                 ->assign('rule', $rule)
-                ->display('admin/detect/edit.tpl')
+                ->fetch('admin/detect/edit.tpl')
         );
     }
 
@@ -206,7 +206,7 @@ class DetectController extends AdminController
         return $response->write(
             $this->view()
                 ->assign('table_config', $table_config)
-                ->display('admin/detect/log.tpl')
+                ->fetch('admin/detect/log.tpl')
         );
     }
 

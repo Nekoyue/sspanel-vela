@@ -36,7 +36,7 @@ class SettingController extends AdminController
                 ->assign('settings', $config)
                 ->assign('payment_gateways', self::return_gateways_list())
                 ->assign('active_payment_gateway', self::return_active_gateways())
-                ->display('admin/setting.tpl')
+                ->fetch('admin/setting.tpl')
         );
     }
 

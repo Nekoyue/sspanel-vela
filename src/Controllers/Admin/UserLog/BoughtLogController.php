@@ -45,7 +45,7 @@ class BoughtLogController extends AdminController
                 ->assign('table_config', $table_config)
                 ->assign('shops', $shops)
                 ->assign('user', $user)
-                ->display('admin/user/bought.tpl')
+                ->fetch('admin/user/bought.tpl')
         );
     }
 

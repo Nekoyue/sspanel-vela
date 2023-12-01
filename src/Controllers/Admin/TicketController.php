@@ -42,7 +42,7 @@ class TicketController extends AdminController
         return $response->write(
             $this->view()
                 ->assign('table_config', $table_config)
-                ->display('admin/ticket/index.tpl')
+                ->fetch('admin/ticket/index.tpl')
         );
     }
 
@@ -174,7 +174,7 @@ class TicketController extends AdminController
                 ->assign('ticketset', $ticketset)
                 ->assign('id', $id)
                 ->assign('render', $render)
-                ->display('admin/ticket/view.tpl')
+                ->fetch('admin/ticket/view.tpl')
         );
     }
 

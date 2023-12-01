@@ -42,7 +42,7 @@ class ShopController extends AdminController
         return $response->write(
             $this->view()
                 ->assign('table_config', $table_config)
-                ->display('admin/shop/index.tpl')
+                ->fetch('admin/shop/index.tpl')
         );
     }
 
@@ -57,7 +57,7 @@ class ShopController extends AdminController
     {
         return $response->write(
             $this->view()
-                ->display('admin/shop/create.tpl')
+                ->fetch('admin/shop/create.tpl')
         );
     }
 
@@ -142,7 +142,7 @@ class ShopController extends AdminController
         return $response->write(
             $this->view()
                 ->assign('shop', $shop)
-                ->display('admin/shop/edit.tpl')
+                ->fetch('admin/shop/edit.tpl')
         );
     }
 
@@ -279,7 +279,7 @@ class ShopController extends AdminController
         return $response->write(
             $this->view()
                 ->assign('table_config', $table_config)
-                ->display('admin/shop/bought.tpl')
+                ->fetch('admin/shop/bought.tpl')
         );
     }
 

@@ -39,7 +39,7 @@ class CodeController extends AdminController
         return $response->write(
             $this->view()
                 ->assign('table_config', $table_config)
-                ->display('admin/code/index.tpl')
+                ->fetch('admin/code/index.tpl')
         );
     }
 
@@ -93,7 +93,7 @@ class CodeController extends AdminController
     {
         return $response->write(
             $this->view()
-                ->display('admin/code/add.tpl')
+                ->fetch('admin/code/add.tpl')
         );
     }
 
@@ -106,7 +106,7 @@ class CodeController extends AdminController
     {
         return $response->write(
             $this->view()
-                ->display('admin/code/add_donate.tpl')
+                ->fetch('admin/code/add_donate.tpl')
         );
     }
 
