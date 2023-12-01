@@ -16,7 +16,7 @@
 
 <body>
 
-<div id="wrapper">
+<div id="wrapper" style="position: fixed; top: 0">
     <header id="header">
         <div class="logo">
             <span class="icon fa-rocket"></span>
@@ -26,9 +26,6 @@
                 <h1>500 错误</h1>
                 <p>服务娘崩溃了呢... TwT</p>
                 <p>这件事儿不应该发生的...如果反复出现请联系站主.</p>
-                {if !is_null($exceptionId)}
-                <p>事件 ID: {$exceptionId}</p>
-                {/if}
             </div>
         </div>
         <nav>
@@ -47,22 +44,6 @@
 <script src="https://cdn.jsdelivr.net/gh/ajlkn/skel@3.0.1/dist/skel.min.js"></script>
 <script src="/assets/js/util.min.js"></script>
 <script src="/assets/js/main.min.js"></script>
-
-{if !is_null($exceptionId)}
-<script src="https://cdn.jsdelivr.net/npm/@sentry/browser@5.20.1/build/bundle.min.js" integrity="sha256-EIV/iYkbXFgnuIHEdltBOK4eY58n87ADisyDI8/VJPg=" crossorigin="anonymous"></script>
-<script>
-    Sentry.init({
-        dsn: "{$config['sentry_dsn']}"
-    });
-    Sentry.showReportDialog({
-        eventId: '{$exceptionId}',
-        user: {
-            name: '{$user->user_name}',
-            email: '{$user->email}'
-        }
-    });
-</script>
-{/if}
 
 </body>
 
