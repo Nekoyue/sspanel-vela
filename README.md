@@ -69,7 +69,7 @@ php xcat Tool initdownload
 Rename the example config file to `.config.php`.
 
 ```shell
-docker-compose up
+docker compose up
 ```
 The website will be served at http://localhost:8081
 
