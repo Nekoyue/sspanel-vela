@@ -17,25 +17,35 @@ use App\Services\Auth;
 use Paymentwall_Config;
 use Paymentwall_Pingback;
 use Paymentwall_Widget;
+use Slim\Http\Response;
+use Slim\Http\ServerRequest;
+use Telegram\Bot\Exceptions\TelegramSDKException;
+use TelegramBot\Api\Exception;
+use TelegramBot\Api\InvalidArgumentException;
 
 class PaymentWall extends AbstractPayment
 {
-    public static function _name() 
+    public static function _name(): string
     {
         return 'paymentwall';
     }
 
-    public static function _enable() 
+    public static function _enable(): bool
     {
         return self::getActiveGateway('paymentwall');
     }
 
-    public function purchase($request, $response, $args)
+    public function purchase(ServerRequest $request, Response $response, array $args)
     {
         // TODO: Implement purchase() method.
     }
 
-    public function notify($request, $response, $args)
+    /**
+     * @throws InvalidArgumentException
+     * @throws Exception
+     * @throws TelegramSDKException
+     */
+    public function notify(ServerRequest $request, Response $response, array $args): void
     {
         $configs = Setting::getClass('pmw');
         if ($configs['pmw_publickey'] != '') {
@@ -85,7 +95,7 @@ class PaymentWall extends AbstractPayment
     }
 
 
-    public static function getPurchaseHTML()
+    public static function getPurchaseHTML(): string
     {
         $configs = Setting::getClass('pmw');
         Paymentwall_Config::getInstance()->set(array(
@@ -114,12 +124,12 @@ class PaymentWall extends AbstractPayment
         return $widget->getHtmlCode(array('height' => $configs['pmw_height'], 'width' => '100%'));
     }
 
-    public function getReturnHTML($request, $response, $args)
+    public function getReturnHTML(ServerRequest $request, Response $response, array $args)
     {
         // TODO: Implement getReturnHTML() method.
     }
 
-    public function getStatus($request, $response, $args)
+    public function getStatus(ServerRequest $request, Response $response, array $args)
     {
         // TODO: Implement getStatus() method.
     }

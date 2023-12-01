@@ -24,10 +24,12 @@ class NodeController extends UserController
 {
     /**
      * @param ServerRequest $request
-     * @param Response  $response
-     * @param array     $args
+     * @param Response $response
+     * @param array $args
+     * @return ResponseInterface
+     * @throws \SmartyException
      */
-    public function user_node_page($request, $response, $args): ResponseInterface
+    public function user_node_page(ServerRequest $request, Response $response, array $args): ResponseInterface
     {
         $user  = $this->user;
         $query = Node::query();
@@ -91,10 +93,12 @@ class NodeController extends UserController
 
     /**
      * @param ServerRequest $request
-     * @param Response  $response
-     * @param array     $args
+     * @param Response $response
+     * @param array $args
+     * @return ResponseInterface
+     * @throws \SmartyException
      */
-    public function user_node_ajax($request, $response, $args): ResponseInterface
+    public function user_node_ajax(ServerRequest $request, Response $response, array $args): ResponseInterface
     {
         $id           = $args['id'];
         $point_node   = Node::find($id);
@@ -113,9 +117,10 @@ class NodeController extends UserController
      * @param ServerRequest $request
      * @param Response $response
      * @param array $args
+     * @return ResponseInterface
      * @throws \SmartyException
      */
-    public function user_node_info($request, $response, $args): ResponseInterface
+    public function user_node_info(ServerRequest $request, Response $response, array $args): ResponseInterface
     {
         $user = $this->user;
         $node = Node::find($args['id']);

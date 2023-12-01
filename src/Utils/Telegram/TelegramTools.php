@@ -385,11 +385,11 @@ class TelegramTools
     /**
      * 使用 $Value 给定的运算式与 $Source 计算结果
      *
-     * @param string $Source         源数值
-     * @param string $Value          运算式含增改数值
+     * @param string $Source 源数值
+     * @param string $Value 运算式含增改数值
      * @param bool $FloatingNumber 是否格式化为浮点数
      *
-     * @return string|null
+     * @return float|int|string|null
      */
     public static function ComputingMethod(string $Source, string $Value, bool $FloatingNumber = false): float|int|string|null
     {

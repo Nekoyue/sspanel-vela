@@ -8,6 +8,7 @@ use App\Models\Setting;
 use App\Utils\Tools;
 use App\Services\Auth;
 use App\Services\Mail;
+use Psr\Http\Message\ResponseInterface;
 use Slim\Http\{
     ServerRequest,
     Response
@@ -19,10 +20,12 @@ class CodeController extends AdminController
      * 后台充值码及充值记录页面
      *
      * @param ServerRequest $request
-     * @param Response  $response
-     * @param array     $args
+     * @param Response $response
+     * @param array $args
+     * @return Response|ResponseInterface
+     * @throws \SmartyException
      */
-    public function index($request, $response, $args)
+    public function index(ServerRequest $request, Response $response, array $args): Response|\Psr\Http\Message\ResponseInterface
     {
         $table_config['total_column'] = array(
             'id'          => 'ID',
@@ -45,10 +48,11 @@ class CodeController extends AdminController
 
     /**
      * @param ServerRequest $request
-     * @param Response  $response
-     * @param array     $args
+     * @param Response $response
+     * @param array $args
+     * @return Response|ResponseInterface
      */
-    public function ajax_code($request, $response, $args)
+    public function ajax_code(ServerRequest $request, Response $response, array $args): Response|\Psr\Http\Message\ResponseInterface
     {
         $query = Code::getTableDataFromAdmin(
             $request,
@@ -86,10 +90,12 @@ class CodeController extends AdminController
 
     /**
      * @param ServerRequest $request
-     * @param Response  $response
-     * @param array     $args
+     * @param Response $response
+     * @param array $args
+     * @return Response|ResponseInterface
+     * @throws \SmartyException
      */
-    public function create($request, $response, $args)
+    public function create(ServerRequest $request, Response $response, array $args): Response|\Psr\Http\Message\ResponseInterface
     {
         return $response->write(
             $this->view()
@@ -99,10 +105,12 @@ class CodeController extends AdminController
 
     /**
      * @param ServerRequest $request
-     * @param Response  $response
-     * @param array     $args
+     * @param Response $response
+     * @param array $args
+     * @return Response|ResponseInterface
+     * @throws \SmartyException
      */
-    public function donate_create($request, $response, $args)
+    public function donate_create(ServerRequest $request, Response $response, array $args): Response|\Psr\Http\Message\ResponseInterface
     {
         return $response->write(
             $this->view()
@@ -112,10 +120,11 @@ class CodeController extends AdminController
 
     /**
      * @param ServerRequest $request
-     * @param Response  $response
-     * @param array     $args
+     * @param Response $response
+     * @param array $args
+     * @return Response|ResponseInterface
      */
-    public function add($request, $response, $args)
+    public function add(ServerRequest $request, Response $response, array $args): Response|\Psr\Http\Message\ResponseInterface
     {
         $cards       = [];
         $user        = Auth::getUser();
@@ -172,10 +181,11 @@ class CodeController extends AdminController
 
     /**
      * @param ServerRequest $request
-     * @param Response  $response
-     * @param array     $args
+     * @param Response $response
+     * @param array $args
+     * @return Response|ResponseInterface
      */
-    public function donate_add($request, $response, $args)
+    public function donate_add(ServerRequest $request, Response $response, array $args): Response|\Psr\Http\Message\ResponseInterface
     {
         $amount = $request->getParam('amount');
         $type = $request->getParam('type');

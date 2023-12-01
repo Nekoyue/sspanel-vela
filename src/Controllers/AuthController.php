@@ -2,6 +2,7 @@
 
 namespace App\Controllers;
 
+use Psr\Http\Message\ResponseInterface;
 use App\Models\{
     User,
     Setting,
@@ -38,9 +39,10 @@ class AuthController extends BaseController
      * @param ServerRequest $request
      * @param Response $response
      * @param array $args
+     * @return Response|ResponseInterface
      * @throws \SmartyException
      */
-    public function login($request, $response, $args)
+    public function login(ServerRequest $request, Response $response, array $args): Response|\Psr\Http\Message\ResponseInterface
     {
         $captcha = Captcha::generate();
 
@@ -74,10 +76,11 @@ class AuthController extends BaseController
 
     /**
      * @param ServerRequest $request
-     * @param Response  $response
-     * @param array     $args
+     * @param Response $response
+     * @param array $args
+     * @return Response|ResponseInterface
      */
-    public function getCaptcha($request, $response, $args)
+    public function getCaptcha(ServerRequest $request, Response $response, array $args): Response|\Psr\Http\Message\ResponseInterface
     {
         $captcha = Captcha::generate();
         return $response->withJson([
@@ -89,10 +92,11 @@ class AuthController extends BaseController
 
     /**
      * @param ServerRequest $request
-     * @param Response  $response
-     * @param array     $args
+     * @param Response $response
+     * @param array $args
+     * @return Response|ResponseInterface
      */
-    public function loginHandle($request, $response, $args)
+    public function loginHandle(ServerRequest $request, Response $response, array $args): Response|\Psr\Http\Message\ResponseInterface
     {
         $email      = trim($request->getParam('email'));
         $email      = strtolower($email);
@@ -155,10 +159,11 @@ class AuthController extends BaseController
 
     /**
      * @param ServerRequest $request
-     * @param Response  $response
-     * @param array     $args
+     * @param Response $response
+     * @param array $args
+     * @return Response|ResponseInterface
      */
-    public function qrcode_loginHandle($request, $response, $args)
+    public function qrcode_loginHandle(ServerRequest $request, Response $response, array $args): Response|\Psr\Http\Message\ResponseInterface
     {
         $token  = $request->getParam('token');
         $number = $request->getParam('number');
@@ -185,10 +190,12 @@ class AuthController extends BaseController
 
     /**
      * @param ServerRequest $request
-     * @param Response  $response
-     * @param array     $args
+     * @param Response $response
+     * @param $next
+     * @return Response|ResponseInterface
+     * @throws \SmartyException
      */
-    public function register($request, $response, $next)
+    public function register(ServerRequest $request, Response $response, $next): Response|\Psr\Http\Message\ResponseInterface
     {
         $ary  = $request->getQueryParams();
         $code = '';
@@ -231,10 +238,11 @@ class AuthController extends BaseController
 
     /**
      * @param ServerRequest $request
-     * @param Response  $response
-     * @param array     $args
+     * @param Response $response
+     * @param $next
+     * @return Response|ResponseInterface
      */
-    public function sendVerify($request, $response, $next)
+    public function sendVerify(ServerRequest $request, Response $response, $next): Response|\Psr\Http\Message\ResponseInterface
     {
         if (Setting::obtain('reg_email_verify')) {
             $email = trim($request->getParam('email'));
@@ -307,11 +315,16 @@ class AuthController extends BaseController
     }
 
     /**
-     * @param ServerRequest $request
-     * @param Response  $response
-     * @param array     $args
+     * @param $name
+     * @param $email
+     * @param $passwd
+     * @param $code
+     * @param $imtype
+     * @param $imvalue
+     * @param $telegram_id
+     * @return array
      */
-    public function register_helper($name, $email, $passwd, $code, $imtype, $imvalue, $telegram_id)
+    public function register_helper($name, $email, $passwd, $code, $imtype, $imvalue, $telegram_id): array
     {
         if (Setting::obtain('reg_mode') == 'close') {
             $res['ret'] = 0;
@@ -426,10 +439,11 @@ class AuthController extends BaseController
 
     /**
      * @param ServerRequest $request
-     * @param Response  $response
-     * @param array     $args
+     * @param Response $response
+     * @param array $args
+     * @return Response|ResponseInterface
      */
-    public function registerHandle($request, $response, $args)
+    public function registerHandle(ServerRequest $request, Response $response, array $args): Response|\Psr\Http\Message\ResponseInterface
     {
         if (Setting::obtain('reg_mode') == 'close') {
             return $response->withJson([
@@ -530,10 +544,11 @@ class AuthController extends BaseController
 
     /**
      * @param ServerRequest $request
-     * @param Response  $response
-     * @param array     $args
+     * @param Response $response
+     * @param $next
+     * @return Response
      */
-    public function logout($request, $response, $next)
+    public function logout(ServerRequest $request, Response $response, $next): Response
     {
         Auth::logout();
         return $response->withStatus(302)->withHeader('Location', '/auth/login');
@@ -541,10 +556,11 @@ class AuthController extends BaseController
 
     /**
      * @param ServerRequest $request
-     * @param Response  $response
-     * @param array     $args
+     * @param Response $response
+     * @param array $args
+     * @return Response|ResponseInterface
      */
-    public function qrcode_check($request, $response, $args)
+    public function qrcode_check(ServerRequest $request, Response $response, array $args): Response|\Psr\Http\Message\ResponseInterface
     {
         $token  = $request->getParam('token');
         $number = $request->getParam('number');
@@ -566,10 +582,12 @@ class AuthController extends BaseController
 
     /**
      * @param ServerRequest $request
-     * @param Response  $response
-     * @param array     $args
+     * @param Response $response
+     * @param array $args
+     * @return Response|ResponseInterface
+     * @throws \SmartyException
      */
-    public function telegram_oauth($request, $response, $args)
+    public function telegram_oauth(ServerRequest $request, Response $response, array $args): Response|\Psr\Http\Message\ResponseInterface
     {
         if ($_ENV['enable_telegram_login'] === true) {
             $auth_data = $request->getQueryParams();
@@ -611,11 +629,10 @@ class AuthController extends BaseController
     }
 
     /**
-     * @param ServerRequest $request
-     * @param Response  $response
-     * @param array     $args
+     * @param $auth_data
+     * @return bool
      */
-    private function telegram_oauth_check($auth_data)
+    private function telegram_oauth_check($auth_data): bool
     {
         $check_hash = $auth_data['hash'];
         $bot_token  = $_ENV['telegram_token'];

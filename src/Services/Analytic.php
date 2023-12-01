@@ -7,7 +7,7 @@ use App\Utils\Tools;
 
 class Analytic
 {
-    public function userCount()
+    public function userCount(): int
     {
         return User::all()->count();
     }
@@ -22,7 +22,7 @@ class Analytic
         return User::where('t', '>', 1)->count();
     }
 
-    public function totalTraffic()
+    public function totalTraffic(): string
     {
         $u = User::all()->sum('u');
         $d = User::all()->sum('d');

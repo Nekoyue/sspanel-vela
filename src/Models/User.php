@@ -7,6 +7,8 @@ use App\Services\{Config, Mail};
 use App\Utils\{GA, Hash, Telegram, Tools, URL};
 use Exception;
 use Ramsey\Uuid\Uuid;
+use Telegram\Bot\Exceptions\TelegramSDKException;
+use TelegramBot\Api\InvalidArgumentException;
 
 /**
  * User Model
@@ -596,6 +598,7 @@ class User extends Model
      * 更新端口
      *
      * @param int $Port
+     * @return array
      */
     public function setPort(int $Port): array
     {
@@ -640,6 +643,7 @@ class User extends Model
      * 指定端口
      *
      * @param int $Port
+     * @return array
      */
     public function SpecifyPort(int $Port): array
     {
@@ -766,6 +770,9 @@ class User extends Model
      *
      * @param string $text
      * @return bool
+     * @throws InvalidArgumentException
+     * @throws TelegramSDKException
+     * @throws \TelegramBot\Api\Exception
      */
     public function sendTelegram(string $text): bool
     {
@@ -784,6 +791,9 @@ class User extends Model
      * 发送每日流量报告
      *
      * @param string $ann 公告
+     * @throws InvalidArgumentException
+     * @throws TelegramSDKException
+     * @throws \TelegramBot\Api\Exception
      */
     public function sendDailyNotification(string $ann = ''): void
     {

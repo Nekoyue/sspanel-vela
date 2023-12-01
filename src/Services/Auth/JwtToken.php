@@ -7,7 +7,7 @@ use App\Services\Jwt;
 
 class JwtToken extends Base
 {
-    public function login($uid, $time)
+    public function login($uid, $time): void
     {
         $expireTime = time() + $time;
         $ary = [
@@ -21,7 +21,7 @@ class JwtToken extends Base
         ], $expireTime);
     }
 
-    public function logout()
+    public function logout(): void
     {
         Utils\Cookie::set([
             //"uid" => $uid,
@@ -29,7 +29,7 @@ class JwtToken extends Base
         ], time() - 3600);
     }
 
-    public function getUser()
+    public function getUser(): void
     {
         $token = Utils\Cookie::get('token');
         $tokenInfo = Jwt::decodeArray($token);

@@ -15,22 +15,25 @@ use App\Models\Payback;
 use App\Models\Setting;
 use App\Utils\Telegram;
 use Slim\Http\{ServerRequest, Response};
+use Telegram\Bot\Exceptions\TelegramSDKException;
+use TelegramBot\Api\Exception;
+use TelegramBot\Api\InvalidArgumentException;
 
 abstract class AbstractPayment
 {
     /**
      * @param ServerRequest $request
-     * @param Response  $response
-     * @param array     $args
+     * @param Response $response
+     * @param array $args
      */
-    abstract public function purchase($request, $response, $args);
+    abstract public function purchase(ServerRequest $request, Response $response, array $args);
 
     /**
      * @param ServerRequest $request
-     * @param Response  $response
-     * @param array     $args
+     * @param Response $response
+     * @param array $args
      */
-    abstract public function notify($request, $response, $args);
+    abstract public function notify(ServerRequest $request, Response $response, array $args);
 
     /**
      * 支付网关的 codeName, 规则为 [0-9a-zA-Z_]*
@@ -47,35 +50,39 @@ abstract class AbstractPayment
     /**
      * 显示给用户的名称
      */
-    public static function _readableName() {
+    public static function _readableName(): string
+    {
         return (get_called_class())::_name() . ' 充值';
     }
 
     /**
      * @param ServerRequest $request
-     * @param Response  $response
-     * @param array     $args
+     * @param Response $response
+     * @param array $args
      */
-    abstract public function getReturnHTML($request, $response, $args);
+    abstract public function getReturnHTML(ServerRequest $request, Response $response, array $args);
 
     /**
      * @param ServerRequest $request
-     * @param Response  $response
-     * @param array     $args
+     * @param Response $response
+     * @param array $args
      */
-    abstract public function getStatus($request, $response, $args);
+    abstract public function getStatus(ServerRequest $request, Response $response, array $args);
 
     abstract public static function getPurchaseHTML();
 
-    protected static function getCallbackUrl() {
+    protected static function getCallbackUrl(): string
+    {
         return $_ENV['baseUrl'] . '/payment/notify/' . (get_called_class())::_name();
     }
 
-    protected static function getUserReturnUrl() {
+    protected static function getUserReturnUrl(): string
+    {
         return $_ENV['baseUrl'] . '/user/payment/return/' . (get_called_class())::_name();
     }
 
-    protected static function getActiveGateway($key) {
+    protected static function getActiveGateway($key): bool
+    {
         $payment_gateways = Setting::where('item', '=', 'payment_gateway')->first();
         $active_gateways = json_decode($payment_gateways->value);
         if (in_array($key, $active_gateways)) {
@@ -84,7 +91,12 @@ abstract class AbstractPayment
         return false;
     }
 
-    public function postPayment($pid, $method)
+    /**
+     * @throws InvalidArgumentException
+     * @throws TelegramSDKException
+     * @throws Exception
+     */
+    public function postPayment($pid, $method): bool|int|string
     {
         $p = Paylist::where('tradeno', $pid)->first();
 
@@ -121,7 +133,7 @@ abstract class AbstractPayment
         return 0;
     }
 
-    public static function generateGuid()
+    public static function generateGuid(): string
     {
         mt_srand((double)microtime() * 10000);
         $charid = strtoupper(md5(uniqid(mt_rand() + time(), true)));

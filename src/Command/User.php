@@ -23,7 +23,7 @@ class User extends Command
         . '│ ├─ generateUUID            - 为所有用户生成新的 UUID' . PHP_EOL
         . '│ ├─ generateGa              - 为所有用户生成新的 Ga Secret' . PHP_EOL;
 
-    public function boot()
+    public function boot(): void
     {
         if (count($this->argv) === 2) {
             echo $this->description;
@@ -42,7 +42,7 @@ class User extends Command
      *
      * @return void
      */
-    public function resetPort()
+    public function resetPort(): void
     {
         fwrite(STDOUT, '请输入用户id: ');
         $user = ModelsUser::find(trim(fgets(STDIN)));
@@ -61,7 +61,7 @@ class User extends Command
      *
      * @return void
      */
-    public function resetAllPort()
+    public function resetAllPort(): void
     {
         $users = ModelsUser::all();
         foreach ($users as $user) {
@@ -77,7 +77,7 @@ class User extends Command
      *
      * @return void
      */
-    public function resetTraffic()
+    public function resetTraffic(): void
     {
         try {
             ModelsUser::where('enable', 1)->update([
@@ -97,7 +97,7 @@ class User extends Command
      *
      * @return void
      */
-    public function generateUUID()
+    public function generateUUID(): void
     {
         $users = ModelsUser::all();
         $current_timestamp = time();
@@ -113,7 +113,7 @@ class User extends Command
      *
      * @return void
      */
-    public function generateGa()
+    public function generateGa(): void
     {
         $users = ModelsUser::all();
         foreach ($users as $user) {
@@ -131,7 +131,7 @@ class User extends Command
      *
      * @return void
      */
-    public function createAdmin()
+    public function createAdmin(): void
     {
         if (count($this->argv) === 3) {
             // ask for input
@@ -204,7 +204,7 @@ class User extends Command
      *
      * @return void
      */
-    public function getCookie()
+    public function getCookie(): void
     {
         if (count($this->argv) === 4) {
             $user = ModelsUser::find($this->argv[3]);

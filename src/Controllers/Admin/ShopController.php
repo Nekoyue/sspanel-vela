@@ -3,6 +3,7 @@
 namespace App\Controllers\Admin;
 
 use App\Controllers\AdminController;
+use Psr\Http\Message\ResponseInterface;
 use App\Models\{
     Shop,
     Bought
@@ -18,10 +19,12 @@ class ShopController extends AdminController
      * 后台商品页面
      *
      * @param ServerRequest $request
-     * @param Response  $response
-     * @param array     $args
+     * @param Response $response
+     * @param array $args
+     * @return Response|ResponseInterface
+     * @throws \SmartyException
      */
-    public function index($request, $response, $args)
+    public function index(ServerRequest $request, Response $response, array $args): Response|\Psr\Http\Message\ResponseInterface
     {
         $table_config['total_column'] = array(
             'op'                    => '操作',
@@ -50,10 +53,12 @@ class ShopController extends AdminController
      * 后台创建新商品页面
      *
      * @param ServerRequest $request
-     * @param Response  $response
-     * @param array     $args
+     * @param Response $response
+     * @param array $args
+     * @return Response|ResponseInterface
+     * @throws \SmartyException
      */
-    public function create($request, $response, $args)
+    public function create(ServerRequest $request, Response $response, array $args): Response|\Psr\Http\Message\ResponseInterface
     {
         return $response->write(
             $this->view()
@@ -65,10 +70,11 @@ class ShopController extends AdminController
      * 后台添加新商品
      *
      * @param ServerRequest $request
-     * @param Response  $response
-     * @param array     $args
+     * @param Response $response
+     * @param array $args
+     * @return Response|ResponseInterface
      */
-    public function add($request, $response, $args)
+    public function add(ServerRequest $request, Response $response, array $args): Response|\Psr\Http\Message\ResponseInterface
     {
         $shop = new Shop();
         $shop->name = $request->getParam('name');
@@ -132,10 +138,12 @@ class ShopController extends AdminController
      * 后台编辑指定商品
      *
      * @param ServerRequest $request
-     * @param Response  $response
-     * @param array     $args
+     * @param Response $response
+     * @param array $args
+     * @return Response|ResponseInterface
+     * @throws \SmartyException
      */
-    public function edit($request, $response, $args)
+    public function edit(ServerRequest $request, Response $response, array $args): Response|\Psr\Http\Message\ResponseInterface
     {
         $id = $args['id'];
         $shop = Shop::find($id);
@@ -150,10 +158,11 @@ class ShopController extends AdminController
      * 后台更新指定商品内容
      *
      * @param ServerRequest $request
-     * @param Response  $response
-     * @param array     $args
+     * @param Response $response
+     * @param array $args
+     * @return Response|ResponseInterface
      */
-    public function update($request, $response, $args)
+    public function update(ServerRequest $request, Response $response, array $args): Response|\Psr\Http\Message\ResponseInterface
     {
         $id = $args['id'];
         $shop = Shop::find($id);
@@ -226,10 +235,11 @@ class ShopController extends AdminController
      * 后台下架指定商品
      *
      * @param ServerRequest $request
-     * @param Response  $response
-     * @param array     $args
+     * @param Response $response
+     * @param array $args
+     * @return Response|ResponseInterface
      */
-    public function deleteGet($request, $response, $args)
+    public function deleteGet(ServerRequest $request, Response $response, array $args): Response|\Psr\Http\Message\ResponseInterface
     {
         $id = $request->getParam('id');
         $shop = Shop::find($id);
@@ -255,10 +265,12 @@ class ShopController extends AdminController
      * 后台购买记录页面
      *
      * @param ServerRequest $request
-     * @param Response  $response
-     * @param array     $args
+     * @param Response $response
+     * @param array $args
+     * @return Response|ResponseInterface
+     * @throws \SmartyException
      */
-    public function bought($request, $response, $args)
+    public function bought(ServerRequest $request, Response $response, array $args): Response|\Psr\Http\Message\ResponseInterface
     {
         $table_config['total_column'] = array(
             'op'                    => '操作',
@@ -287,10 +299,11 @@ class ShopController extends AdminController
      * 后台退订指定购买记录的自动续费
      *
      * @param ServerRequest $request
-     * @param Response  $response
-     * @param array     $args
+     * @param Response $response
+     * @param array $args
+     * @return Response|ResponseInterface
      */
-    public function deleteBoughtGet($request, $response, $args)
+    public function deleteBoughtGet(ServerRequest $request, Response $response, array $args): Response|\Psr\Http\Message\ResponseInterface
     {
         $id = $request->getParam('id');
         $shop = Bought::find($id);
@@ -311,10 +324,11 @@ class ShopController extends AdminController
      * 后台商品页面 AJAX
      *
      * @param ServerRequest $request
-     * @param Response  $response
-     * @param array     $args
+     * @param Response $response
+     * @param array $args
+     * @return Response|ResponseInterface
      */
-    public function ajax_shop($request, $response, $args)
+    public function ajax_shop(ServerRequest $request, Response $response, array $args): Response|\Psr\Http\Message\ResponseInterface
     {
         $query = Shop::getTableDataFromAdmin(
             $request,
@@ -355,10 +369,11 @@ class ShopController extends AdminController
      * 后台购买记录 AJAX
      *
      * @param ServerRequest $request
-     * @param Response  $response
-     * @param array     $args
+     * @param Response $response
+     * @param array $args
+     * @return Response|ResponseInterface
      */
-    public function ajax_bought($request, $response, $args)
+    public function ajax_bought(ServerRequest $request, Response $response, array $args): Response|\Psr\Http\Message\ResponseInterface
     {
         $query = Bought::getTableDataFromAdmin(
             $request,

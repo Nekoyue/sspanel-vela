@@ -8,6 +8,7 @@
 
 namespace App\Utils;
 
+use App\Models\User;
 use Symfony\Component\Yaml\Yaml;
 use Symfony\Component\Yaml\Exception\ParseException;
 
@@ -27,7 +28,7 @@ class ConfGenerate
      *
      * @return array|null
      */
-    public static function getMatchProxy($Proxy, $Rule)
+    public static function getMatchProxy(array $Proxy, array $Rule): ?array
     {
         $return = null;
         switch (true) {
@@ -72,7 +73,7 @@ class ConfGenerate
      *
      * @return array|string
      */
-    public static function YAML2Array($Content)
+    public static function YAML2Array(string $Content): array|string
     {
         try {
             return Yaml::parse($Content);
@@ -84,14 +85,14 @@ class ConfGenerate
     /**
      * 自定义配置文件生成 Surge 托管配置
      *
-     * @param User   $User          用户
-     * @param string $AllProxys     Surge 格式的全部节点
-     * @param array  $Nodes         节点数组
-     * @param string $SourceContent 配置内容
-     *
+     * @param User $User 用户
+     * @param string $AllProxys Surge 格式的全部节点
+     * @param array $Nodes 节点数组
+     * @param $Configs
      * @return string
+     * @throws \SmartyException
      */
-    public static function getSurgeConfs($User, $AllProxys, $Nodes, $Configs)
+    public static function getSurgeConfs(User $User, string $AllProxys, array $Nodes, $Configs): string
     {
         $General = (isset($Configs['General']) ? self::getSurgeConfGeneral($Configs['General']) : '');
 
@@ -141,7 +142,7 @@ class ConfGenerate
      *
      * @return string
      */
-    public static function getSurgeConfGeneral($General)
+    public static function getSurgeConfGeneral(array $General): string
     {
         $return = '';
         if (count($General) != 0) {
@@ -159,7 +160,7 @@ class ConfGenerate
      *
      * @return string
      */
-    public static function getSurgeConfProxy($Proxys)
+    public static function getSurgeConfProxy(array $Proxys): string
     {
         $return = '';
         if (count($Proxys) != 0) {
@@ -180,7 +181,7 @@ class ConfGenerate
      *
      * @return array
      */
-    public static function getSurgeConfProxyGroup($Nodes, $ProxyGroups)
+    public static function getSurgeConfProxyGroup(array $Nodes, array $ProxyGroups): array
     {
         $return = [];
         foreach ($ProxyGroups as $ProxyGroup) {
@@ -217,7 +218,7 @@ class ConfGenerate
      *
      * @return array
      */
-    public static function fixSurgeProxyGroup($ProxyGroups, $checks)
+    public static function fixSurgeProxyGroup(array $ProxyGroups, array $checks): array
     {
         if (count($checks) == 0) {
             return $ProxyGroups;
@@ -258,7 +259,7 @@ class ConfGenerate
      *
      * @return string
      */
-    public static function getSurgeProxyGroup2String($ProxyGroups)
+    public static function getSurgeProxyGroup2String(array $ProxyGroups): string
     {
         $return = '';
         foreach ($ProxyGroups as $ProxyGroup) {
@@ -306,13 +307,13 @@ class ConfGenerate
     /**
      * 自定义配置文件生成 Clash 配置
      *
-     * @param object $User          用户
-     * @param array  $AllProxys     全部节点数组
-     * @param string $SourceContent 远程配置内容
-     *
+     * @param object $User 用户
+     * @param array $AllProxys 全部节点数组
+     * @param $Configs
      * @return string
+     * @throws \SmartyException
      */
-    public static function getClashConfs($User, $AllProxys, $Configs)
+    public static function getClashConfs(object $User, array $AllProxys, $Configs): string
     {
         if (isset($Configs['Proxy']) && count($Configs['Proxy']) != 0) {
             $tmpProxys = array_merge($AllProxys, $Configs['Proxy']);
@@ -360,7 +361,7 @@ class ConfGenerate
      *
      * @return array
      */
-    public static function getClashConfProxyGroup($Nodes, $ProxyGroups)
+    public static function getClashConfProxyGroup(array $Nodes, array $ProxyGroups): array
     {
         $return = [];
         foreach ($ProxyGroups as $ProxyGroup) {
@@ -406,7 +407,7 @@ class ConfGenerate
      *
      * @return array
      */
-    public static function fixClashProxyGroup($ProxyGroups, $checks)
+    public static function fixClashProxyGroup(array $ProxyGroups, array $checks): array
     {
         if (count($checks) == 0) {
             return $ProxyGroups;
@@ -446,8 +447,9 @@ class ConfGenerate
      * @param array $Rules 规则加载地址
      *
      * @return string
+     * @throws \SmartyException
      */
-    public static function getRule($Rules)
+    public static function getRule(array $Rules): string
     {
         $render = ConfRender::getTemplateRender();
         return $render->fetch($Rules['source']);

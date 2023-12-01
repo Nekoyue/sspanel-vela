@@ -6,19 +6,23 @@ use App\Controllers\AdminController;
 use App\Models\DetectLog;
 use App\Models\DetectRule;
 use App\Utils\Telegram;
+use Psr\Http\Message\ResponseInterface;
 use Slim\Http\{
     ServerRequest,
     Response
 };
+use Telegram\Bot\Exceptions\TelegramSDKException;
 
 class DetectController extends AdminController
 {
     /**
      * @param ServerRequest $request
-     * @param Response  $response
-     * @param array     $args
+     * @param Response $response
+     * @param array $args
+     * @return Response|ResponseInterface
+     * @throws \SmartyException
      */
-    public function index($request, $response, $args)
+    public function index(ServerRequest $request, Response $response, array $args): Response|\Psr\Http\Message\ResponseInterface
     {
         $table_config['total_column'] = array(
             'op'    => '操作',
@@ -39,10 +43,11 @@ class DetectController extends AdminController
 
     /**
      * @param ServerRequest $request
-     * @param Response  $response
-     * @param array     $args
+     * @param Response $response
+     * @param array $args
+     * @return Response|ResponseInterface
      */
-    public function ajax_rule($request, $response, $args)
+    public function ajax_rule(ServerRequest $request, Response $response, array $args): Response|\Psr\Http\Message\ResponseInterface
     {
         $query = DetectRule::getTableDataFromAdmin(
             $request,
@@ -78,10 +83,12 @@ class DetectController extends AdminController
 
     /**
      * @param ServerRequest $request
-     * @param Response  $response
-     * @param array     $args
+     * @param Response $response
+     * @param array $args
+     * @return Response|ResponseInterface
+     * @throws \SmartyException
      */
-    public function create($request, $response, $args)
+    public function create(ServerRequest $request, Response $response, array $args): Response|\Psr\Http\Message\ResponseInterface
     {
         return $response->write(
             $this->view()
@@ -91,10 +98,12 @@ class DetectController extends AdminController
 
     /**
      * @param ServerRequest $request
-     * @param Response  $response
-     * @param array     $args
+     * @param Response $response
+     * @param array $args
+     * @return Response|ResponseInterface
+     * @throws TelegramSDKException
      */
-    public function add($request, $response, $args)
+    public function add(ServerRequest $request, Response $response, array $args): Response|\Psr\Http\Message\ResponseInterface
     {
         $rule = new DetectRule();
         $rule->name = $request->getParam('name');
@@ -118,10 +127,12 @@ class DetectController extends AdminController
 
     /**
      * @param ServerRequest $request
-     * @param Response  $response
-     * @param array     $args
+     * @param Response $response
+     * @param array $args
+     * @return Response|ResponseInterface
+     * @throws \SmartyException
      */
-    public function edit($request, $response, $args)
+    public function edit(ServerRequest $request, Response $response, array $args): Response|\Psr\Http\Message\ResponseInterface
     {
         $id = $args['id'];
         $rule = DetectRule::find($id);
@@ -134,10 +145,12 @@ class DetectController extends AdminController
 
     /**
      * @param ServerRequest $request
-     * @param Response  $response
-     * @param array     $args
+     * @param Response $response
+     * @param array $args
+     * @return Response|ResponseInterface
+     * @throws TelegramSDKException
      */
-    public function update($request, $response, $args)
+    public function update(ServerRequest $request, Response $response, array $args): Response|\Psr\Http\Message\ResponseInterface
     {
         $id = $args['id'];
         $rule = DetectRule::find($id);
@@ -162,10 +175,11 @@ class DetectController extends AdminController
 
     /**
      * @param ServerRequest $request
-     * @param Response  $response
-     * @param array     $args
+     * @param Response $response
+     * @param array $args
+     * @return Response|ResponseInterface
      */
-    public function delete($request, $response, $args)
+    public function delete(ServerRequest $request, Response $response, array $args): Response|\Psr\Http\Message\ResponseInterface
     {
         $id = $request->getParam('id');
         $rule = DetectRule::find($id);
@@ -183,10 +197,12 @@ class DetectController extends AdminController
 
     /**
      * @param ServerRequest $request
-     * @param Response  $response
-     * @param array     $args
+     * @param Response $response
+     * @param array $args
+     * @return Response|ResponseInterface
+     * @throws \SmartyException
      */
-    public function log($request, $response, $args)
+    public function log(ServerRequest $request, Response $response, array $args): Response|\Psr\Http\Message\ResponseInterface
     {
         $table_config['total_column'] = array(
             'id'          => 'ID',
@@ -212,10 +228,11 @@ class DetectController extends AdminController
 
     /**
      * @param ServerRequest $request
-     * @param Response  $response
-     * @param array     $args
+     * @param Response $response
+     * @param array $args
+     * @return Response|ResponseInterface
      */
-    public function ajax_log($request, $response, $args)
+    public function ajax_log(ServerRequest $request, Response $response, array $args): Response|\Psr\Http\Message\ResponseInterface
     {
         $query = DetectLog::getTableDataFromAdmin(
             $request,

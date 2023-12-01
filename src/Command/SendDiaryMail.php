@@ -8,12 +8,20 @@ use App\Services\Config;
 use App\Utils\Telegram;
 use App\Utils\Tools;
 use App\Services\Analytics;
+use Telegram\Bot\Exceptions\TelegramSDKException;
+use TelegramBot\Api\Exception;
+use TelegramBot\Api\InvalidArgumentException;
 
 class SendDiaryMail extends Command
 {
     public string $description = '├─=: php xcat SendDiaryMail  - 每日流量报告' . PHP_EOL;
 
-    public function boot()
+    /**
+     * @throws TelegramSDKException
+     * @throws Exception
+     * @throws InvalidArgumentException
+     */
+    public function boot(): void
     {
         $users = User::all();
         $logs = Ann::orderBy('id', 'desc')->get();

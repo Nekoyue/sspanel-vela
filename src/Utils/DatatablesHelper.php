@@ -10,8 +10,8 @@ use Illuminate\Database\QueryException;
 
 class DatatablesHelper implements DatabaseInterface
 {
-    protected $escape = [];
-    protected $connection;
+    protected array $escape = [];
+    protected \Illuminate\Database\Connection $connection;
 
     public function __construct($config = null)
     {
@@ -24,12 +24,12 @@ class DatatablesHelper implements DatabaseInterface
         }
     }
 
-    public function connect()
+    public function connect(): static
     {
         return $this;
     }
 
-    public function query($query)
+    public function query($query): array
     {
         $data = $this->connection->select($query, $this->escape);
         $row = [];
@@ -46,7 +46,7 @@ class DatatablesHelper implements DatabaseInterface
         return $data[0]->rowcount;
     }
 
-    public function escape($string)
+    public function escape($string): string
     {
         $this->escape[':escape' . (count($this->escape) + 1)] = '%' . $string . '%';
         return ':escape' . count($this->escape);

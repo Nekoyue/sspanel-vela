@@ -8,10 +8,12 @@ use App\Models\{
     User
 };
 use App\Utils\Telegram;
+use Psr\Http\Message\ResponseInterface;
 use Slim\Http\{
     ServerRequest,
     Response
 };
+use Telegram\Bot\Exceptions\TelegramSDKException;
 
 class AnnController extends AdminController
 {
@@ -19,10 +21,12 @@ class AnnController extends AdminController
      * 后台公告页面
      *
      * @param ServerRequest $request
-     * @param Response  $response
-     * @param array     $args
+     * @param Response $response
+     * @param array $args
+     * @return Response|ResponseInterface
+     * @throws \SmartyException
      */
-    public function index($request, $response, $args)
+    public function index(ServerRequest $request, Response $response, array $args): Response|\Psr\Http\Message\ResponseInterface
     {
         $table_config['total_column'] = array(
             'op'      => '操作',
@@ -45,10 +49,11 @@ class AnnController extends AdminController
      * 后台公告页面 AJAX
      *
      * @param ServerRequest $request
-     * @param Response  $response
-     * @param array     $args
+     * @param Response $response
+     * @param array $args
+     * @return Response|ResponseInterface
      */
-    public function ajax($request, $response, $args)
+    public function ajax(ServerRequest $request, Response $response, array $args): Response|\Psr\Http\Message\ResponseInterface
     {
         $query = Ann::getTableDataFromAdmin(
             $request,
@@ -84,10 +89,12 @@ class AnnController extends AdminController
      * 后台公告创建页面
      *
      * @param ServerRequest $request
-     * @param Response  $response
-     * @param array     $args
+     * @param Response $response
+     * @param array $args
+     * @return Response|ResponseInterface
+     * @throws \SmartyException
      */
-    public function create($request, $response, $args)
+    public function create(ServerRequest $request, Response $response, array $args): Response|\Psr\Http\Message\ResponseInterface
     {
         return $response->write(
             $this->view()
@@ -99,10 +106,12 @@ class AnnController extends AdminController
      * 后台添加公告
      *
      * @param ServerRequest $request
-     * @param Response  $response
-     * @param array     $args
+     * @param Response $response
+     * @param array $args
+     * @return Response|ResponseInterface
+     * @throws TelegramSDKException
      */
-    public function add($request, $response, $args)
+    public function add(ServerRequest $request, Response $response, array $args): Response|\Psr\Http\Message\ResponseInterface
     {
         $issend   = $request->getParam('issend');
         $vip      = $request->getParam('vip');
@@ -160,10 +169,12 @@ class AnnController extends AdminController
      * 后台编辑公告页面
      *
      * @param ServerRequest $request
-     * @param Response  $response
-     * @param array     $args
+     * @param Response $response
+     * @param array $args
+     * @return Response|ResponseInterface
+     * @throws \SmartyException
      */
-    public function edit($request, $response, $args)
+    public function edit(ServerRequest $request, Response $response, array $args): Response|\Psr\Http\Message\ResponseInterface
     {
         $ann = Ann::find($args['id']);
         return $response->write(
@@ -177,10 +188,12 @@ class AnnController extends AdminController
      * 后台编辑公告提交
      *
      * @param ServerRequest $request
-     * @param Response  $response
-     * @param array     $args
+     * @param Response $response
+     * @param array $args
+     * @return Response|ResponseInterface
+     * @throws TelegramSDKException
      */
-    public function update($request, $response, $args)
+    public function update(ServerRequest $request, Response $response, array $args): Response|\Psr\Http\Message\ResponseInterface
     {
         $ann           = Ann::find($args['id']);
         $ann->content  = $request->getParam('content');
@@ -203,10 +216,11 @@ class AnnController extends AdminController
      * 后台删除公告
      *
      * @param ServerRequest $request
-     * @param Response  $response
-     * @param array     $args
+     * @param Response $response
+     * @param array $args
+     * @return Response|ResponseInterface
      */
-    public function delete($request, $response, $args)
+    public function delete(ServerRequest $request, Response $response, array $args): Response|\Psr\Http\Message\ResponseInterface
     {
         $ann = Ann::find($request->getParam('id'));
         if (!$ann->delete()) {

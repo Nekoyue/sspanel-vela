@@ -4,7 +4,7 @@ namespace App\Utils;
 
 class AppURI
 {
-    public static function getSurgeURI(array $item, int $version)
+    public static function getSurgeURI(array $item, int $version): ?string
     {
         $return = null;
         switch ($item['type']) {
@@ -18,7 +18,7 @@ class AppURI
         return $return;
     }
 
-    public static function getQuantumultXURI(array $item)
+    public static function getQuantumultXURI(array $item): ?string
     {
         $return = null;
         switch ($item['type']) {
@@ -38,7 +38,7 @@ class AppURI
     }
 
 
-    public static function getClashURI(array $item)
+    public static function getClashURI(array $item): array
     {
         $return = null;
         switch ($item['type']) {
@@ -64,7 +64,7 @@ class AppURI
         return $return;
     }
 
-    public static function getShadowrocketURI(array $item)
+    public static function getShadowrocketURI(array $item): ?string
     {
         $return = null;
         switch ($item['type']) {
@@ -80,7 +80,7 @@ class AppURI
     }
 
 
-    public static function getTrojanURI(array $item)
+    public static function getTrojanURI(array $item): ?string
     {
         $return = null;
         switch ($item['type']) {

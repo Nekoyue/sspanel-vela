@@ -17,12 +17,12 @@ class BaseController
     /**
      * @var Smarty
      */
-    protected $view;
+    protected Smarty $view;
 
     /**
      * @var User
      */
-    protected $user;
+    protected User $user;
 
     /**
      * Construct page renderer
@@ -38,7 +38,7 @@ class BaseController
      *
      * @return Smarty
      */
-    public function view()
+    public function view(): Smarty
     {
         if (View::$connection) {
             $this->view->assign('queryLog', View::$connection->connection('default')->getQueryLog())->assign('optTime', (microtime(true) - View::$beginTime) * 1000);

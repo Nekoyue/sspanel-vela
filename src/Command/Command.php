@@ -9,7 +9,7 @@ namespace App\Command;
  */
 abstract class Command
 {
-    public $argv;
+    public array $argv;
 
     public function __construct($argv)
     {

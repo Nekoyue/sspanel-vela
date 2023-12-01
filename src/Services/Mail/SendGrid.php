@@ -4,13 +4,14 @@ namespace App\Services\Mail;
 
 use App\Models\Setting;
 use App\Services\Config;
+use SendGrid\Mail\TypeException;
 
 class SendGrid extends Base
 {
-    private $config;
-    private $sg;
-    private $sender;
-    private $name;
+    private array $config;
+    private \SendGrid $sg;
+    private mixed $sender;
+    private mixed $name;
 
     public function __construct()
     {
@@ -21,10 +22,10 @@ class SendGrid extends Base
         $this->email = new \SendGrid\Mail\Mail();
     }
 
-    public function getConfig()
+    public function getConfig(): array
     {
         $configs = Setting::getClass('sendgrid');
-        
+
         return [
             'key' => $configs['sendgrid_key'],
             'sender' => $configs['sendgrid_sender'],
@@ -32,7 +33,10 @@ class SendGrid extends Base
         ];
     }
 
-    public function send($to_address, $subject_raw, $text, $files)
+    /**
+     * @throws TypeException
+     */
+    public function send($to_address, $subject_raw, $text, $files): void
     {
         $this->email->setFrom($this->sender, $this->name);
         $this->email->setSubject($subject_raw);

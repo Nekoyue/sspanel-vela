@@ -16,6 +16,7 @@ class HomeController extends BaseController
      * @param ServerRequest $request
      * @param Response $response
      * @param array $args
+     * @return ResponseInterface
      * @throws \SmartyException
      */
     public function index(ServerRequest $request, Response $response, array $args): ResponseInterface
@@ -27,6 +28,7 @@ class HomeController extends BaseController
      * @param ServerRequest $request
      * @param Response $response
      * @param array $args
+     * @return ResponseInterface
      * @throws \SmartyException
      */
     public function code(ServerRequest $request, Response $response, array $args): ResponseInterface
@@ -39,6 +41,7 @@ class HomeController extends BaseController
      * @param ServerRequest $request
      * @param Response $response
      * @param array $args
+     * @return ResponseInterface
      * @throws \SmartyException
      */
     public function tos(ServerRequest $request, Response $response, array $args): ResponseInterface
@@ -50,6 +53,7 @@ class HomeController extends BaseController
      * @param ServerRequest $request
      * @param Response $response
      * @param array $args
+     * @return ResponseInterface
      * @throws \SmartyException
      */
     public function staff(ServerRequest $request, Response $response, array $args): ResponseInterface
@@ -62,6 +66,7 @@ class HomeController extends BaseController
      * @param ServerRequest $request
      * @param Response $response
      * @param array $args
+     * @return ResponseInterface
      * @throws \SmartyException
      */
     public function page404(ServerRequest $request, Response $response, array $args): ResponseInterface
@@ -73,6 +78,7 @@ class HomeController extends BaseController
      * @param ServerRequest $request
      * @param Response $response
      * @param array $args
+     * @return ResponseInterface
      * @throws \SmartyException
      */
     public function page405(ServerRequest $request, Response $response, array $args): ResponseInterface
@@ -84,6 +90,7 @@ class HomeController extends BaseController
      * @param ServerRequest $request
      * @param Response $response
      * @param array $args
+     * @return ResponseInterface
      * @throws \SmartyException
      */
     public function page500(ServerRequest $request, Response $response, array $args): ResponseInterface

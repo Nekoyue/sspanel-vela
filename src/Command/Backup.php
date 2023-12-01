@@ -7,6 +7,8 @@ use App\Utils\Telegram;
 use App\Models\Setting;
 use Exception;
 use RuntimeException;
+use Telegram\Bot\Exceptions\TelegramSDKException;
+use TelegramBot\Api\InvalidArgumentException;
 
 class Backup extends Command
 {
@@ -15,7 +17,7 @@ class Backup extends Command
         . '│ ├─ full                    - 整体数据备份' . PHP_EOL
         . '│ ├─ simple                  - 只备份核心数据' . PHP_EOL;
 
-    public function boot()
+    public function boot(): void
     {
         if (count($this->argv) === 2) {
             echo $this->description;
@@ -29,7 +31,12 @@ class Backup extends Command
         }
     }
 
-    public function backup($full = false)
+    /**
+     * @throws TelegramSDKException
+     * @throws \TelegramBot\Api\Exception
+     * @throws InvalidArgumentException
+     */
+    public function backup($full = false): bool
     {
         $configs = Setting::getClass('backup');
 

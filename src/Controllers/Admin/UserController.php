@@ -3,6 +3,7 @@
 namespace App\Controllers\Admin;
 
 use App\Controllers\AdminController;
+use Psr\Http\Message\ResponseInterface;
 use App\Models\{
     User,
     Shop,
@@ -32,10 +33,12 @@ class UserController extends AdminController
 {
     /**
      * @param ServerRequest $request
-     * @param Response  $response
-     * @param array     $args
+     * @param Response $response
+     * @param array $args
+     * @return Response|ResponseInterface
+     * @throws \SmartyException
      */
-    public function index($request, $response, $args)
+    public function index(ServerRequest $request, Response $response, array $args): Response|\Psr\Http\Message\ResponseInterface
     {
         $table_config['total_column'] = array(
             'op'                    => '操作',
@@ -81,10 +84,11 @@ class UserController extends AdminController
 
     /**
      * @param ServerRequest $request
-     * @param Response  $response
-     * @param array     $args
+     * @param Response $response
+     * @param array $args
+     * @return Response|ResponseInterface
      */
-    public function createNewUser($request, $response, $args)
+    public function createNewUser(ServerRequest $request, Response $response, array $args): Response|\Psr\Http\Message\ResponseInterface
     {
         $email   = strtolower(trim($request->getParam('email')));
         $money   = (int) trim($request->getParam('balance'));
@@ -188,10 +192,12 @@ class UserController extends AdminController
 
     /**
      * @param ServerRequest $request
-     * @param Response  $response
-     * @param array     $args
+     * @param Response $response
+     * @param array $args
+     * @return Response|ResponseInterface
+     * @throws \SmartyException
      */
-    public function edit($request, $response, $args)
+    public function edit(ServerRequest $request, Response $response, array $args): Response|\Psr\Http\Message\ResponseInterface
     {
         $user = User::find($args['id']);
         return $response->write(
@@ -203,10 +209,11 @@ class UserController extends AdminController
 
     /**
      * @param ServerRequest $request
-     * @param Response  $response
-     * @param array     $args
+     * @param Response $response
+     * @param array $args
+     * @return Response|ResponseInterface
      */
-    public function update($request, $response, $args)
+    public function update(ServerRequest $request, Response $response, array $args): Response|\Psr\Http\Message\ResponseInterface
     {
         $id = $args['id'];
         $user = User::find($id);
@@ -285,10 +292,11 @@ class UserController extends AdminController
 
     /**
      * @param ServerRequest $request
-     * @param Response  $response
-     * @param array     $args
+     * @param Response $response
+     * @param array $args
+     * @return Response|ResponseInterface
      */
-    public function delete($request, $response, $args)
+    public function delete(ServerRequest $request, Response $response, array $args): Response|\Psr\Http\Message\ResponseInterface
     {
         $user = User::find((int) $request->getParam('id'));
         if (!$user->kill_user()) {
@@ -305,10 +313,11 @@ class UserController extends AdminController
 
     /**
      * @param ServerRequest $request
-     * @param Response  $response
-     * @param array     $args
+     * @param Response $response
+     * @param array $args
+     * @return Response|ResponseInterface
      */
-    public function changetouser($request, $response, $args)
+    public function changetouser(ServerRequest $request, Response $response, array $args): Response|\Psr\Http\Message\ResponseInterface
     {
         $userid    = $request->getParam('userid');
         $adminid   = $request->getParam('adminid');
@@ -345,10 +354,11 @@ class UserController extends AdminController
 
     /**
      * @param ServerRequest $request
-     * @param Response  $response
-     * @param array     $args
+     * @param Response $response
+     * @param array $args
+     * @return Response|ResponseInterface
      */
-    public function ajax($request, $response, $args)
+    public function ajax(ServerRequest $request, Response $response, array $args): Response|\Psr\Http\Message\ResponseInterface
     {
         $query = User::getTableDataFromAdmin(
             $request,

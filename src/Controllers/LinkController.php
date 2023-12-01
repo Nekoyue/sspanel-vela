@@ -28,7 +28,7 @@ use Slim\Http\{
  */
 class LinkController extends BaseController
 {
-    public static function GenerateRandomLink()
+    public static function GenerateRandomLink(): string
     {
         for ($i = 0; $i < 10; $i++) {
             $token = Tools::genRandomChar(16);
@@ -43,6 +43,7 @@ class LinkController extends BaseController
 
     /**
      * @param int $userid
+     * @return string
      */
     public static function GenerateSSRSubCode(int $userid): string
     {
@@ -60,10 +61,11 @@ class LinkController extends BaseController
 
     /**
      * @param ServerRequest $request
-     * @param Response  $response
-     * @param array     $args
+     * @param Response $response
+     * @param array $args
+     * @return string|ResponseInterface|null
      */
-    public static function GetContent($request, $response, $args)
+    public static function GetContent(ServerRequest $request, Response $response, array $args): string|ResponseInterface|null
     {
         if (!$_ENV['Subscribe']) {
             return null;
@@ -196,12 +198,12 @@ class LinkController extends BaseController
     /**
      * 获取订阅类型的文件名
      *
-     * @param string      $type  订阅类型
+     * @param string $type 订阅类型
      * @param string|null $value 值
      *
      * @return array
      */
-    public static function getSubscribeExtend($type, $value = null)
+    public static function getSubscribeExtend(string $type, string $value = null): array
     {
         switch ($type) {
             case 'sub':
@@ -291,13 +293,13 @@ class LinkController extends BaseController
     /**
      * 记录订阅日志
      *
-     * @param User   $user 用户
+     * @param User $user 用户
      * @param string $type 订阅类型
      * @param string $ua   UA
      *
      * @return void
      */
-    private static function Subscribe_log($user, $type, $ua)
+    private static function Subscribe_log(User $user, string $type, string $ua): void
     {
         $log                     = new UserSubscribeLog();
         $log->user_name          = $user->user_name;
@@ -314,12 +316,13 @@ class LinkController extends BaseController
     /**
      * 响应内容
      *
-     * @param User   $user
+     * @param User $user
      * @param object $response
-     * @param string $content  订阅内容
+     * @param string $content 订阅内容
      * @param string $filename 文件名
+     * @return ResponseInterface
      */
-    public static function getBody($user, $response, $content, $filename): ResponseInterface
+    public static function getBody(User $user, object $response, string $content, string $filename): ResponseInterface
     {
         $response = $response
             ->withHeader(
@@ -349,11 +352,11 @@ class LinkController extends BaseController
      * 订阅链接汇总
      *
      * @param User $user 用户
-     * @param int  $int  当前用户访问的订阅类型
+     * @param int $int 当前用户访问的订阅类型
      *
      * @return array
      */
-    public static function getSubinfo($user, $int = 0)
+    public static function getSubinfo(User $user, int $int = 0): array
     {
         if ($int == 0) {
             $int = '';
@@ -380,7 +383,7 @@ class LinkController extends BaseController
         );
     }
 
-    public static function getListItem($item, $list)
+    public static function getListItem($item, $list): array|string|null
     {
         $return = null;
         switch ($list) {
@@ -403,7 +406,7 @@ class LinkController extends BaseController
         return $return;
     }
 
-    public static function getLists($user, $list, $opts, $Rule)
+    public static function getLists($user, $list, $opts, $Rule): string
     {
         $list = strtolower($list);
         if ($list == 'shadowrocket') {
@@ -438,7 +441,7 @@ class LinkController extends BaseController
         }
     }
 
-    public static function getListExtend($user, $list)
+    public static function getListExtend($user, $list): array
     {
         $return = [];
         $info_array = (count($_ENV['sub_message']) != 0 ? (array) $_ENV['sub_message'] : []);
@@ -500,14 +503,15 @@ class LinkController extends BaseController
     /**
      * Surge 配置
      *
-     * @param User  $user  用户
-     * @param int   $surge 订阅类型
-     * @param array $opts  request
-     * @param array $Rule  节点筛选规则
+     * @param User $user 用户
+     * @param int $surge 订阅类型
+     * @param array $opts request
+     * @param array $Rule 节点筛选规则
      *
      * @return string
+     * @throws \SmartyException
      */
-    public static function getSurge($user, $surge, $opts, $Rule)
+    public static function getSurge(User $user, int $surge, array $opts, array $Rule): string
     {
         $subInfo = self::getSubinfo($user, $surge);
         $userapiUrl = $subInfo['surge'];
@@ -536,14 +540,14 @@ class LinkController extends BaseController
     /**
      * QuantumultX 配置
      *
-     * @param User  $user        用户
-     * @param int   $quantumultx 订阅类型
+     * @param User $user 用户
+     * @param int $quantumultx 订阅类型
      * @param array $opts        request
      * @param array $Rule        节点筛选规则
      *
      * @return string
      */
-    public static function getQuantumultX($user, $quantumultx, $opts, $Rule)
+    public static function getQuantumultX(User $user, int $quantumultx, array $opts, array $Rule): string
     {
         return '';
     }
@@ -551,14 +555,15 @@ class LinkController extends BaseController
     /**
      * Surfboard 配置
      *
-     * @param User  $user      用户
-     * @param int   $surfboard 订阅类型
-     * @param array $opts      request
-     * @param array $Rule      节点筛选规则
+     * @param User $user 用户
+     * @param int $surfboard 订阅类型
+     * @param array $opts request
+     * @param array $Rule 节点筛选规则
      *
      * @return string
+     * @throws \SmartyException
      */
-    public static function getSurfboard($user, $surfboard, $opts, $Rule)
+    public static function getSurfboard(User $user, int $surfboard, array $opts, array $Rule): string
     {
         $subInfo = self::getSubinfo($user, 0);
         $userapiUrl = $subInfo['surfboard'];
@@ -585,14 +590,15 @@ class LinkController extends BaseController
     /**
      * Clash 配置
      *
-     * @param User  $user  用户
-     * @param int   $clash 订阅类型
-     * @param array $opts  request
-     * @param array $Rule  节点筛选规则
+     * @param User $user 用户
+     * @param int $clash 订阅类型
+     * @param array $opts request
+     * @param array $Rule 节点筛选规则
      *
      * @return string
+     * @throws \SmartyException
      */
-    public static function getClash($user, $clash, $opts, $Rule)
+    public static function getClash(User $user, int $clash, array $opts, array $Rule): string
     {
         $subInfo = self::getSubinfo($user, $clash);
         $userapiUrl = $subInfo['clash'];
@@ -614,7 +620,7 @@ class LinkController extends BaseController
         return ConfGenerate::getClashConfs($user, $Proxys, $_ENV['Clash_Profiles'][$Profiles]);
     }
 
-    public static function getAnXray($user, $anxray, $opts, $Rule)
+    public static function getAnXray($user, $anxray, $opts, $Rule): string
     {
         $subInfo = self::getSubinfo($user, $anxray);
         $All_Proxy  = '';
@@ -631,14 +637,14 @@ class LinkController extends BaseController
     /**
      * 通用订阅
      *
-     * @param User   $user 用户
-     * @param int    $sub  订阅类型
-     * @param array  $opts request
-     * @param array  $Rule 节点筛选规则
+     * @param User $user 用户
+     * @param int $sub 订阅类型
+     * @param array $opts request
+     * @param array $Rule 节点筛选规则
      *
      * @return string
      */
-    public static function getSub($user, $sub, $opts, $Rule)
+    public static function getSub(User $user, int $sub, array $opts, array $Rule): string
     {
         $return_url = '';
         switch ($sub) {

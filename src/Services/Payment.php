@@ -35,7 +35,8 @@ class Payment
     //     }
     // }
 
-    static function getPaymentsEnabled() {
+    static function getPaymentsEnabled(): array
+    {
         $payments = array();
 
         $helper = new ClassHelper();
@@ -52,7 +53,8 @@ class Payment
         return $payments;
     }
 
-    static function getPaymentMap() {
+    static function getPaymentMap(): array
+    {
         $result = array();
 
         foreach (self::getPaymentsEnabled() as $payment) {
@@ -80,7 +82,7 @@ class Payment
         return $response->withStatus(404);
     }
 
-    public static function returnHTML($request, $response, $args)
+    public static function returnHTML($request, $response, $args): string
     {
         $payment = self::getPaymentByName($args['type']);
 

@@ -7,13 +7,13 @@ use Sentry;
 
 class Boot
 {
-    public static function setTime()
+    public static function setTime(): void
     {
         date_default_timezone_set($_ENV['timeZone']);
         View::$beginTime = microtime(true);
     }
 
-    public static function bootDb()
+    public static function bootDb(): void
     {
         // Init Eloquent ORM Connection
         $capsule = new Capsule();
@@ -31,7 +31,8 @@ class Boot
         $capsule->getDatabaseManager()->connection('default')->enableQueryLog();
     }
 
-    public static function bootSentry() {
+    public static function bootSentry(): void
+    {
         if (!empty($_ENV['sentry_dsn'])) {
             Sentry\init([
                 'dsn' => $_ENV['sentry_dsn'],

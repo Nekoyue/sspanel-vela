@@ -22,10 +22,12 @@ class TicketController extends UserController
 {
     /**
      * @param ServerRequest $request
-     * @param Response  $response
-     * @param array     $args
+     * @param Response $response
+     * @param array $args
+     * @return ResponseInterface|null
+     * @throws \SmartyException
      */
-    public function ticket($request, $response, $args): ?ResponseInterface
+    public function ticket(ServerRequest $request, Response $response, array $args): ?ResponseInterface
     {
         if ($_ENV['enable_ticket'] != true) {
             return null;
@@ -52,10 +54,12 @@ class TicketController extends UserController
 
     /**
      * @param ServerRequest $request
-     * @param Response  $response
-     * @param array     $args
+     * @param Response $response
+     * @param array $args
+     * @return ResponseInterface
+     * @throws \SmartyException
      */
-    public function ticket_create($request, $response, $args): ResponseInterface
+    public function ticket_create(ServerRequest $request, Response $response, array $args): ResponseInterface
     {
         return $response->write(
             $this->view()
@@ -65,10 +69,11 @@ class TicketController extends UserController
 
     /**
      * @param ServerRequest $request
-     * @param Response  $response
-     * @param array     $args
+     * @param Response $response
+     * @param array $args
+     * @return ResponseInterface
      */
-    public function ticket_add($request, $response, $args): ResponseInterface
+    public function ticket_add(ServerRequest $request, Response $response, array $args): ResponseInterface
     {
         $title    = $request->getParam('title');
         $content  = $request->getParam('content');
@@ -133,10 +138,11 @@ class TicketController extends UserController
 
     /**
      * @param ServerRequest $request
-     * @param Response  $response
-     * @param array     $args
+     * @param Response $response
+     * @param array $args
+     * @return ResponseInterface
      */
-    public function ticket_update($request, $response, $args): ResponseInterface
+    public function ticket_update(ServerRequest $request, Response $response, array $args): ResponseInterface
     {
         $id       = $args['id'];
         $content  = $request->getParam('content');
@@ -240,10 +246,12 @@ class TicketController extends UserController
 
     /**
      * @param ServerRequest $request
-     * @param Response  $response
-     * @param array     $args
+     * @param Response $response
+     * @param array $args
+     * @return ResponseInterface
+     * @throws \SmartyException
      */
-    public function ticket_view($request, $response, $args): ResponseInterface
+    public function ticket_view(ServerRequest $request, Response $response, array $args): ResponseInterface
     {
         $id           = $args['id'];
         $ticket_main  = Ticket::where('id', '=', $id)->where('userid', $this->user->id)->where('rootid', '=', 0)->first();

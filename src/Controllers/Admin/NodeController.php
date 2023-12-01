@@ -23,10 +23,12 @@ class NodeController extends AdminController
      * 后台节点页面
      *
      * @param ServerRequest $request
-     * @param Response  $response
-     * @param array     $args
+     * @param Response $response
+     * @param array $args
+     * @return ResponseInterface
+     * @throws \SmartyException
      */
-    public function index($request, $response, $args): ResponseInterface
+    public function index(ServerRequest $request, Response $response, array $args): ResponseInterface
     {
         $table_config['total_column'] = array(
             'op'                      => '操作',
@@ -63,10 +65,12 @@ class NodeController extends AdminController
      * 后台创建节点页面
      *
      * @param ServerRequest $request
-     * @param Response  $response
-     * @param array     $args
+     * @param Response $response
+     * @param array $args
+     * @return ResponseInterface
+     * @throws \SmartyException
      */
-    public function create($request, $response, $args): ResponseInterface
+    public function create(ServerRequest $request, Response $response, array $args): ResponseInterface
     {
         return $response->write(
             $this->view()
@@ -78,10 +82,11 @@ class NodeController extends AdminController
      * 后台添加节点
      *
      * @param ServerRequest $request
-     * @param Response  $response
-     * @param array     $args
+     * @param Response $response
+     * @param array $args
+     * @return ResponseInterface
      */
-    public function add($request, $response, $args): ResponseInterface
+    public function add(ServerRequest $request, Response $response, array $args): ResponseInterface
     {
         $node                   = new Node();
         $node->name             = $request->getParam('name');
@@ -158,10 +163,12 @@ class NodeController extends AdminController
      * 后台编辑指定节点页面
      *
      * @param ServerRequest $request
-     * @param Response  $response
-     * @param array     $args
+     * @param Response $response
+     * @param array $args
+     * @return ResponseInterface
+     * @throws \SmartyException
      */
-    public function edit($request, $response, $args): ResponseInterface
+    public function edit(ServerRequest $request, Response $response, array $args): ResponseInterface
     {
         $id = $args['id'];
         $node = Node::find($id);
@@ -176,10 +183,11 @@ class NodeController extends AdminController
      * 后台更新指定节点内容
      *
      * @param ServerRequest $request
-     * @param Response  $response
-     * @param array     $args
+     * @param Response $response
+     * @param array $args
+     * @return ResponseInterface
      */
-    public function update($request, $response, $args): ResponseInterface
+    public function update(ServerRequest $request, Response $response, array $args): ResponseInterface
     {
         $id                     = $args['id'];
         $node                   = Node::find($id);
@@ -251,10 +259,11 @@ class NodeController extends AdminController
      * 后台删除指定节点
      *
      * @param ServerRequest $request
-     * @param Response  $response
-     * @param array     $args
+     * @param Response $response
+     * @param array $args
+     * @return ResponseInterface
      */
-    public function delete($request, $response, $args): ResponseInterface
+    public function delete(ServerRequest $request, Response $response, array $args): ResponseInterface
     {
         $id = $request->getParam('id');
         $node = Node::find($id);
@@ -293,10 +302,11 @@ class NodeController extends AdminController
      * 后台节点页面 AJAX
      *
      * @param ServerRequest $request
-     * @param Response  $response
-     * @param array     $args
+     * @param Response $response
+     * @param array $args
+     * @return ResponseInterface
      */
-    public function ajax($request, $response, $args): ResponseInterface
+    public function ajax(ServerRequest $request, Response $response, array $args): ResponseInterface
     {
         $query = Node::getTableDataFromAdmin(
             $request,

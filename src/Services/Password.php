@@ -16,8 +16,9 @@ class Password
      * 发送重置密码邮件
      *
      * @param $email string
+     * @return bool
      */
-    public static function sendResetEmail($email): bool
+    public static function sendResetEmail(string $email): bool
     {
         $pwdRst              = new PasswordReset();
         $pwdRst->email       = $email;

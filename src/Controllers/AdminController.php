@@ -2,6 +2,7 @@
 
 namespace App\Controllers;
 
+use Psr\Http\Message\ResponseInterface;
 use App\Models\{
     User,
     Coupon
@@ -28,10 +29,12 @@ class AdminController extends UserController
      * 后台首页
      *
      * @param ServerRequest $request
-     * @param Response  $response
-     * @param array     $args
+     * @param Response $response
+     * @param array $args
+     * @return Response|ResponseInterface
+     * @throws \SmartyException
      */
-    public function index($request, $response, $args)
+    public function index(ServerRequest $request, Response $response, array $args): Response|\Psr\Http\Message\ResponseInterface
     {
         return $response->write(
             $this->view()
@@ -44,10 +47,12 @@ class AdminController extends UserController
      * 统计信息
      *
      * @param ServerRequest $request
-     * @param Response  $response
-     * @param array     $args
+     * @param Response $response
+     * @param array $args
+     * @return Response|ResponseInterface
+     * @throws \SmartyException
      */
-    public function sys($request, $response, $args)
+    public function sys(ServerRequest $request, Response $response, array $args): Response|\Psr\Http\Message\ResponseInterface
     {
         return $response->write(
             $this->view()
@@ -59,10 +64,12 @@ class AdminController extends UserController
      * 后台邀请返利页面
      *
      * @param ServerRequest $request
-     * @param Response  $response
-     * @param array     $args
+     * @param Response $response
+     * @param array $args
+     * @return Response|ResponseInterface
+     * @throws \SmartyException
      */
-    public function invite($request, $response, $args)
+    public function invite(ServerRequest $request, Response $response, array $args): Response|\Psr\Http\Message\ResponseInterface
     {
         $table_config['total_column'] = array(
             'id'              => 'ID',
@@ -90,10 +97,11 @@ class AdminController extends UserController
      * 后台邀请返利页面 AJAX
      *
      * @param ServerRequest $request
-     * @param Response  $response
-     * @param array     $args
+     * @param Response $response
+     * @param array $args
+     * @return Response|ResponseInterface
      */
-    public function ajax_payback($request, $response, $args)
+    public function ajax_payback(ServerRequest $request, Response $response, array $args): Response|\Psr\Http\Message\ResponseInterface
     {
         $datatables = new Datatables(new DatatablesHelper());
         $datatables->query('Select payback.id,payback.total,payback.userid as event_user_id,event_user.user_name as event_user_name,payback.ref_by as ref_user_id,ref_user.user_name as ref_user_name,payback.ref_get,payback.datetime from payback,user as event_user,user as ref_user where event_user.id = payback.userid and ref_user.id = payback.ref_by');
@@ -109,10 +117,11 @@ class AdminController extends UserController
      * 更改用户邀请者
      *
      * @param ServerRequest $request
-     * @param Response  $response
-     * @param array     $args
+     * @param Response $response
+     * @param array $args
+     * @return Response|ResponseInterface
      */
-    public function chgInvite($request, $response, $args)
+    public function chgInvite(ServerRequest $request, Response $response, array $args): Response|\Psr\Http\Message\ResponseInterface
     {
         $userid = $request->getParam('userid');
         if ($userid == null) {
@@ -144,10 +153,11 @@ class AdminController extends UserController
      * 为用户添加邀请次数
      *
      * @param ServerRequest $request
-     * @param Response  $response
-     * @param array     $args
+     * @param Response $response
+     * @param array $args
+     * @return Response|ResponseInterface
      */
-    public function addInvite($request, $response, $args)
+    public function addInvite(ServerRequest $request, Response $response, array $args): Response|\Psr\Http\Message\ResponseInterface
     {
         $num = $request->getParam('num');
         if (Tools::isInt($num) == false) {
@@ -184,10 +194,12 @@ class AdminController extends UserController
      * 后台商品优惠码页面
      *
      * @param ServerRequest $request
-     * @param Response  $response
-     * @param array     $args
+     * @param Response $response
+     * @param array $args
+     * @return Response|ResponseInterface
+     * @throws \SmartyException
      */
-    public function coupon($request, $response, $args)
+    public function coupon(ServerRequest $request, Response $response, array $args): Response|\Psr\Http\Message\ResponseInterface
     {
         $table_config['total_column'] = array(
             'id'        => 'ID',
@@ -213,10 +225,11 @@ class AdminController extends UserController
      * 后台商品优惠码页面 AJAX
      *
      * @param ServerRequest $request
-     * @param Response  $response
-     * @param array     $args
+     * @param Response $response
+     * @param array $args
+     * @return Response|ResponseInterface
      */
-    public function ajax_coupon($request, $response, $args)
+    public function ajax_coupon(ServerRequest $request, Response $response, array $args): Response|\Psr\Http\Message\ResponseInterface
     {
         $datatables = new Datatables(new DatatablesHelper());
         $datatables->query('Select id,code,expire,shop,credit,onetime from coupon');
@@ -232,10 +245,11 @@ class AdminController extends UserController
      * 添加优惠码
      *
      * @param ServerRequest $request
-     * @param Response  $response
-     * @param array     $args
+     * @param Response $response
+     * @param array $args
+     * @return Response|ResponseInterface
      */
-    public function addCoupon($request, $response, $args)
+    public function addCoupon(ServerRequest $request, Response $response, array $args): Response|\Psr\Http\Message\ResponseInterface
     {
         $generate_type = (int) $request->getParam('generate_type');
         $final_code    = $request->getParam('prefix');

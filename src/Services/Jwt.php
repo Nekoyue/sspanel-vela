@@ -11,12 +11,12 @@ class Jwt
         return $_ENV['key'];
     }
 
-    public static function encode($input)
+    public static function encode($input): string
     {
         return JwtClient::encode($input, self::getKey());
     }
 
-    public static function encode_withkey($input, $key)
+    public static function encode_withkey($input, $key): string
     {
         return JwtClient::encode($input, $key);
     }

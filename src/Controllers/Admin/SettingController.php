@@ -16,7 +16,7 @@ use App\Services\{
 
 class SettingController extends AdminController
 {
-    public function index($request, $response, $args)
+    public function index(ServerRequest $request, Response $response, array $args): Response|\Psr\Http\Message\ResponseInterface
     {
         $config = array();
         $settings = Setting::get(['item', 'value', 'type']);
@@ -149,6 +149,9 @@ class SettingController extends AdminController
         ]);
     }
 
+    /**
+     * @throws \Exception
+     */
     public function test($request, $response, $args)
     {
         $to = $request->getParam('recipient');
@@ -173,7 +176,7 @@ class SettingController extends AdminController
         ]);
     }
 
-    public function return_gateways_list()
+    public function return_gateways_list(): array
     {
         $payment_gateways = array(
             // 网关名 网关代号

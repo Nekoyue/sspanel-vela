@@ -276,6 +276,7 @@ class Node extends Model
      * 获取偏移后的端口
      *
      * @param mixed $port
+     * @return mixed
      */
     public function getOffsetPort(mixed $port)
     {

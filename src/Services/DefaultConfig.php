@@ -13,7 +13,7 @@ class DefaultConfig
      *
      * @return bool
      */
-    public static function create($key)
+    public static function create(string $key): bool
     {
         $value = self::default_value($key);
         if ($value != null) {
@@ -42,7 +42,7 @@ class DefaultConfig
      *
      * @return GConfig|null
      */
-    public static function firstOrCreate($key)
+    public static function firstOrCreate(string $key): ?GConfig
     {
         return (self::create($key)
             ? GConfig::where('key', '=', $key)->first()
@@ -55,7 +55,7 @@ class DefaultConfig
      *
      * @return string
      */
-    public static function detectConfigs()
+    public static function detectConfigs(): string
     {
         $return = '开始检查新增的配置项...' . PHP_EOL;
         $configs = self::configs();
@@ -76,11 +76,11 @@ class DefaultConfig
     /**
      * 默认配置，新增配置请添加到此处
      *
-     * @param string $key 键名
+     * @param string|null $key 键名
      *
      * @return array
      */
-    public static function configs($key = null)
+    public static function configs(string $key = null): array
     {
         $configs = [
             // Telegram 部分
@@ -303,9 +303,9 @@ class DefaultConfig
      *
      * @param string $key 键名
      *
-     * @return void
+     * @return array|array[]
      */
-    public static function default_value($key)
+    public static function default_value(string $key): array
     {
         return self::configs($key);
     }

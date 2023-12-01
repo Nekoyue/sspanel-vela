@@ -18,10 +18,12 @@ class LoginLogController extends AdminController
 {
     /**
      * @param ServerRequest $request
-     * @param Response  $response
-     * @param array     $args
+     * @param Response $response
+     * @param array $args
+     * @return ResponseInterface
+     * @throws \SmartyException
      */
-    public function index($request, $response, $args): ResponseInterface
+    public function index(ServerRequest $request, Response $response, array $args): ResponseInterface
     {
         $id = $args['id'];
         $user = User::find($id);
@@ -45,10 +47,11 @@ class LoginLogController extends AdminController
 
     /**
      * @param ServerRequest $request
-     * @param Response  $response
-     * @param array     $args
+     * @param Response $response
+     * @param array $args
+     * @return ResponseInterface
      */
-    public function ajax($request, $response, $args): ResponseInterface
+    public function ajax(ServerRequest $request, Response $response, array $args): ResponseInterface
     {
         $user  = User::find($args['id']);
         $query = LoginIp::getTableDataFromAdmin(

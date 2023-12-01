@@ -10,11 +10,11 @@ class QQWry
 {
     private $fp;
 
-    private $firstip;
+    private mixed $firstip;
 
-    private $lastip;
+    private mixed $lastip;
 
-    private $totalip;
+    private int|float $totalip;
 
 
     public function __construct()
@@ -61,7 +61,7 @@ class QQWry
     }
 
 
-    private function packip($ip)
+    private function packip($ip): string
     {
         return pack('N', (int)ip2long($ip));
     }
@@ -108,7 +108,7 @@ class QQWry
     }
 
 
-    public function getlocation($ip)
+    public function getlocation($ip): ?array
     {
         if (!$this->fp) {
             return null;

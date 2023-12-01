@@ -20,10 +20,11 @@ class FuncController extends BaseController
 {
     /**
      * @param ServerRequest $request
-     * @param Response  $response
-     * @param array     $args
+     * @param Response $response
+     * @param array $args
+     * @return Response|ResponseInterface
      */
-    public function ping($request, $response, $args)
+    public function ping(ServerRequest $request, Response $response, array $args): Response|ResponseInterface
     {
         $res = [
             'ret' => 1,
@@ -34,10 +35,11 @@ class FuncController extends BaseController
 
     /**
      * @param ServerRequest $request
-     * @param Response  $response
-     * @param array     $args
+     * @param Response $response
+     * @param array $args
+     * @return ResponseInterface
      */
-    public function get_detect_logs($request, $response, $args): ResponseInterface
+    public function get_detect_logs(ServerRequest $request, Response $response, array $args): ResponseInterface
     {
         $rules = DetectRule::all();
 
@@ -55,10 +57,11 @@ class FuncController extends BaseController
 
     /**
      * @param ServerRequest $request
-     * @param Response  $response
-     * @param array     $args
+     * @param Response $response
+     * @param array $args
+     * @return ResponseInterface
      */
-    public function get_blockip($request, $response, $args): ResponseInterface
+    public function get_blockip(ServerRequest $request, Response $response, array $args): ResponseInterface
     {
         $block_ips = BlockIp::Where('datetime', '>', time() - 60)->get();
 
@@ -76,10 +79,11 @@ class FuncController extends BaseController
 
     /**
      * @param ServerRequest $request
-     * @param Response  $response
-     * @param array     $args
+     * @param Response $response
+     * @param array $args
+     * @return ResponseInterface
      */
-    public function get_unblockip($request, $response, $args): ResponseInterface
+    public function get_unblockip(ServerRequest $request, Response $response, array $args): ResponseInterface
     {
         $unblock_ips = UnblockIp::Where('datetime', '>', time() - 60)->get();
 
@@ -97,10 +101,11 @@ class FuncController extends BaseController
 
     /**
      * @param ServerRequest $request
-     * @param Response  $response
-     * @param array     $args
+     * @param Response $response
+     * @param array $args
+     * @return Response|ResponseInterface
      */
-    public function addBlockIp($request, $response, $args)
+    public function addBlockIp(ServerRequest $request, Response $response, array $args): Response|ResponseInterface
     {
         $params = $request->getQueryParams();
 

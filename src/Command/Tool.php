@@ -19,7 +19,7 @@ class Tool extends Command
         . '│ ├─ exportAllSettings       - 导出所有设置' . PHP_EOL
         . '│ ├─ importAllSettings       - 导入所有设置' . PHP_EOL;
 
-    public function boot()
+    public function boot(): void
     {
         if (count($this->argv) === 2) {
             echo $this->description;
@@ -37,7 +37,7 @@ class Tool extends Command
      * @throws Exception
      * @throws TelegramSDKException
      */
-    public function setTelegram()
+    public function setTelegram(): void
     {
         if ($_ENV['use_new_telegram_bot'] === true) {
             $WebhookUrl = ($_ENV['telegram_callback_url'] . '/telegram_callback?token=' . $_ENV['telegram_request_token']);
@@ -60,7 +60,7 @@ class Tool extends Command
         }
     }
 
-    public function initQQWry()
+    public function initQQWry(): void
     {
         echo ('正在下载或更新纯真ip数据库...') . PHP_EOL;
         $path  = BASE_PATH . '/storage/qqwry.dat';
@@ -91,12 +91,12 @@ class Tool extends Command
         }
     }
 
-    public function detectConfigs()
+    public function detectConfigs(): void
     {
         echo \App\Services\DefaultConfig::detectConfigs();
     }
 
-    public function resetAllSettings()
+    public function resetAllSettings(): void
     {
         $settings = Setting::all();
 
@@ -109,7 +109,7 @@ class Tool extends Command
         echo '已使用默认值覆盖所有设置.' . PHP_EOL;
     }
 
-    public function exportAllSettings()
+    public function exportAllSettings(): void
     {
         $settings = Setting::all();
         foreach ($settings as $setting)
@@ -127,7 +127,7 @@ class Tool extends Command
         echo '已导出所有设置.' . PHP_EOL;
     }
 
-    public function importAllSettings()
+    public function importAllSettings(): void
     {
         $db = new DatatablesHelper();
 

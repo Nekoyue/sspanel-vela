@@ -19,7 +19,7 @@ class Mail
     /**
      * @return Mailgun|NullMail|SendGrid|Ses|Smtp|null
      */
-    public static function getClient()
+    public static function getClient(): Mailgun|Smtp|Ses|NullMail|SendGrid|null
     {
         $driver = Setting::obtain('mail_driver');
         switch ($driver) {
@@ -40,8 +40,9 @@ class Mail
      * @param $template
      * @param $ary
      * @return mixed
+     * @throws \SmartyException
      */
-    public static function genHtml($template, $ary)
+    public static function genHtml($template, $ary): mixed
     {
         $smarty = new smarty();
         $smarty->settemplatedir(BASE_PATH . '/resources/email/');
@@ -59,12 +60,12 @@ class Mail
      * @param $to
      * @param $subject
      * @param $template
-     * @param $ary
-     * @param $files
+     * @param array $ary
+     * @param array $files
      * @return void
      * @throws \Exception
      */
-    public static function send($to, $subject, $template, $ary = [], $files = []): void
+    public static function send($to, $subject, $template, array $ary = [], array $files = []): void
     {
         $text = self::genHtml($template, $ary);
         self::getClient()->send($to, $subject, $text, $files);

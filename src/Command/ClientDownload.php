@@ -88,9 +88,9 @@ class ClientDownload extends Command
         ],
     ];
 
-    private $version;
+    private array $version;
 
-    public function boot()
+    public function boot(): void
     {
         $this->client  = new \GuzzleHttp\Client();
         $this->version = $this->getLocalVersions();
@@ -245,7 +245,7 @@ class ClientDownload extends Command
         );
     }
 
-    private function getSoft(array $task)
+    private function getSoft(array $task): void
     {
         $savePath = $this->basePath . $task['savePath'];
         echo '====== ' . $task['name'] . ' 开始 ======' . PHP_EOL;

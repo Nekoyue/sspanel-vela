@@ -14,10 +14,11 @@ class GConfigController extends AdminController
 {
     /**
      * @param ServerRequest $request
-     * @param Response  $response
-     * @param array     $args
+     * @param Response $response
+     * @param array $args
+     * @return ResponseInterface
      */
-    public function update($request, $response, $args): ResponseInterface
+    public function update(ServerRequest $request, Response $response, array $args): ResponseInterface
     {
         $key    = trim($args['key']);
         $user   = $this->user;
@@ -36,10 +37,12 @@ class GConfigController extends AdminController
 
     /**
      * @param ServerRequest $request
-     * @param Response  $response
-     * @param array     $args
+     * @param Response $response
+     * @param array $args
+     * @return ResponseInterface
+     * @throws \SmartyException
      */
-    public function edit($request, $response, $args): ResponseInterface
+    public function edit(ServerRequest $request, Response $response, array $args): ResponseInterface
     {
         $key    = trim($args['key']);
         $config = GConfig::where('key', '=', $key)->first();
@@ -52,10 +55,12 @@ class GConfigController extends AdminController
 
     /**
      * @param ServerRequest $request
-     * @param Response  $response
-     * @param array     $args
+     * @param Response $response
+     * @param array $args
+     * @return ResponseInterface
+     * @throws \SmartyException
      */
-    public function telegram($request, $response, $args): ResponseInterface
+    public function telegram(ServerRequest $request, Response $response, array $args): ResponseInterface
     {
         $table_config['total_column'] = array(
             'op'             => '操作',
@@ -81,10 +86,11 @@ class GConfigController extends AdminController
 
     /**
      * @param ServerRequest $request
-     * @param Response  $response
-     * @param array     $args
+     * @param Response $response
+     * @param array $args
+     * @return ResponseInterface
      */
-    public function telegram_ajax($request, $response, $args): ResponseInterface
+    public function telegram_ajax(ServerRequest $request, Response $response, array $args): ResponseInterface
     {
         $query = GConfig::getTableDataFromAdmin(
             $request,

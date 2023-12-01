@@ -2,17 +2,19 @@
 
 namespace App\Services;
 
+use App\Models\User;
+
 class Auth
 {
 
-    protected $user;
+    protected User $user;
 
-    private static function getDriver()
+    private static function getDriver(): Auth\Cookie|Redis|Auth\JwtToken
     {
         return Factory::createAuth();
     }
 
-    public static function login($uid, $time)
+    public static function login($uid, $time): void
     {
         self::getDriver()->login($uid, $time);
     }
@@ -22,7 +24,7 @@ class Auth
      *
      * @return \App\Models\User
      */
-    public static function getUser()
+    public static function getUser(): \App\Models\User
     {
         global $user;
         if ($user === null) {
@@ -31,7 +33,7 @@ class Auth
         return $user;
     }
 
-    public static function logout()
+    public static function logout(): void
     {
         self::getDriver()->logout();
     }

@@ -7,6 +7,9 @@ use App\Models\Setting;
 
 class Captcha
 {
+    /**
+     * @throws \Exception
+     */
     public static function generate(): array
     {
         $geetest   = null;

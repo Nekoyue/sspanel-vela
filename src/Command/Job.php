@@ -25,6 +25,8 @@ use App\Utils\DatatablesHelper;
 use App\Utils\Telegram;
 use App\Utils\Tools;
 use Exception;
+use Telegram\Bot\Exceptions\TelegramSDKException;
+use TelegramBot\Api\InvalidArgumentException;
 
 class Job extends Command
 {
@@ -35,7 +37,7 @@ class Job extends Command
         . '│ ├─ CheckJob                - 检查任务，每分钟' . PHP_EOL
         . '│ ├─ UserJob                 - 用户账户相关任务，每小时' . PHP_EOL;
 
-    public function boot()
+    public function boot(): void
     {
         if (count($this->argv) === 2) {
             echo $this->description;
@@ -54,7 +56,7 @@ class Job extends Command
      *
      * @return void
      */
-    public function SendMail()
+    public function SendMail(): void
     {
         if (file_exists(BASE_PATH . '/storage/email_queue')) {
             echo "程序正在运行中" . PHP_EOL;
@@ -83,8 +85,11 @@ class Job extends Command
      * 每日任务
      *
      * @return void
+     * @throws InvalidArgumentException
+     * @throws TelegramSDKException
+     * @throws \TelegramBot\Api\Exception
      */
-    public function DailyJob()
+    public function DailyJob(): void
     {
         ini_set('memory_limit', '-1');
 
@@ -192,8 +197,11 @@ class Job extends Command
      * 检查任务，每分钟
      *
      * @return void
+     * @throws InvalidArgumentException
+     * @throws TelegramSDKException
+     * @throws \TelegramBot\Api\Exception
      */
-    public function CheckJob()
+    public function CheckJob(): void
     {
         //节点掉线检测
         if ($_ENV['enable_detect_offline']) {
@@ -375,7 +383,7 @@ class Job extends Command
      *
      * @return void
      */
-    public function UserJob()
+    public function UserJob(): void
     {
         $users = User::all();
         foreach ($users as $user) {

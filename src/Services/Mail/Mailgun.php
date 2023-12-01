@@ -5,13 +5,14 @@ namespace App\Services\Mail;
 use App\Models\Setting;
 use App\Services\Config;
 use Mailgun\Mailgun as MailgunService;
+use Psr\Http\Client\ClientExceptionInterface;
 
 class Mailgun extends Base
 {
-    private $config;
-    private $mg;
-    private $domain;
-    private $sender;
+    private array $config;
+    private MailgunService $mg;
+    private mixed $domain;
+    private mixed $sender;
 
     public function __construct()
     {
@@ -21,10 +22,10 @@ class Mailgun extends Base
         $this->sender = $this->config['sender'];
     }
 
-    public function getConfig()
+    public function getConfig(): array
     {
         $configs = Setting::getClass('mailgun');
-        
+
         return [
             'key' => $configs['mailgun_key'],
             'domain' => $configs['mailgun_domain'],
@@ -32,7 +33,10 @@ class Mailgun extends Base
         ];
     }
 
-    public function send($to, $subject, $text, $files)
+    /**
+     * @throws ClientExceptionInterface
+     */
+    public function send($to, $subject, $text, $files): void
     {
         $inline = array();
         foreach ($files as $file) {

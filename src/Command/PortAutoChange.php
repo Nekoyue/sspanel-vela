@@ -40,7 +40,7 @@ class PortAutoChange extends Command
         'exception_node_id' => array(),
     ];
 
-    public function boot()
+    public function boot(): void
     {
         $gfw_port_nodes = [];
         $nodes = Node::where(
@@ -217,7 +217,7 @@ class PortAutoChange extends Command
         return $node_port;
     }
 
-    public function DetectPort($api_url)
+    public function DetectPort($api_url): bool
     {
         $result_tcping = false;
         $detect_time = $_ENV['detect_gfw_count'];

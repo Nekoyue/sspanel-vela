@@ -17,10 +17,12 @@ class SubscribeLogController extends AdminController
      * 后台订阅记录页面
      *
      * @param ServerRequest $request
-     * @param Response  $response
-     * @param array     $args
+     * @param Response $response
+     * @param array $args
+     * @return ResponseInterface
+     * @throws \SmartyException
      */
-    public function index($request, $response, $args): ResponseInterface
+    public function index(ServerRequest $request, Response $response, array $args): ResponseInterface
     {
         $table_config['total_column'] = array(
             'id'                  => 'ID',
@@ -46,10 +48,11 @@ class SubscribeLogController extends AdminController
      * 后台订阅记录页面 AJAX
      *
      * @param ServerRequest $request
-     * @param Response  $response
-     * @param array     $args
+     * @param Response $response
+     * @param array $args
+     * @return ResponseInterface
      */
-    public function ajax_subscribe_log($request, $response, $args): ResponseInterface
+    public function ajax_subscribe_log(ServerRequest $request, Response $response, array $args): ResponseInterface
     {
         $query = UserSubscribeLog::getTableDataFromAdmin(
             $request,

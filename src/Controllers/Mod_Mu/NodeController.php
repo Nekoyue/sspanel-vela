@@ -19,10 +19,10 @@ class NodeController extends BaseController
 {
     /**
      * @param ServerRequest $request
-     * @param Response  $response
-     * @param array     $args
+     * @param Response $response
+     * @param array $args
      */
-    public function saveReport($request, $response, $args)
+    public function saveReport(ServerRequest $request, Response $response, array $args): void
     {
         // $request_ip = $_SERVER["REMOTE_ADDR"];
         $node_id = $request->getParam('node_id');
@@ -49,10 +49,11 @@ class NodeController extends BaseController
 
     /**
      * @param ServerRequest $request
-     * @param Response  $response
-     * @param array     $args
+     * @param Response $response
+     * @param array $args
+     * @return Response|ResponseInterface
      */
-    public function info($request, $response, $args)
+    public function info(ServerRequest $request, Response $response, array $args): Response|ResponseInterface
     {
         $node_id = $args['id'];
         if ($node_id == '0') {
@@ -82,10 +83,11 @@ class NodeController extends BaseController
 
     /**
      * @param ServerRequest $request
-     * @param Response  $response
-     * @param array     $args
+     * @param Response $response
+     * @param array $args
+     * @return ResponseInterface
      */
-    public function get_info($request, $response, $args): ResponseInterface
+    public function get_info(ServerRequest $request, Response $response, array $args): ResponseInterface
     {
         $node_id = $args['id'];
         if ($node_id == '0') {
@@ -134,10 +136,11 @@ class NodeController extends BaseController
 
     /**
      * @param ServerRequest $request
-     * @param Response  $response
-     * @param array     $args
+     * @param Response $response
+     * @param array $args
+     * @return ResponseInterface
      */
-    public function get_all_info($request, $response, $args): ResponseInterface
+    public function get_all_info(ServerRequest $request, Response $response, array $args): ResponseInterface
     {
         $nodes = Node::where('node_ip', '<>', null)->where(
             static function ($query) {
@@ -164,10 +167,11 @@ class NodeController extends BaseController
 
     /**
      * @param ServerRequest $request
-     * @param Response  $response
-     * @param array     $args
+     * @param Response $response
+     * @param array $args
+     * @return Response|ResponseInterface
      */
-    public function getConfig($request, $response, $args)
+    public function getConfig(ServerRequest $request, Response $response, array $args): Response|ResponseInterface
     {
         $data = $request->getParsedBody();
         switch ($data['type']) {

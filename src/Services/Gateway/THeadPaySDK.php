@@ -7,7 +7,11 @@ class THeadPaySDK {
         $this->config = $config;
     }
 
-    public function pay($order) {
+    /**
+     * @throws \Exception
+     */
+    public function pay($order): array
+    {
         $params = [
             'mchid' => $this->config['theadpay_mchid'],
             'out_trade_no' => $order['trade_no'],
@@ -40,11 +44,13 @@ class THeadPaySDK {
         return $result;
     }
 
-    public function verify($params) {
+    public function verify($params): bool
+    {
         return $params['sign'] === $this->sign($params);
     }
 
-    protected function sign($params) {
+    protected function sign($params): string
+    {
         unset($params['sign']);
         ksort($params);
         reset($params);

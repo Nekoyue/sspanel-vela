@@ -22,7 +22,7 @@ class Config
         return $value->getValue();
     }
 
-    public static function getPublicConfig()
+    public static function getPublicConfig(): array
     {
         $public_configs = Setting::getPublicConfig();
 
@@ -107,7 +107,7 @@ class Config
         ];
     }
 
-    public static function getDbConfig()
+    public static function getDbConfig(): array
     {
         return [
             'driver'        => $_ENV['db_driver'],
@@ -122,7 +122,7 @@ class Config
         ];
     }
 
-    public static function getMuKey()
+    public static function getMuKey(): array
     {
         $muKeyList = array_key_exists('muKeyList', $_ENV) ? $_ENV['muKeyList'] : ['　'];
         return array_merge(explode(',', $_ENV['muKey']), $muKeyList);

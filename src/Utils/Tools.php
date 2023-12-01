@@ -12,7 +12,7 @@ class Tools
     /**
      * 查询IP归属
      */
-    public static function getIpInfo($ip)
+    public static function getIpInfo($ip): bool|string
     {
         $iplocation = new QQWry();
         $location   = $iplocation->getlocation($ip);
@@ -23,7 +23,7 @@ class Tools
     /**
      * 根据流量值自动转换单位输出
      */
-    public static function flowAutoShow($value = 0)
+    public static function flowAutoShow($value = 0): string
     {
         $kb = 1024;
         $mb = 1048576;
@@ -56,7 +56,7 @@ class Tools
     /**
      * 根据含单位的流量值转换 B 输出
      */
-    public static function flowAutoShowZ($Value)
+    public static function flowAutoShowZ($Value): ?float
     {
         $number = substr($Value, 0, -2);
         if (!is_numeric($number)) {
@@ -95,14 +95,14 @@ class Tools
     }
 
     //虽然名字是toMB，但是实际上功能是from MB to B
-    public static function toMB($traffic)
+    public static function toMB($traffic): float|int
     {
         $mb = 1048576;
         return $traffic * $mb;
     }
 
     //虽然名字是toGB，但是实际上功能是from GB to B
-    public static function toGB($traffic)
+    public static function toGB($traffic): float|int
     {
         $gb = 1048576 * 1024;
         return $traffic * $gb;
@@ -110,9 +110,9 @@ class Tools
 
     /**
      * @param $traffic
-     * @return float
+     * @return float|int
      */
-    public static function flowToGB($traffic)
+    public static function flowToGB($traffic): float|int
     {
         $gb = 1048576 * 1024;
         return $traffic / $gb;
@@ -120,9 +120,9 @@ class Tools
 
     /**
      * @param $traffic
-     * @return float
+     * @return float|int
      */
-    public static function flowToMB($traffic)
+    public static function flowToMB($traffic): float|int
     {
         $gb = 1048576;
         return $traffic / $gb;
@@ -130,7 +130,10 @@ class Tools
 
     //获取随机字符串
 
-    public static function genRandomNum($length = 8)
+    /**
+     * @throws \Exception
+     */
+    public static function genRandomNum($length = 8): string
     {
         // 来自Miku的 6位随机数 注册验证码 生成方案
         $chars = '0123456789';
@@ -141,7 +144,10 @@ class Tools
         return $char;
     }
 
-    public static function genRandomChar($length = 8)
+    /**
+     * @throws RandomException
+     */
+    public static function genRandomChar($length = 8): string
     {
         // 密码字符集，可任意添加你需要的字符
         $chars = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
@@ -152,36 +158,36 @@ class Tools
         return $char;
     }
 
-    public static function genToken()
+    public static function genToken(): string
     {
         return self::genRandomChar(64);
     }
 
-    public static function is_ip($a)
+    public static function is_ip($a): bool|int
     {
         return preg_match("/^\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}$/", $a);
     }
 
     // Unix time to Date Time
-    public static function toDateTime($time)
+    public static function toDateTime($time): string
     {
         return date('Y-m-d H:i:s', $time);
     }
 
-    public static function secondsToTime($seconds)
+    public static function secondsToTime($seconds): string
     {
         $dtF = new DateTime('@0');
         $dtT = new DateTime("@$seconds");
         return $dtF->diff($dtT)->format('%a 天, %h 小时, %i 分 + %s 秒');
     }
 
-    public static function genSID()
+    public static function genSID(): string
     {
         $unid = uniqid($_ENV['key'], true);
         return Hash::sha256WithSalt($unid);
     }
 
-    public static function genUUID()
+    public static function genUUID(): string
     {
         // @TODO
         return self::genSID();
@@ -208,17 +214,17 @@ class Tools
         }
     }
 
-    public static function base64_url_encode($input)
+    public static function base64_url_encode($input): string
     {
         return strtr(base64_encode($input), array('+' => '-', '/' => '_', '=' => ''));
     }
 
-    public static function base64_url_decode($input)
+    public static function base64_url_decode($input): bool|string
     {
         return base64_decode(strtr($input, '-_', '+/'));
     }
 
-    public static function getDir($dir)
+    public static function getDir($dir): array
     {
         $dirArray[] = null;
         if (false != ($handle = opendir($dir))) {
@@ -234,13 +240,13 @@ class Tools
         return $dirArray;
     }
 
-    public static function is_validate($str)
+    public static function is_validate($str): bool
     {
         $pattern = "/[^A-Za-z0-9\-_\.]/";
         return !preg_match($pattern, $str);
     }
 
-    public static function get_middle_text($origin_text, $begin_text, $end_text)
+    public static function get_middle_text($origin_text, $begin_text, $end_text): ?string
     {
         $begin_pos = strpos($origin_text, $begin_text);
         if ($begin_pos == false) {
@@ -369,7 +375,7 @@ class Tools
      *
      * @return Model
      */
-    public static function keyFilter($object, $filter_array)
+    public static function keyFilter(Model $object, array $filter_array): Model
     {
         foreach ($object->toArray() as $key => $value) {
             if (!in_array($key, $filter_array)) {
@@ -379,12 +385,12 @@ class Tools
         return $object;
     }
 
-    public static function getRealIp($rawIp)
+    public static function getRealIp($rawIp): array|string
     {
         return str_replace('::ffff:', '', $rawIp);
     }
 
-    public static function isInt($str)
+    public static function isInt($str): bool
     {
         if ($str[0] == '-') {
             $str = substr($str, 1);
@@ -393,7 +399,7 @@ class Tools
         return ctype_digit($str);
     }
 
-    public static function OutPort($server, $node_name, $mu_port)
+    public static function OutPort($server, $node_name, $mu_port): array
     {
         $node_server = explode(';', $server);
         $node_port = $mu_port;
@@ -427,7 +433,7 @@ class Tools
         ];
     }
 
-    public static function get_MuOutPortArray($server)
+    public static function get_MuOutPortArray($server): array
     {
         $type = 0; //偏移
         $port = []; //指定
@@ -492,7 +498,7 @@ class Tools
 
     // 请将冷门的国家或地区放置在上方，热门的中继起源放置在下方
     // 以便于兼容如：【上海 -> 美国】等节点名称
-    private static $emoji = [
+    private static array $emoji = [
         "🇦🇷" => [
             "阿根廷"
         ],
@@ -669,7 +675,7 @@ class Tools
      * @param ZipArchive $zipFile
      * @param int $exclusiveLength Number of text to be exclusived from the file path.
      */
-    public static function folderToZip($folder, &$zipFile, $exclusiveLength)
+    public static function folderToZip(string $folder, ZipArchive &$zipFile, int $exclusiveLength): void
     {
         $handle = opendir($folder);
         while (false !== $f = readdir($handle)) {
@@ -692,9 +698,9 @@ class Tools
     /**
      * 清空文件夹
      *
-     * @param string $dirName
+     * @param $dirPath
      */
-    public static function delDirAndFile($dirPath)
+    public static function delDirAndFile($dirPath): void
     {
         if ($handle = opendir($dirPath)) {
             while (false !== ($item = readdir($handle))) {
@@ -716,7 +722,7 @@ class Tools
      * @param DatatablesHelper $db
      * @param string $table
      */
-    public static function reset_auto_increment($db, $table)
+    public static function reset_auto_increment(DatatablesHelper $db, string $table): void
     {
         $maxid = $db->query(
             "SELECT `auto_increment` AS `maxid` FROM `information_schema`.`tables` WHERE `table_schema` = '" . $_ENV['db_database'] . "' AND `table_name` = '" . $table . "'"
@@ -730,8 +736,9 @@ class Tools
      * Eloquent 分页链接渲染
      *
      * @param mixed $data
+     * @return string
      */
-    public static function paginate_render($data): string
+    public static function paginate_render(mixed $data): string
     {
         $totalPage   = $data->lastPage();
         $currentPage = $data->currentPage();
@@ -798,13 +805,13 @@ class Tools
         return $html;
     }
 
-    public static function etag($data)
+    public static function etag($data): string
     {
         $etag = sha1(json_encode($data));
         return $etag;
     }
 
-    public static function genSubToken()
+    public static function genSubToken(): string
     {
         for ($i = 0; $i < 10; $i++) {
             $token = self::genRandomChar(16);

@@ -23,13 +23,13 @@ class Analytics
         return User::where('last_check_in_time', '>', strtotime('today'))->count();
     }
 
-    public function getTrafficUsage()
+    public function getTrafficUsage(): string
     {
         $total = User::sum('u') + User::sum('d');
         return Tools::flowAutoShow($total);
     }
 
-    public function getTodayTrafficUsage()
+    public function getTodayTrafficUsage(): string
     {
         $total = User::sum('u') + User::sum('d') - User::sum('last_day_t');
         return Tools::flowAutoShow($total);
@@ -41,7 +41,7 @@ class Analytics
         return User::sum('u') + User::sum('d') - User::sum('last_day_t');
     }
 
-    public function getLastTrafficUsage()
+    public function getLastTrafficUsage(): string
     {
         $total = User::sum('last_day_t');
         return Tools::flowAutoShow($total);
@@ -53,7 +53,7 @@ class Analytics
         return User::sum('last_day_t');
     }
 
-    public function getUnusedTrafficUsage()
+    public function getUnusedTrafficUsage(): string
     {
         $total = User::sum('transfer_enable') - User::sum('u') - User::sum('d');
         return Tools::flowAutoShow($total);
@@ -65,7 +65,7 @@ class Analytics
     }
 
 
-    public function getTotalTraffic()
+    public function getTotalTraffic(): string
     {
         $total = User::sum('transfer_enable');
         return Tools::flowAutoShow($total);

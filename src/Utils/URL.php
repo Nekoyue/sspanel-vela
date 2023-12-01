@@ -3,6 +3,7 @@
 namespace App\Utils;
 
 use App\Controllers\LinkController;
+use Illuminate\Database\Eloquent\Collection;
 use App\Models\{Node, User};
 
 class URL
@@ -11,8 +12,9 @@ class URL
      * parse xxx=xxx|xxx=xxx to array(xxx => xxx, xxx => xxx)
      *
      * @param string $origin
+     * @return array
      */
-    public static function parse_args($origin): array
+    public static function parse_args(string $origin): array
     {
         // parse xxx=xxx|xxx=xxx to array(xxx => xxx, xxx => xxx)
         $args_explode = explode('|', $origin);
@@ -31,11 +33,12 @@ class URL
     /**
      * 获取全部节点对象
      *
-     * @param User  $user
-     * @param mixed $sort  数值或数组
+     * @param User $user
+     * @param mixed $sort 数值或数组
      * @param array $rules 节点筛选规则
+     * @return Collection
      */
-    public static function getNodes(User $user, $sort, array $rules = []): \Illuminate\Database\Eloquent\Collection
+    public static function getNodes(User $user, mixed $sort, array $rules = []): \Illuminate\Database\Eloquent\Collection
     {
         $query = Node::query();
         if (is_array($sort)) {
@@ -226,14 +229,14 @@ class URL
     }
 
 
-
     /**
      * 获取 Trojan 全部节点
      *
      * @param User $user 用户
      * @param bool $emoji
+     * @return array
      */
-    public static function getAllTrojan($user, $emoji = false): array
+    public static function getAllTrojan(User $user, bool $emoji = false): array
     {
         $return_array = array();
         $nodes = self::getNodes($user, 14);
@@ -252,8 +255,9 @@ class URL
      *
      * @param User $user 用户
      * @param Node $node
+     * @return string
      */
-    public static function get_trojan_url($user, $node): string
+    public static function get_trojan_url(User $user, Node $node): string
     {
         $server = $node->getTrojanItem($user);
         $return = 'trojan://' . $server['passwd'] . '@' . $server['address'] . ':' . $server['port'];

@@ -6,6 +6,9 @@ use App\Models\User;
 use App\Utils\Telegram;
 use App\Utils\DatatablesHelper;
 use Ozdemir\Datatables\Datatables;
+use Telegram\Bot\Exceptions\TelegramSDKException;
+use TelegramBot\Api\Exception;
+use TelegramBot\Api\InvalidArgumentException;
 
 class FinanceMail extends Command
 {
@@ -15,7 +18,7 @@ class FinanceMail extends Command
         . '│ ├─ week                    - 周报' . PHP_EOL
         . '│ ├─ month                   - 月报' . PHP_EOL;
 
-    public function boot()
+    public function boot(): void
     {
         if (count($this->argv) === 2) {
             echo $this->description;
@@ -29,7 +32,12 @@ class FinanceMail extends Command
         }
     }
 
-    public function day()
+    /**
+     * @throws TelegramSDKException
+     * @throws Exception
+     * @throws InvalidArgumentException
+     */
+    public function day(): void
     {
         $datatables = new Datatables(new DatatablesHelper());
         $datatables->query(
@@ -81,7 +89,12 @@ class FinanceMail extends Command
         }
     }
 
-    public function week()
+    /**
+     * @throws TelegramSDKException
+     * @throws Exception
+     * @throws InvalidArgumentException
+     */
+    public function week(): void
     {
         $datatables = new Datatables(new DatatablesHelper());
         $datatables->query(
@@ -126,7 +139,12 @@ class FinanceMail extends Command
         }
     }
 
-    public function month()
+    /**
+     * @throws TelegramSDKException
+     * @throws Exception
+     * @throws InvalidArgumentException
+     */
+    public function month(): void
     {
         $datatables = new Datatables(new DatatablesHelper());
         $datatables->query(

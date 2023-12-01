@@ -2,15 +2,19 @@
 
 namespace App\Services\Mail;
 
+use PHPMailer\PHPMailer\Exception;
 use PHPMailer\PHPMailer\PHPMailer;
 use App\Services\Config;
 use App\Models\Setting;
 
 class Smtp extends Base
 {
-    private $mail;
-    private $config;
+    private PHPMailer $mail;
+    private array $config;
 
+    /**
+     * @throws Exception
+     */
     public function __construct()
     {
         $this->config = $this->getConfig();
@@ -24,7 +28,7 @@ class Smtp extends Base
         $mail->Username = $this->config['username'];          // SMTP username
         $mail->Password = $this->config['passsword'];         // SMTP password
         $mail->setFrom($this->config['sender'], $this->config['name']);
-        
+
         if ($this->config['smtp_ssl'] == true) {
             // Enable TLS encryption, `ssl` also accepted
             $mail->SMTPSecure = ($this->config['port'] == '587' ? 'tls' : 'ssl');
@@ -37,10 +41,10 @@ class Smtp extends Base
         $this->mail = $mail;
     }
 
-    public function getConfig()
+    public function getConfig(): array
     {
         $configs = Setting::getClass('smtp');
-        
+
         return [
             'host' => $configs['smtp_host'],
             'port' => $configs['smtp_port'],
@@ -52,8 +56,11 @@ class Smtp extends Base
             'smtp_bbc' => $configs['smtp_bbc']
         ];
     }
-    
-    public function send($to, $subject, $text, $files)
+
+    /**
+     * @throws Exception
+     */
+    public function send($to, $subject, $text, $files): void
     {
         $mail = $this->mail;
         $mail->addAddress($to);     // Add a recipient

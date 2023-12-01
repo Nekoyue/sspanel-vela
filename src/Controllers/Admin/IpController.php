@@ -9,6 +9,7 @@ use App\Models\{
     LoginIp,
     UnblockIp
 };
+use Psr\Http\Message\ResponseInterface;
 use App\Utils\{
     QQWry,
     Tools
@@ -24,10 +25,12 @@ class IpController extends AdminController
      * 后台登录记录页面
      *
      * @param ServerRequest $request
-     * @param Response  $response
-     * @param array     $args
+     * @param Response $response
+     * @param array $args
+     * @return Response|ResponseInterface
+     * @throws \SmartyException
      */
-    public function index($request, $response, $args)
+    public function index(ServerRequest $request, Response $response, array $args): Response|\Psr\Http\Message\ResponseInterface
     {
         $table_config['total_column'] = array(
             'id'        => 'ID',
@@ -51,10 +54,11 @@ class IpController extends AdminController
      * 后台登录记录页面 AJAX
      *
      * @param ServerRequest $request
-     * @param Response  $response
-     * @param array     $args
+     * @param Response $response
+     * @param array $args
+     * @return Response|ResponseInterface
      */
-    public function ajax_login($request, $response, $args)
+    public function ajax_login(ServerRequest $request, Response $response, array $args): Response|\Psr\Http\Message\ResponseInterface
     {
         $query = LoginIp::getTableDataFromAdmin(
             $request,
@@ -101,10 +105,12 @@ class IpController extends AdminController
      * 后台在线 IP 页面
      *
      * @param ServerRequest $request
-     * @param Response  $response
-     * @param array     $args
+     * @param Response $response
+     * @param array $args
+     * @return Response|ResponseInterface
+     * @throws \SmartyException
      */
-    public function alive($request, $response, $args)
+    public function alive(ServerRequest $request, Response $response, array $args): Response|\Psr\Http\Message\ResponseInterface
     {
         $table_config['total_column'] = array(
             'id'        => 'ID',
@@ -130,10 +136,11 @@ class IpController extends AdminController
      * 后台在线 IP 页面 AJAX
      *
      * @param ServerRequest $request
-     * @param Response  $response
-     * @param array     $args
+     * @param Response $response
+     * @param array $args
+     * @return Response|ResponseInterface
      */
-    public function ajax_alive($request, $response, $args)
+    public function ajax_alive(ServerRequest $request, Response $response, array $args): Response|\Psr\Http\Message\ResponseInterface
     {
         $query = Ip::getTableDataFromAdmin(
             $request,
@@ -184,10 +191,12 @@ class IpController extends AdminController
      * 节点被封IP
      *
      * @param ServerRequest $request
-     * @param Response  $response
-     * @param array     $args
+     * @param Response $response
+     * @param array $args
+     * @return Response|ResponseInterface
+     * @throws \SmartyException
      */
-    public function block($request, $response, $args)
+    public function block(ServerRequest $request, Response $response, array $args): Response|\Psr\Http\Message\ResponseInterface
     {
         $table_config['total_column'] = array(
             'id'        => 'ID',
@@ -209,10 +218,11 @@ class IpController extends AdminController
      * 节点被封IP AJAX
      *
      * @param ServerRequest $request
-     * @param Response  $response
-     * @param array     $args
+     * @param Response $response
+     * @param array $args
+     * @return Response|ResponseInterface
      */
-    public function ajax_block($request, $response, $args)
+    public function ajax_block(ServerRequest $request, Response $response, array $args): Response|\Psr\Http\Message\ResponseInterface
     {
         $query = BlockIp::getTableDataFromAdmin(
             $request,
@@ -253,10 +263,11 @@ class IpController extends AdminController
      * 解封IP
      *
      * @param ServerRequest $request
-     * @param Response  $response
-     * @param array     $args
+     * @param Response $response
+     * @param array $args
+     * @return Response|ResponseInterface
      */
-    public function doUnblock($request, $response, $args)
+    public function doUnblock(ServerRequest $request, Response $response, array $args): Response|\Psr\Http\Message\ResponseInterface
     {
         $ip            = trim($request->getParam('ip'));
         $BIP           = BlockIp::where('ip', $ip)->delete();
@@ -276,10 +287,12 @@ class IpController extends AdminController
      * 解封IP记录
      *
      * @param ServerRequest $request
-     * @param Response  $response
-     * @param array     $args
+     * @param Response $response
+     * @param array $args
+     * @return Response|ResponseInterface
+     * @throws \SmartyException
      */
-    public function unblock($request, $response, $args)
+    public function unblock(ServerRequest $request, Response $response, array $args): Response|\Psr\Http\Message\ResponseInterface
     {
         $table_config['total_column'] = array(
             'id'        => 'ID',
@@ -302,10 +315,11 @@ class IpController extends AdminController
      * 解封IP记录 AJAX
      *
      * @param ServerRequest $request
-     * @param Response  $response
-     * @param array     $args
+     * @param Response $response
+     * @param array $args
+     * @return Response|ResponseInterface
      */
-    public function ajax_unblock($request, $response, $args)
+    public function ajax_unblock(ServerRequest $request, Response $response, array $args): Response|\Psr\Http\Message\ResponseInterface
     {
         $query = UnblockIp::getTableDataFromAdmin(
             $request,

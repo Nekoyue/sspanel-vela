@@ -3,6 +3,7 @@
 namespace App\Controllers\Admin;
 
 use App\Controllers\AdminController;
+use Psr\Http\Message\ResponseInterface;
 use App\Models\{
     User,
     Ticket
@@ -20,10 +21,12 @@ class TicketController extends AdminController
      * 后台工单页面
      *
      * @param ServerRequest $request
-     * @param Response  $response
-     * @param array     $args
+     * @param Response $response
+     * @param array $args
+     * @return Response|ResponseInterface
+     * @throws \SmartyException
      */
-    public function index($request, $response, $args)
+    public function index(ServerRequest $request, Response $response, array $args): Response|\Psr\Http\Message\ResponseInterface
     {
         $table_config['total_column'] = array(
             'op'        => '操作',
@@ -50,10 +53,11 @@ class TicketController extends AdminController
      * 後臺創建新工單
      *
      * @param ServerRequest $request
-     * @param Response  $response
-     * @param array     $args
+     * @param Response $response
+     * @param array $args
+     * @return Response|ResponseInterface
      */
-    public function add($request, $response, $args)
+    public function add(ServerRequest $request, Response $response, array $args): Response|\Psr\Http\Message\ResponseInterface
     {
         $title    = $request->getParam('title');
         $content  = $request->getParam('content');
@@ -101,10 +105,11 @@ class TicketController extends AdminController
      * 后台 更新工单内容
      *
      * @param ServerRequest $request
-     * @param Response  $response
-     * @param array     $args
+     * @param Response $response
+     * @param array $args
+     * @return Response|ResponseInterface
      */
-    public function update($request, $response, $args)
+    public function update(ServerRequest $request, Response $response, array $args): Response|\Psr\Http\Message\ResponseInterface
     {
         $id      = $args['id'];
         $content = $request->getParam('content');
@@ -153,10 +158,12 @@ class TicketController extends AdminController
      * 后台 查看指定工单
      *
      * @param ServerRequest $request
-     * @param Response  $response
-     * @param array     $args
+     * @param Response $response
+     * @param array $args
+     * @return ResponseInterface|Response
+     * @throws \SmartyException
      */
-    public function show($request, $response, $args)
+    public function show(ServerRequest $request, Response $response, array $args)
     {
         $id            = $args['id'];
         $ticket = Ticket::where('id','=', $id)->first();
@@ -182,10 +189,11 @@ class TicketController extends AdminController
      * 后台工单页面 AJAX
      *
      * @param ServerRequest $request
-     * @param Response  $response
-     * @param array     $args
+     * @param Response $response
+     * @param array $args
+     * @return Response|ResponseInterface
      */
-    public function ajax($request, $response, $args)
+    public function ajax(ServerRequest $request, Response $response, array $args): Response|\Psr\Http\Message\ResponseInterface
     {
         $query = Ticket::getTableDataFromAdmin(
             $request,

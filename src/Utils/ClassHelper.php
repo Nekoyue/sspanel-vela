@@ -6,8 +6,8 @@ namespace App\Utils;
 
 class ClassHelper
 {
-    private static $composer = null;
-    private static $classes  = [];
+    private static mixed $composer = null;
+    private static array $classes = [];
 
     public function __construct()
     {
@@ -21,7 +21,7 @@ class ClassHelper
         }
     }
 
-    public function getClasses()
+    public function getClasses(): array
     {
         $allClasses = [];
 
@@ -34,7 +34,7 @@ class ClassHelper
         return $allClasses;
     }
 
-    public function getClassesByNamespace($namespace)
+    public function getClassesByNamespace($namespace): array
     {
         if (0 !== strpos($namespace, '\\')) {
             $namespace = '\\' . $namespace;

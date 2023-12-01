@@ -6,24 +6,29 @@ use App\Services\View;
 use App\Services\Auth;
 use App\Models\Paylist;
 use App\Models\Setting;
+use Slim\Http\Response;
+use Slim\Http\ServerRequest;
+use Telegram\Bot\Exceptions\TelegramSDKException;
+use TelegramBot\Api\Exception;
+use TelegramBot\Api\InvalidArgumentException;
 
 class PAYJS extends AbstractPayment
 {
-    public static function _name()
+    public static function _name(): string
     {
         return 'payjs';
     }
 
-    public static function _enable()
+    public static function _enable(): bool
     {
         return self::getActiveGateway('payjs');
     }
 
-    private $appSecret;
-    private $gatewayUri;
+    private string|int|bool $appSecret;
+    private string $gatewayUri;
     /**
      * 签名初始化
-     * @param merKey    签名密钥
+     * _param merKey    签名密钥
      */
     public function __construct()
     {
@@ -33,7 +38,7 @@ class PAYJS extends AbstractPayment
     /**
      * @name    准备签名/验签字符串
      */
-    public function prepareSign($data)
+    public function prepareSign($data): string
     {
         $data['mchid'] = Setting::obtain('payjs_mchid');
         $data = array_filter($data);
@@ -41,11 +46,11 @@ class PAYJS extends AbstractPayment
         return http_build_query($data);
     }
     /**
-     * @name    生成签名
-     * @param sourceData
-     * @return    签名数据
+     *  生成签名
+     * @param string $data
+     * @return  string  签名数据
      */
-    public function sign($data)
+    public function sign($data): string
     {
         return strtoupper(md5(urldecode($data) . '&key=' . $this->appSecret));
     }
@@ -55,12 +60,13 @@ class PAYJS extends AbstractPayment
      * @param   sourceData 原数据
      * @return
      */
-    public function verify($data, $signature)
+    public function verify($data, $signature): bool
     {
         $mySign = $this->sign($data);
         return $mySign === $signature;
     }
-    public function post($data, $type = 'pay')
+
+    public function post($data, $type = 'pay'): bool|string
     {
         if ($type == 'pay') {
             $this->gatewayUri .= 'cashier';
@@ -81,7 +87,8 @@ class PAYJS extends AbstractPayment
         curl_close($curl);
         return $data;
     }
-    public function purchase($request, $response, $args)
+
+    public function purchase(ServerRequest $request, Response $response, array $args): bool|string
     {
         $price = $request->getParam('price');
         $type = $request->getParam('type');
@@ -118,7 +125,8 @@ class PAYJS extends AbstractPayment
         $data['sign'] = $this->sign($params);
         return json_decode($this->post($data, $type = 'query'), true);
     }
-    public function notify($request, $response, $args)
+
+    public function notify(ServerRequest $request, Response $response, array $args): void
     {
         $data = $_POST;
 
@@ -151,18 +159,30 @@ class PAYJS extends AbstractPayment
             echo 'FAIL1';
         }
     }
-    public function refund($merchantTradeNo)
+
+    public function refund($merchantTradeNo): bool|string
     {
         $data['payjs_order_id'] = $merchantTradeNo;
         $params = $this->prepareSign($data);
         $data['sign'] = $this->sign($params);
         return $this->post($data, 'refund');
     }
-    public static function getPurchaseHTML()
+
+    /**
+     * @throws \SmartyException
+     */
+    public static function getPurchaseHTML(): bool|string
     {
         return View::getSmarty()->fetch('user/payjs.tpl');
     }
-    public function getReturnHTML($request, $response, $args)
+
+    /**
+     * @throws InvalidArgumentException
+     * @throws \SmartyException
+     * @throws Exception
+     * @throws TelegramSDKException
+     */
+    public function getReturnHTML(ServerRequest $request, Response $response, array $args): Response|\Psr\Http\Message\ResponseInterface
     {
         $pid = $_GET['merchantTradeNo'];
         $p = Paylist::where('tradeno', '=', $pid)->first();
@@ -190,7 +210,8 @@ class PAYJS extends AbstractPayment
             View::getSmarty()->assign('money', $money)->assign('success', $success)->fetch('user/pay_success.tpl')
         );
     }
-    public function getStatus($request, $response, $args)
+
+    public function getStatus(ServerRequest $request, Response $response, array $args): bool|string
     {
         $return = [];
         $p = Paylist::where('tradeno', $_POST['pid'])->first();

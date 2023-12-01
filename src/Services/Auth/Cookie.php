@@ -9,7 +9,7 @@ use App\Utils\Hash;
 
 class Cookie extends Base
 {
-    public function login($uid, $time)
+    public function login($uid, $time): void
     {
         $user = User::find($uid);
         $expire_in = $time + time();
@@ -23,7 +23,7 @@ class Cookie extends Base
         ], $expire_in);
     }
 
-    public function getUser()
+    public function getUser(): \Illuminate\Database\Eloquent\Collection|array|User|null
     {
         $uid = Utils\Cookie::get('uid');
         $email = Utils\Cookie::get('email');
@@ -73,7 +73,7 @@ class Cookie extends Base
         return $user;
     }
 
-    public function logout()
+    public function logout(): void
     {
         $time = time() - 1000;
         Utils\Cookie::set([

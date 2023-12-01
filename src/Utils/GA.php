@@ -12,7 +12,7 @@ namespace App\Utils;
  */
 class GA
 {
-    protected $_codeLength = 6;
+    protected int $_codeLength = 6;
 
     /**
      * Create new secret.
@@ -21,7 +21,7 @@ class GA
      * @param int $secretLength
      * @return string
      */
-    public function createSecret($secretLength = 16)
+    public function createSecret(int $secretLength = 16): string
     {
         $validChars = $this->_getBase32LookupTable();
         unset($validChars[32]);
@@ -40,7 +40,7 @@ class GA
      * @param int|null $timeSlice
      * @return string
      */
-    public function getCode($secret, $timeSlice = null)
+    public function getCode(string $secret, int $timeSlice = null): string
     {
         if ($timeSlice === null) {
             $timeSlice = floor(time() / 30);
@@ -72,10 +72,10 @@ class GA
      *
      * @param string $name
      * @param string $secret
-     * @param string $title
+     * @param string|null $title
      * @return string
      */
-    public function getQRCodeGoogleUrl($name, $secret, $title = null)
+    public function getQRCodeGoogleUrl(string $name, string $secret, string $title = null): string
     {
         $urlencoded = urlencode('otpauth://totp/' . $name . '?secret=' . $secret . '');
         if (isset($title)) {
@@ -84,7 +84,7 @@ class GA
         return 'https://chart.googleapis.com/chart?chs=200x200&chld=M|0&cht=qr&chl=' . $urlencoded . '';
     }
 
-    public function getUrl($name, $secret, $title = null)
+    public function getUrl($name, $secret, $title = null): string
     {
         $urlencoded = 'otpauth://totp/' . $name . '?secret=' . $secret . '';
         if (isset($title)) {
@@ -102,7 +102,7 @@ class GA
      * @param int|null $currentTimeSlice time slice if we want use other that time()
      * @return bool
      */
-    public function verifyCode($secret, $code, $discrepancy = 1, $currentTimeSlice = null)
+    public function verifyCode(string $secret, string $code, int $discrepancy = 1, int $currentTimeSlice = null): bool
     {
         if ($currentTimeSlice === null) {
             $currentTimeSlice = floor(time() / 30);
@@ -124,7 +124,7 @@ class GA
      * @param int $length
      * @return GA|PHPGangsta_GoogleAuthenticator
      */
-    public function setCodeLength($length)
+    public function setCodeLength(int $length): PHPGangsta_GoogleAuthenticator|static
     {
         $this->_codeLength = $length;
         return $this;
@@ -136,7 +136,7 @@ class GA
      * @param $secret
      * @return bool|string
      */
-    protected function _base32Decode($secret)
+    protected function _base32Decode($secret): bool|string
     {
         if (empty($secret)) {
             return '';
@@ -182,7 +182,7 @@ class GA
      * @param bool $padding
      * @return string
      */
-    protected function _base32Encode($secret, $padding = true)
+    protected function _base32Encode(string $secret, bool $padding = true): string
     {
         if (empty($secret)) {
             return '';
@@ -221,7 +221,7 @@ class GA
      *
      * @return array
      */
-    protected function _getBase32LookupTable()
+    protected function _getBase32LookupTable(): array
     {
         return array(
             'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', //  7

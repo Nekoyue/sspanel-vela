@@ -11,7 +11,7 @@ class Update extends Command
 {
     public string $description = '├─=: php xcat Update         - 更新并迁移配置' . PHP_EOL;
 
-    public function boot()
+    public function boot(): bool
     {
         global $_ENV;
         $copy_result = copy(BASE_PATH . '/config/.config.php', BASE_PATH . '/config/.config.php.bak');
@@ -138,7 +138,7 @@ class Update extends Command
         return true;
     }
 
-    public function addColumns($table, $columu, $type, $isnull, $default, $comment, $after)
+    public function addColumns($table, $columu, $type, $isnull, $default, $comment, $after): void
     {
         $datatables = new DatatablesHelper();
         $exists = $datatables->query("SELECT COUNT(*) as cc FROM information_schema.columns WHERE `table_schema` = '" . $_ENV['db_database'] . "' AND `table_name` = '" . $table . "' AND `column_name` = '" . $columu . "'");
@@ -149,7 +149,7 @@ class Update extends Command
         $datatables->query("ALTER TABLE `" . $table . "` ADD COLUMN `" . $columu . "` " . $type . $isnull . "DEFAULT " . $default . " COMMENT '" . $comment . "' AFTER `" . $after . "`");
     }
 
-    public function old_to_new($version_old)
+    public function old_to_new($version_old): void
     {
         if ($version_old < 2) {
             // 版本 2 开始

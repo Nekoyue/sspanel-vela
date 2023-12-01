@@ -8,12 +8,20 @@ use App\Models\{
 };
 use App\Services\Config;
 use App\Utils\Telegram;
+use Telegram\Bot\Exceptions\TelegramSDKException;
+use TelegramBot\Api\Exception;
+use TelegramBot\Api\InvalidArgumentException;
 
 class DetectGFW extends Command
 {
     public string $description = '├─=: php xcat DetectGFW      - 节点被墙检测定时任务' . PHP_EOL;
 
-    public function boot()
+    /**
+     * @throws InvalidArgumentException
+     * @throws TelegramSDKException
+     * @throws Exception
+     */
+    public function boot(): void
     {
         //节点被墙检测
         $last_time = file_get_contents(BASE_PATH . '/storage/last_detect_gfw_time');

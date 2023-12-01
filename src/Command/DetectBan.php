@@ -15,7 +15,7 @@ class DetectBan extends Command
     /**
      * 审计封禁任务
      */
-    public function boot()
+    public function boot(): void
     {
         if ($_ENV['enable_auto_detect_ban'] === false) {
             return;

@@ -11,10 +11,10 @@ class GeetestLib
 {
     public const GT_SDK_VERSION = 'php_3.2.0';
 
-    public static $connectTimeout = 3;
-    public static $socketTimeout = 3;
+    public static int $connectTimeout = 3;
+    public static int $socketTimeout = 3;
 
-    private $response;
+    private mixed $response;
 
     public function __construct($captcha_id, $private_key)
     {
@@ -28,7 +28,7 @@ class GeetestLib
      * @param null $user_id
      * @return int
      */
-    public function pre_process($user_id = null)
+    public function pre_process($user_id = null): int
     {
         $url = 'http://api.geetest.com/register.php?gt=' . $this->captcha_id;
         if (($user_id != null) and is_string($user_id)) {
@@ -49,7 +49,7 @@ class GeetestLib
     /**
      * @param $challenge
      */
-    private function success_process($challenge)
+    private function success_process($challenge): void
     {
         $challenge = md5($challenge . $this->private_key);
         $result = array(
@@ -63,7 +63,7 @@ class GeetestLib
     /**
      *
      */
-    private function failback_process()
+    private function failback_process(): void
     {
         $rnd1 = md5(random_int(0, 100));
         $rnd2 = md5(random_int(0, 100));
@@ -79,7 +79,7 @@ class GeetestLib
     /**
      * @return mixed
      */
-    public function get_response_str()
+    public function get_response_str(): mixed
     {
         return json_encode($this->response);
     }
@@ -89,7 +89,7 @@ class GeetestLib
      *
      * @return mixed
      */
-    public function get_response()
+    public function get_response(): mixed
     {
         return $this->response;
     }
@@ -103,7 +103,7 @@ class GeetestLib
      * @param null $user_id
      * @return int
      */
-    public function success_validate($challenge, $validate, $seccode, $user_id = null)
+    public function success_validate($challenge, $validate, $seccode, $user_id = null): int
     {
         if (!$this->check_validate($challenge, $validate)) {
             return 0;
@@ -136,7 +136,7 @@ class GeetestLib
      * @param $seccode
      * @return int
      */
-    public function fail_validate($challenge, $validate, $seccode)
+    public function fail_validate($challenge, $validate, $seccode): int
     {
         if ($validate) {
             $value = explode('_', $validate);
@@ -160,7 +160,7 @@ class GeetestLib
      * @param $validate
      * @return bool
      */
-    private function check_validate($challenge, $validate)
+    private function check_validate($challenge, $validate): bool
     {
         if (strlen($validate) != 32) {
             return false;
@@ -178,7 +178,7 @@ class GeetestLib
      * @param $url
      * @return mixed|string
      */
-    private function send_request($url)
+    private function send_request($url): mixed
     {
         if (function_exists('curl_exec')) {
             $ch = curl_init();
@@ -212,10 +212,10 @@ class GeetestLib
     /**
      *
      * @param       $url
-     * @param array $postdata
+     * @param array|string $postdata
      * @return mixed|string
      */
-    private function post_request($url, $postdata = '')
+    private function post_request($url, array|string $postdata = ''): mixed
     {
         if (!$postdata) {
             return false;
@@ -266,9 +266,9 @@ class GeetestLib
      *
      * @param $challenge
      * @param $string
-     * @return int
+     * @return float|int
      */
-    private function decode_response($challenge, $string)
+    private function decode_response($challenge, $string): float|int
     {
         if (strlen($string) > 100) {
             return 0;
@@ -305,7 +305,7 @@ class GeetestLib
      * @param $x_str
      * @return int
      */
-    private function get_x_pos_from_str($x_str)
+    private function get_x_pos_from_str($x_str): int
     {
         if (strlen($x_str) != 5) {
             return 0;
@@ -324,7 +324,7 @@ class GeetestLib
      * @param $img_grp_index
      * @return int
      */
-    private function get_failback_pic_ans($full_bg_index, $img_grp_index)
+    private function get_failback_pic_ans($full_bg_index, $img_grp_index): int
     {
         $full_bg_name = substr(md5($full_bg_index), 0, 9);
         $bg_name = substr(md5($img_grp_index), 10, 9);
@@ -348,7 +348,7 @@ class GeetestLib
      * @param $challenge
      * @return mixed
      */
-    private function decodeRandBase($challenge)
+    private function decodeRandBase($challenge): mixed
     {
         $base = substr($challenge, 32, 2);
         $tempArray = array();
@@ -363,7 +363,7 @@ class GeetestLib
     /**
      * @param $err
      */
-    private function triggerError($err)
+    private function triggerError($err): void
     {
         trigger_error($err);
     }

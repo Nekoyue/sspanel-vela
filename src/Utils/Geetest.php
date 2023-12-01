@@ -24,7 +24,7 @@ class Geetest
         return $ret;
     }
 
-    public static function verify($geetest_challenge, $geetest_validate, $geetest_seccode)
+    public static function verify($geetest_challenge, $geetest_validate, $geetest_seccode): bool
     {
         session_start();
         $configs = Setting::getClass('geetest');

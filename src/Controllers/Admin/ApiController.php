@@ -12,10 +12,12 @@ use Slim\Http\{
 class ApiController extends BaseController {
     /**
      * @param ServerRequest $request
-     * @param Response  $response
-     * @param array     $args
+     * @param Response $response
+     * @param array $args
+     * @return ResponseInterface
      */
-    public function getNodeList($request, $response, $args): ResponseInterface {
+    public function getNodeList(ServerRequest $request, Response $response, array $args): ResponseInterface
+    {
         return $response->withJson([
             "ret" => 1,
             "nodes" => Node::all(),
@@ -24,10 +26,12 @@ class ApiController extends BaseController {
 
     /**
      * @param ServerRequest $request
-     * @param Response  $response
-     * @param array     $args
+     * @param Response $response
+     * @param array $args
+     * @return ResponseInterface
      */
-    public function getNodeInfo($request, $response, $args): ResponseInterface {
+    public function getNodeInfo(ServerRequest $request, Response $response, array $args): ResponseInterface
+    {
         $node = Node::find($args['id']);
 
         return $response->withJson([
@@ -38,10 +42,12 @@ class ApiController extends BaseController {
 
     /**
      * @param ServerRequest $request
-     * @param Response  $response
-     * @param array     $args
+     * @param Response $response
+     * @param array $args
+     * @return ResponseInterface
      */
-    public function ping($request, $response, $args): ResponseInterface {
+    public function ping(ServerRequest $request, Response $response, array $args): ResponseInterface
+    {
         return $response->withJson([
             'ret' => 1,
             'data' => 'pong'

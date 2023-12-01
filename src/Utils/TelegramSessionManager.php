@@ -6,7 +6,7 @@ use App\Models\TelegramSession;
 
 class TelegramSessionManager
 {
-    public static function GenerateRandomLink()
+    public static function GenerateRandomLink(): string
     {
         $i = 0;
         for ($i = 0; $i < 10; $i++) {
@@ -20,7 +20,10 @@ class TelegramSessionManager
         return "couldn't alloc token";
     }
 
-    public static function GenerateLoginRandomLink()
+    /**
+     * @throws \Exception
+     */
+    public static function GenerateLoginRandomLink(): string
     {
         $i = 0;
         for ($i = 0; $i < 10; $i++) {

@@ -23,12 +23,12 @@ class UserController extends BaseController
      * User List
      *
      * @param \Slim\Http\ServerRequest $request
-     * @param \Slim\Http\Response   $response
-     * @param array                 $args
+     * @param \Slim\Http\Response $response
+     * @param array $args
      *
      * @return \Slim\Http\Response
      */
-    public function index($request, $response, $args): ResponseInterface
+    public function index(ServerRequest $request, Response $response, array $args): ResponseInterface
     {
         $node_id = $request->getQueryParam('node_id', '0');
 
@@ -133,10 +133,11 @@ class UserController extends BaseController
 
     /**
      * @param ServerRequest $request
-     * @param Response  $response
-     * @param array     $args
+     * @param Response $response
+     * @param array $args
+     * @return Response|ResponseInterface
      */
-    public function addTraffic($request, $response, $args)
+    public function addTraffic(ServerRequest $request, Response $response, array $args): Response|ResponseInterface
     {
         $params = $request->getQueryParams();
 
@@ -198,10 +199,11 @@ class UserController extends BaseController
 
     /**
      * @param ServerRequest $request
-     * @param Response  $response
-     * @param array     $args
+     * @param Response $response
+     * @param array $args
+     * @return Response|ResponseInterface
      */
-    public function addAliveIp($request, $response, $args)
+    public function addAliveIp(ServerRequest $request, Response $response, array $args): Response|ResponseInterface
     {
         $params = $request->getQueryParams();
 
@@ -243,10 +245,11 @@ class UserController extends BaseController
 
     /**
      * @param ServerRequest $request
-     * @param Response  $response
-     * @param array     $args
+     * @param Response $response
+     * @param array $args
+     * @return Response|ResponseInterface
      */
-    public function addDetectLog($request, $response, $args)
+    public function addDetectLog(ServerRequest $request, Response $response, array $args): Response|ResponseInterface
     {
         $params = $request->getQueryParams();
 

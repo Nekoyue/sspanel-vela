@@ -12,7 +12,7 @@ class CoinPayApi
      * @return string
      * @throws CoinPayException
      */
-    public static function unifiedOrder($config, $inputObj, $timeOut = 6)
+    public static function unifiedOrder(CoinPayConfigInterface $config, CoinPayUnifiedOrder $inputObj, int $timeOut = 6): string
     {
         if (!$inputObj->IsSubjectSet()) {
             throw new CoinPayException("缺少统一支付接口必填参数subject！");
@@ -55,7 +55,7 @@ class CoinPayApi
      * @param int $length
      * @return string
      */
-    public static function getNonceStr($length = 32)
+    public static function getNonceStr(int $length = 32): string
     {
         $chars = "abcdefghijklmnopqrstuvwxyz0123456789";
         $str = "";

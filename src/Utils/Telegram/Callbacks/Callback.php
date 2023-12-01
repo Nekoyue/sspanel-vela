@@ -3,6 +3,7 @@
 namespace App\Utils\Telegram\Callbacks;
 
 use App\Controllers\LinkController;
+use Exception;
 use App\Models\{Ip, Node, Payback, LoginIp, Setting, InviteCode, User, UserSubscribeLog};
 use App\Services\Config;
 use Telegram\Bot\Api;
@@ -1075,6 +1076,7 @@ class Callback
      * 每日签到
      *
      * @throws TelegramSDKException
+     * @throws Exception
      */
     public function UserCheckin(): void
     {

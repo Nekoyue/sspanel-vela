@@ -7,29 +7,32 @@ use App\Services\View;
 use App\Models\Paylist;
 use App\Models\Setting;
 use Exception;
+use Slim\Http\Response;
+use Slim\Http\ServerRequest;
 
 class THeadPay extends AbstractPayment
 {
-    public static function _name() 
+    public static function _name(): string
     {
         return 'theadpay';
     }
 
-    public static function _enable() 
+    public static function _enable(): bool
     {
         return self::getActiveGateway('theadpay');
     }
 
-    public static function _readableName() {
+    public static function _readableName(): string
+    {
         return "THeadPay 平头哥支付";
     }
 
-    protected $sdk;
+    protected THeadPaySDK $sdk;
 
     public function __construct()
     {
         $configs = Setting::getClass('theadpay');
-        
+
         $this->sdk = new THeadPaySDK([
             'theadpay_url'      => $configs['theadpay_url'],
             'theadpay_mchid'    => $configs['theadpay_mchid'],
@@ -38,7 +41,7 @@ class THeadPay extends AbstractPayment
     }
 
 
-    public function purchase($request, $response, $args)
+    public function purchase(ServerRequest $request, Response $response, array $args): Response|\Psr\Http\Message\ResponseInterface
     {
         $amount = (int)$request->getParam('amount');
         $user = Auth::getUser();
@@ -77,7 +80,7 @@ class THeadPay extends AbstractPayment
         }
     }
 
-    public function notify($request, $response, $args)
+    public function notify(ServerRequest $request, Response $response, array $args): void
     {
         $inputString = file_get_contents('php://input', 'r');
         $inputStripped = str_replace(array("\r", "\n", "\t", "\v"), '', $inputString);
@@ -93,20 +96,23 @@ class THeadPay extends AbstractPayment
     }
 
 
-    public static function getPurchaseHTML()
+    /**
+     * @throws \SmartyException
+     */
+    public static function getPurchaseHTML(): bool|string
     {
         return View::getSmarty()->fetch('user/theadpay.tpl');
     }
 
-    public function getReturnHTML($request, $response, $args)
+    public function getReturnHTML(ServerRequest $request, Response $response, array $args): int
     {
         return 0;
     }
 
-    public function getStatus($request, $response, $args)
+    public function getStatus(ServerRequest $request, Response $response, array $args): Response|\Psr\Http\Message\ResponseInterface
     {
         $pid = $request->getParam('pid');
-        
+
         $p = Paylist::where('tradeno', $pid)->first();
         return $response->withJson([
             'ret'       => 1,

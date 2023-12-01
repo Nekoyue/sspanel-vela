@@ -25,8 +25,12 @@ use App\Models\{Ann,
 };
 use App\Services\{Auth, Captcha, Config, Payment};
 use App\Utils\{Check, Cookie, DatatablesHelper, GA, Hash, QQWry, Telegram, TelegramSessionManager, Tools, URL};
+use Psr\Http\Message\ResponseInterface;
 use Ramsey\Uuid\Uuid;
 use Slim\Http\{Response, ServerRequest};
+use Telegram\Bot\Exceptions\TelegramSDKException;
+use TelegramBot\Api\Exception;
+use TelegramBot\Api\InvalidArgumentException;
 use voku\helper\AntiXSS;
 
 /**
@@ -34,6 +38,9 @@ use voku\helper\AntiXSS;
  */
 class UserController extends BaseController
 {
+    /**
+     * @throws \SmartyException
+     */
     public function user_order($request, $response, $args)
     {
         $user = $this->user;
@@ -50,6 +57,9 @@ class UserController extends BaseController
         );
     }
 
+    /**
+     * @throws \SmartyException
+     */
     public function product_index($request, $response, $args)
     {
         $products = Product::all();
@@ -63,10 +73,12 @@ class UserController extends BaseController
 
     /**
      * @param ServerRequest $request
-     * @param Response  $response
-     * @param array     $args
+     * @param Response $response
+     * @param array $args
+     * @return Response|ResponseInterface
+     * @throws \SmartyException
      */
-    public function index($request, $response, $args)
+    public function index(ServerRequest $request, Response $response, array $args): Response|\Psr\Http\Message\ResponseInterface
     {
         $captcha = Captcha::generate();
 
@@ -123,10 +135,12 @@ class UserController extends BaseController
 
     /**
      * @param ServerRequest $request
-     * @param Response  $response
-     * @param array     $args
+     * @param Response $response
+     * @param array $args
+     * @return Response|ResponseInterface
+     * @throws \SmartyException
      */
-    public function code($request, $response, $args)
+    public function code(ServerRequest $request, Response $response, array $args): Response|\Psr\Http\Message\ResponseInterface
     {
         $pageNum = $request->getQueryParams()['page'] ?? 1;
         $codes   = Code::where('type', '<>', '-2')
@@ -149,10 +163,12 @@ class UserController extends BaseController
 
     /**
      * @param ServerRequest $request
-     * @param Response  $response
-     * @param array     $args
+     * @param Response $response
+     * @param array $args
+     * @return ResponseInterface|Response|void
+     * @throws \SmartyException
      */
-    public function donate($request, $response, $args)
+    public function donate(ServerRequest $request, Response $response, array $args)
     {
         if ($_ENV['enable_donate'] != true) {
             exit(0);
@@ -177,7 +193,7 @@ class UserController extends BaseController
         );
     }
 
-    public function isHTTPS()
+    public function isHTTPS(): bool
     {
         define('HTTPS', false);
         if (defined('HTTPS') && HTTPS) {
@@ -205,10 +221,11 @@ class UserController extends BaseController
 
     /**
      * @param ServerRequest $request
-     * @param Response  $response
-     * @param array     $args
+     * @param Response $response
+     * @param array $args
+     * @return Response|ResponseInterface
      */
-    public function code_check($request, $response, $args)
+    public function code_check(ServerRequest $request, Response $response, array $args): Response|\Psr\Http\Message\ResponseInterface
     {
         $time  = $request->getQueryParams()['time'];
         $codes = Code::where('userid', '=', $this->user->id)
@@ -227,10 +244,14 @@ class UserController extends BaseController
 
     /**
      * @param ServerRequest $request
-     * @param Response  $response
-     * @param array     $args
+     * @param Response $response
+     * @param array $args
+     * @return Response|ResponseInterface
+     * @throws Exception
+     * @throws InvalidArgumentException
+     * @throws TelegramSDKException
      */
-    public function codepost($request, $response, $args)
+    public function codepost(ServerRequest $request, Response $response, array $args): Response|\Psr\Http\Message\ResponseInterface
     {
         $code = trim($request->getParam('code'));
         if ($code == '') {
@@ -309,10 +330,11 @@ class UserController extends BaseController
 
     /**
      * @param ServerRequest $request
-     * @param Response  $response
-     * @param array     $args
+     * @param Response $response
+     * @param array $args
+     * @return Response|ResponseInterface
      */
-    public function GaCheck($request, $response, $args)
+    public function GaCheck(ServerRequest $request, Response $response, array $args): Response|\Psr\Http\Message\ResponseInterface
     {
         $code = $request->getParam('code');
         if ($code == '') {
@@ -338,10 +360,11 @@ class UserController extends BaseController
 
     /**
      * @param ServerRequest $request
-     * @param Response  $response
-     * @param array     $args
+     * @param Response $response
+     * @param array $args
+     * @return Response|ResponseInterface
      */
-    public function GaSet($request, $response, $args)
+    public function GaSet(ServerRequest $request, Response $response, array $args): Response|\Psr\Http\Message\ResponseInterface
     {
         $enable = $request->getParam('enable');
         if ($enable == '') {
@@ -361,10 +384,11 @@ class UserController extends BaseController
 
     /**
      * @param ServerRequest $request
-     * @param Response  $response
-     * @param array     $args
+     * @param Response $response
+     * @param array $args
+     * @return Response|ResponseInterface
      */
-    public function ResetPort($request, $response, $args)
+    public function ResetPort(ServerRequest $request, Response $response, array $args): Response|\Psr\Http\Message\ResponseInterface
     {
         $temp = $this->user->ResetPort();
         return $response->withJson([
@@ -375,10 +399,11 @@ class UserController extends BaseController
 
     /**
      * @param ServerRequest $request
-     * @param Response  $response
-     * @param array     $args
+     * @param Response $response
+     * @param array $args
+     * @return Response|ResponseInterface
      */
-    public function SpecifyPort($request, $response, $args)
+    public function SpecifyPort(ServerRequest $request, Response $response, array $args): Response|\Psr\Http\Message\ResponseInterface
     {
         $temp = $this->user->SpecifyPort((int) $request->getParam('port'));
         return $response->withJson([
@@ -389,10 +414,11 @@ class UserController extends BaseController
 
     /**
      * @param ServerRequest $request
-     * @param Response  $response
-     * @param array     $args
+     * @param Response $response
+     * @param array $args
+     * @return Response
      */
-    public function GaReset($request, $response, $args)
+    public function GaReset(ServerRequest $request, Response $response, array $args): Response
     {
         $ga             = new GA();
         $secret         = $ga->createSecret();
@@ -404,10 +430,12 @@ class UserController extends BaseController
 
     /**
      * @param ServerRequest $request
-     * @param Response  $response
-     * @param array     $args
+     * @param Response $response
+     * @param array $args
+     * @return Response|ResponseInterface
+     * @throws \SmartyException
      */
-    public function profile($request, $response, $args)
+    public function profile(ServerRequest $request, Response $response, array $args): Response|\Psr\Http\Message\ResponseInterface
     {
         $pageNum  = $request->getQueryParams()['page'] ?? 1;
         $paybacks = Payback::where('ref_by', $this->user->id)
@@ -458,10 +486,12 @@ class UserController extends BaseController
 
     /**
      * @param ServerRequest $request
-     * @param Response  $response
-     * @param array     $args
+     * @param Response $response
+     * @param array $args
+     * @return Response|ResponseInterface
+     * @throws \SmartyException
      */
-    public function announcement($request, $response, $args)
+    public function announcement(ServerRequest $request, Response $response, array $args): Response|\Psr\Http\Message\ResponseInterface
     {
         $Anns = Ann::orderBy('date', 'desc')->get();
 
@@ -481,10 +511,12 @@ class UserController extends BaseController
 
     /**
      * @param ServerRequest $request
-     * @param Response  $response
-     * @param array     $args
+     * @param Response $response
+     * @param array $args
+     * @return Response|ResponseInterface
+     * @throws \SmartyException
      */
-    public function media($request, $response, $args)
+    public function media(ServerRequest $request, Response $response, array $args): Response|\Psr\Http\Message\ResponseInterface
     {
         $results = [];
         $db = new DatatablesHelper;
@@ -553,10 +585,12 @@ class UserController extends BaseController
 
     /**
      * @param ServerRequest $request
-     * @param Response  $response
-     * @param array     $args
+     * @param Response $response
+     * @param array $args
+     * @return Response|ResponseInterface
+     * @throws \SmartyException
      */
-    public function edit($request, $response, $args)
+    public function edit(ServerRequest $request, Response $response, array $args): Response|\Psr\Http\Message\ResponseInterface
     {
         $themes = Tools::getDir(BASE_PATH . '/resources/views');
 
@@ -589,10 +623,12 @@ class UserController extends BaseController
 
     /**
      * @param ServerRequest $request
-     * @param Response  $response
-     * @param array     $args
+     * @param Response $response
+     * @param array $args
+     * @return Response|ResponseInterface
+     * @throws \SmartyException
      */
-    public function invite($request, $response, $args)
+    public function invite(ServerRequest $request, Response $response, array $args): Response|\Psr\Http\Message\ResponseInterface
     {
         $code = InviteCode::where('user_id', $this->user->id)->first();
         if ($code == null) {
@@ -628,10 +664,11 @@ class UserController extends BaseController
 
     /**
      * @param ServerRequest $request
-     * @param Response  $response
-     * @param array     $args
+     * @param Response $response
+     * @param array $args
+     * @return Response|ResponseInterface
      */
-    public function buyInvite($request, $response, $args)
+    public function buyInvite(ServerRequest $request, Response $response, array $args): Response|\Psr\Http\Message\ResponseInterface
     {
         $price = $_ENV['invite_price'];
         $num = $request->getParam('num');
@@ -668,10 +705,11 @@ class UserController extends BaseController
 
     /**
      * @param ServerRequest $request
-     * @param Response  $response
-     * @param array     $args
+     * @param Response $response
+     * @param array $args
+     * @return Response|ResponseInterface
      */
-    public function customInvite($request, $response, $args)
+    public function customInvite(ServerRequest $request, Response $response, array $args): Response|\Psr\Http\Message\ResponseInterface
     {
         $price = $_ENV['custom_invite_price'];
         $customcode = $request->getParam('customcode');
@@ -713,10 +751,12 @@ class UserController extends BaseController
 
     /**
      * @param ServerRequest $request
-     * @param Response  $response
-     * @param array     $args
+     * @param Response $response
+     * @param array $args
+     * @return Response|ResponseInterface
+     * @throws \SmartyException
      */
-    public function sys($request, $response, $args)
+    public function sys(ServerRequest $request, Response $response, array $args): Response|\Psr\Http\Message\ResponseInterface
     {
         return $response->write(
             $this->view()->assign('ana', '')->fetch('user/sys.tpl')
@@ -725,10 +765,11 @@ class UserController extends BaseController
 
     /**
      * @param ServerRequest $request
-     * @param Response  $response
-     * @param array     $args
+     * @param Response $response
+     * @param array $args
+     * @return Response|ResponseInterface
      */
-    public function updatePassword($request, $response, $args)
+    public function updatePassword(ServerRequest $request, Response $response, array $args): Response|\Psr\Http\Message\ResponseInterface
     {
         $oldpwd = $request->getParam('oldpwd');
         $pwd = $request->getParam('pwd');
@@ -765,10 +806,11 @@ class UserController extends BaseController
 
     /**
      * @param ServerRequest $request
-     * @param Response  $response
-     * @param array     $args
+     * @param Response $response
+     * @param array $args
+     * @return Response|ResponseInterface
      */
-    public function updateEmail($request, $response, $args)
+    public function updateEmail(ServerRequest $request, Response $response, array $args): Response|\Psr\Http\Message\ResponseInterface
     {
         $user = $this->user;
         $newemail = $request->getParam('newemail');
@@ -825,10 +867,11 @@ class UserController extends BaseController
 
     /**
      * @param ServerRequest $request
-     * @param Response  $response
-     * @param array     $args
+     * @param Response $response
+     * @param array $args
+     * @return Response|ResponseInterface
      */
-    public function updateUsername($request, $response, $args)
+    public function updateUsername(ServerRequest $request, Response $response, array $args): Response|\Psr\Http\Message\ResponseInterface
     {
         $newusername = $request->getParam('newusername');
         $user = $this->user;
@@ -843,10 +886,11 @@ class UserController extends BaseController
 
     /**
      * @param ServerRequest $request
-     * @param Response  $response
-     * @param array     $args
+     * @param Response $response
+     * @param array $args
+     * @return Response|ResponseInterface
      */
-    public function updateHide($request, $response, $args)
+    public function updateHide(ServerRequest $request, Response $response, array $args): Response|\Psr\Http\Message\ResponseInterface
     {
         $hide = $request->getParam('hide');
         $user = $this->user;
@@ -860,10 +904,11 @@ class UserController extends BaseController
 
     /**
      * @param ServerRequest $request
-     * @param Response  $response
-     * @param array     $args
+     * @param Response $response
+     * @param array $args
+     * @return Response|ResponseInterface
      */
-    public function Unblock($request, $response, $args)
+    public function Unblock(ServerRequest $request, Response $response, array $args): Response|\Psr\Http\Message\ResponseInterface
     {
         $user = $this->user;
         $BIP = BlockIp::where('ip', $_SERVER['REMOTE_ADDR'])->get();
@@ -884,10 +929,12 @@ class UserController extends BaseController
 
     /**
      * @param ServerRequest $request
-     * @param Response  $response
-     * @param array     $args
+     * @param Response $response
+     * @param array $args
+     * @return Response|ResponseInterface
+     * @throws \SmartyException
      */
-    public function shop($request, $response, $args)
+    public function shop(ServerRequest $request, Response $response, array $args): Response|\Psr\Http\Message\ResponseInterface
     {
         $shops = Shop::where('status', 1)->orderBy('name')->get();
         return $response->write(
@@ -897,10 +944,11 @@ class UserController extends BaseController
 
     /**
      * @param ServerRequest $request
-     * @param Response  $response
-     * @param array     $args
+     * @param Response $response
+     * @param array $args
+     * @return Response|ResponseInterface
      */
-    public function CouponCheck($request, $response, $args)
+    public function CouponCheck(ServerRequest $request, Response $response, array $args): Response|\Psr\Http\Message\ResponseInterface
     {
         $coupon = $request->getParam('coupon');
         $coupon = trim($coupon);
@@ -964,10 +1012,11 @@ class UserController extends BaseController
 
     /**
      * @param ServerRequest $request
-     * @param Response  $response
-     * @param array     $args
+     * @param Response $response
+     * @param array $args
+     * @return Response|ResponseInterface
      */
-    public function buy_traffic_package($request, $response, $args)
+    public function buy_traffic_package(ServerRequest $request, Response $response, array $args): Response|\Psr\Http\Message\ResponseInterface
     {
         $user = $this->user;
         $shop = $request->getParam('shop');
@@ -1024,10 +1073,11 @@ class UserController extends BaseController
 
     /**
      * @param ServerRequest $request
-     * @param Response  $response
-     * @param array     $args
+     * @param Response $response
+     * @param array $args
+     * @return Response|ResponseInterface
      */
-    public function buy($request, $response, $args)
+    public function buy(ServerRequest $request, Response $response, array $args): Response|\Psr\Http\Message\ResponseInterface
     {
         $user   = $this->user;
         $coupon = $request->getParam('coupon');
@@ -1147,10 +1197,12 @@ class UserController extends BaseController
 
     /**
      * @param ServerRequest $request
-     * @param Response  $response
-     * @param array     $args
+     * @param Response $response
+     * @param array $args
+     * @return Response|ResponseInterface
+     * @throws \SmartyException
      */
-    public function bought($request, $response, $args)
+    public function bought(ServerRequest $request, Response $response, array $args): Response|\Psr\Http\Message\ResponseInterface
     {
         $pageNum = $request->getQueryParams()['page'] ?? 1;
         $shops = Bought::where('userid', $this->user->id)->orderBy('id', 'desc')->paginate(15, ['*'], 'page', $pageNum);
@@ -1176,10 +1228,11 @@ class UserController extends BaseController
 
     /**
      * @param ServerRequest $request
-     * @param Response  $response
-     * @param array     $args
+     * @param Response $response
+     * @param array $args
+     * @return Response|ResponseInterface
      */
-    public function deleteBoughtGet($request, $response, $args)
+    public function deleteBoughtGet(ServerRequest $request, Response $response, array $args): Response|\Psr\Http\Message\ResponseInterface
     {
         $id = $request->getParam('id');
         $shop = Bought::where('id', $id)->where('userid', $this->user->id)->first();
@@ -1206,10 +1259,11 @@ class UserController extends BaseController
 
     /**
      * @param ServerRequest $request
-     * @param Response  $response
-     * @param array     $args
+     * @param Response $response
+     * @param array $args
+     * @return Response|ResponseInterface
      */
-    public function updateWechat($request, $response, $args)
+    public function updateWechat(ServerRequest $request, Response $response, array $args): Response|\Psr\Http\Message\ResponseInterface
     {
         $type = $request->getParam('imtype');
         $wechat = $request->getParam('wechat');
@@ -1249,10 +1303,11 @@ class UserController extends BaseController
 
     /**
      * @param ServerRequest $request
-     * @param Response  $response
-     * @param array     $args
+     * @param Response $response
+     * @param array $args
+     * @return Response|ResponseInterface
      */
-    public function updateTheme($request, $response, $args)
+    public function updateTheme(ServerRequest $request, Response $response, array $args): Response|\Psr\Http\Message\ResponseInterface
     {
         $theme = $request->getParam('theme');
 
@@ -1274,10 +1329,11 @@ class UserController extends BaseController
 
     /**
      * @param ServerRequest $request
-     * @param Response  $response
-     * @param array     $args
+     * @param Response $response
+     * @param array $args
+     * @return Response|ResponseInterface
      */
-    public function updateMail($request, $response, $args)
+    public function updateMail(ServerRequest $request, Response $response, array $args): Response|\Psr\Http\Message\ResponseInterface
     {
         $value = (int) $request->getParam('mail');
         if (in_array($value, [0, 1, 2])) {
@@ -1300,10 +1356,11 @@ class UserController extends BaseController
 
     /**
      * @param ServerRequest $request
-     * @param Response  $response
-     * @param array     $args
+     * @param Response $response
+     * @param array $args
+     * @return Response|ResponseInterface
      */
-    public function updateSsPwd($request, $response, $args)
+    public function updateSsPwd(ServerRequest $request, Response $response, array $args): Response|\Psr\Http\Message\ResponseInterface
     {
         $user = $this->user;
         $pwd = Tools::genRandomChar(16);
@@ -1337,10 +1394,11 @@ class UserController extends BaseController
 
     /**
      * @param ServerRequest $request
-     * @param Response  $response
-     * @param array     $args
+     * @param Response $response
+     * @param array $args
+     * @return Response|ResponseInterface
      */
-    public function updateMethod($request, $response, $args)
+    public function updateMethod(ServerRequest $request, Response $response, array $args): Response|\Psr\Http\Message\ResponseInterface
     {
         $user          = $this->user;
         $method        = strtolower($request->getParam('method'));
@@ -1351,10 +1409,11 @@ class UserController extends BaseController
 
     /**
      * @param ServerRequest $request
-     * @param Response  $response
-     * @param array     $args
+     * @param Response $response
+     * @param array $args
+     * @return Response
      */
-    public function logout($request, $response, $args)
+    public function logout(ServerRequest $request, Response $response, array $args): Response
     {
         Auth::logout();
         return $response->withStatus(302)->withHeader('Location', '/');
@@ -1362,10 +1421,12 @@ class UserController extends BaseController
 
     /**
      * @param ServerRequest $request
-     * @param Response  $response
-     * @param array     $args
+     * @param Response $response
+     * @param array $args
+     * @return Response|ResponseInterface
+     * @throws \Exception
      */
-    public function doCheckIn($request, $response, $args)
+    public function doCheckIn(ServerRequest $request, Response $response, array $args): Response|\Psr\Http\Message\ResponseInterface
     {
         if ($_ENV['enable_checkin'] === false) {
             $res['ret'] = 0;
@@ -1410,10 +1471,12 @@ class UserController extends BaseController
 
     /**
      * @param ServerRequest $request
-     * @param Response  $response
-     * @param array     $args
+     * @param Response $response
+     * @param array $args
+     * @return Response|ResponseInterface
+     * @throws \SmartyException
      */
-    public function kill($request, $response, $args)
+    public function kill(ServerRequest $request, Response $response, array $args): Response|\Psr\Http\Message\ResponseInterface
     {
         return $response->write(
             $this->view()->fetch('user/kill.tpl')
@@ -1422,10 +1485,11 @@ class UserController extends BaseController
 
     /**
      * @param ServerRequest $request
-     * @param Response  $response
-     * @param array     $args
+     * @param Response $response
+     * @param array $args
+     * @return Response|ResponseInterface
      */
-    public function handleKill($request, $response, $args)
+    public function handleKill(ServerRequest $request, Response $response, array $args): Response|\Psr\Http\Message\ResponseInterface
     {
         $user = $this->user;
 
@@ -1454,10 +1518,12 @@ class UserController extends BaseController
 
     /**
      * @param ServerRequest $request
-     * @param Response  $response
-     * @param array     $args
+     * @param Response $response
+     * @param array $args
+     * @return Response|ResponseInterface
+     * @throws \SmartyException
      */
-    public function detect_index($request, $response, $args)
+    public function detect_index(ServerRequest $request, Response $response, array $args): Response|\Psr\Http\Message\ResponseInterface
     {
         $pageNum = $request->getQueryParams()['page'] ?? 1;
         $logs = DetectRule::paginate(15, ['*'], 'page', $pageNum);
@@ -1480,10 +1546,12 @@ class UserController extends BaseController
 
     /**
      * @param ServerRequest $request
-     * @param Response  $response
-     * @param array     $args
+     * @param Response $response
+     * @param array $args
+     * @return Response|ResponseInterface
+     * @throws \SmartyException
      */
-    public function detect_log($request, $response, $args)
+    public function detect_log(ServerRequest $request, Response $response, array $args): Response|\Psr\Http\Message\ResponseInterface
     {
         $pageNum = $request->getQueryParams()['page'] ?? 1;
         $logs = DetectLog::orderBy('id', 'desc')->where('user_id', $this->user->id)->paginate(15, ['*'], 'page', $pageNum);
@@ -1523,10 +1591,12 @@ class UserController extends BaseController
 
     /**
      * @param ServerRequest $request
-     * @param Response  $response
-     * @param array     $args
+     * @param Response $response
+     * @param array $args
+     * @return Response|ResponseInterface
+     * @throws \SmartyException
      */
-    public function disable($request, $response, $args)
+    public function disable(ServerRequest $request, Response $response, array $args): Response|\Psr\Http\Message\ResponseInterface
     {
         return $response->write(
             $this->view()->fetch('user/disable.tpl')
@@ -1535,10 +1605,11 @@ class UserController extends BaseController
 
     /**
      * @param ServerRequest $request
-     * @param Response  $response
-     * @param array     $args
+     * @param Response $response
+     * @param array $args
+     * @return Response
      */
-    public function telegram_reset($request, $response, $args)
+    public function telegram_reset(ServerRequest $request, Response $response, array $args): Response
     {
         $user = $this->user;
         $user->TelegramReset();
@@ -1547,10 +1618,11 @@ class UserController extends BaseController
 
     /**
      * @param ServerRequest $request
-     * @param Response  $response
-     * @param array     $args
+     * @param Response $response
+     * @param array $args
+     * @return Response
      */
-    public function resetURL($request, $response, $args)
+    public function resetURL(ServerRequest $request, Response $response, array $args): Response
     {
         $user = $this->user;
         $user->clean_link();
@@ -1559,10 +1631,11 @@ class UserController extends BaseController
 
     /**
      * @param ServerRequest $request
-     * @param Response  $response
-     * @param array     $args
+     * @param Response $response
+     * @param array $args
+     * @return Response|ResponseInterface
      */
-    public function resetInviteURL($request, $response, $args)
+    public function resetInviteURL(ServerRequest $request, Response $response, array $args): Response|\Psr\Http\Message\ResponseInterface
     {
         $user = $this->user;
         $user->clear_inviteCodes();
@@ -1574,10 +1647,11 @@ class UserController extends BaseController
 
     /**
      * @param ServerRequest $request
-     * @param Response  $response
-     * @param array     $args
+     * @param Response $response
+     * @param array $args
+     * @return Response
      */
-    public function backtoadmin($request, $response, $args)
+    public function backtoadmin(ServerRequest $request, Response $response, array $args): Response
     {
         $userid = Cookie::get('uid');
         $adminid = Cookie::get('old_uid');
@@ -1622,9 +1696,11 @@ class UserController extends BaseController
      *
      * @param ServerRequest $request
      * @param Response $response
-     * @param array    $args
+     * @param array $args
+     * @return ResponseInterface|Response
+     * @throws \SmartyException
      */
-    public function subscribe_log($request, $response, $args)
+    public function subscribe_log(ServerRequest $request, Response $response, array $args)
     {
         if ($_ENV['subscribeLog_show'] === false) {
             return $response->withStatus(302)->withHeader('Location', '/user');
@@ -1649,9 +1725,10 @@ class UserController extends BaseController
      *
      * @param ServerRequest $request
      * @param Response $response
-     * @param array    $args
+     * @param array $args
+     * @return string
      */
-    public function getPcClient($request, $response, $args)
+    public function getPcClient(ServerRequest $request, Response $response, array $args): string
     {
         $zipArc = new \ZipArchive();
         $user_token = LinkController::GenerateSSRSubCode($this->user->id);
@@ -1691,9 +1768,10 @@ class UserController extends BaseController
      *
      * @param ServerRequest $request
      * @param Response $response
-     * @param array    $args
+     * @param array $args
+     * @return string|null
      */
-    public function getClientfromToken($request, $response, $args)
+    public function getClientfromToken(ServerRequest $request, Response $response, array $args): ?string
     {
         $token = $args['token'];
         $Etoken = Token::where('token', '=', $token)->where('create_time', '>', time() - 60 * 10)->first();

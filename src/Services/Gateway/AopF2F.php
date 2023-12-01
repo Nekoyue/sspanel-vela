@@ -14,24 +14,27 @@ use App\Services\View;
 use App\Services\Auth;
 use App\Models\Paylist;
 use App\Models\Setting;
+use Slim\Http\Response;
+use Slim\Http\ServerRequest;
 
 class AopF2F extends AbstractPayment
 {
-    public static function _name() 
+    public static function _name(): string
     {
         return 'f2fpay';
     }
 
-    public static function _enable() 
+    public static function _enable(): bool
     {
         return self::getActiveGateway('f2fpay');
     }
 
-    public static function _readableName() {
+    public static function _readableName(): string
+    {
         return "支付宝在线充值";
     }
 
-    private function createGateway()
+    private function createGateway(): \Omnipay\Common\GatewayInterface
     {
         $configs = Setting::getClass('f2f');
         $gateway = Omnipay::create('Alipay_AopF2F');
@@ -49,7 +52,7 @@ class AopF2F extends AbstractPayment
     }
 
 
-    public function purchase($request, $response, $args)
+    public function purchase(ServerRequest $request, Response $response, array $args): bool|Response|string|\Psr\Http\Message\ResponseInterface
     {
         $amount = $request->getParam('amount');
         $user = Auth::getUser();
@@ -89,7 +92,7 @@ class AopF2F extends AbstractPayment
         return json_encode($return);
     }
 
-    public function notify($request, $response, $args)
+    public function notify(ServerRequest $request, Response $response, array $args): void
     {
         $gateway = $this->createGateway();
         $aliRequest = $gateway->completePurchase();
@@ -109,17 +112,20 @@ class AopF2F extends AbstractPayment
     }
 
 
-    public static function getPurchaseHTML()
+    /**
+     * @throws \SmartyException
+     */
+    public static function getPurchaseHTML(): bool|string
     {
         return View::getSmarty()->fetch('user/aopf2f.tpl');
     }
 
-    public function getReturnHTML($request, $response, $args)
+    public function getReturnHTML(ServerRequest $request, Response $response, array $args): int
     {
         return 0;
     }
 
-    public function getStatus($request, $response, $args)
+    public function getStatus(ServerRequest $request, Response $response, array $args): bool|string
     {
         $p = Paylist::where('tradeno', $_POST['pid'])->first();
         $return['ret'] = 1;

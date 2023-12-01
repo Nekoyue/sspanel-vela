@@ -18,10 +18,12 @@ class BoughtLogController extends AdminController
 {
     /**
      * @param ServerRequest $request
-     * @param Response  $response
-     * @param array     $args
+     * @param Response $response
+     * @param array $args
+     * @return ResponseInterface
+     * @throws \SmartyException
      */
-    public function bought($request, $response, $args): ResponseInterface
+    public function bought(ServerRequest $request, Response $response, array $args): ResponseInterface
     {
         $id = $args['id'];
         $user = User::find($id);
@@ -51,10 +53,11 @@ class BoughtLogController extends AdminController
 
     /**
      * @param ServerRequest $request
-     * @param Response  $response
-     * @param array     $args
+     * @param Response $response
+     * @param array $args
+     * @return ResponseInterface
      */
-    public function bought_ajax($request, $response, $args): ResponseInterface
+    public function bought_ajax(ServerRequest $request, Response $response, array $args): ResponseInterface
     {
         $user  = User::find($args['id']);
         $query = Bought::getTableDataFromAdmin(
@@ -108,10 +111,11 @@ class BoughtLogController extends AdminController
 
     /**
      * @param ServerRequest $request
-     * @param Response  $response
-     * @param array     $args
+     * @param Response $response
+     * @param array $args
+     * @return ResponseInterface
      */
-    public function bought_delete($request, $response, $args): ResponseInterface
+    public function bought_delete(ServerRequest $request, Response $response, array $args): ResponseInterface
     {
         $id = $request->getParam('id');
         $Bought = Bought::find($id);
@@ -129,10 +133,11 @@ class BoughtLogController extends AdminController
 
     /**
      * @param ServerRequest $request
-     * @param Response  $response
-     * @param array     $args
+     * @param Response $response
+     * @param array $args
+     * @return ResponseInterface
      */
-    public function bought_add($request, $response, $args): ResponseInterface
+    public function bought_add(ServerRequest $request, Response $response, array $args): ResponseInterface
     {
         $id = $args['id'];
         $user = User::find($id);

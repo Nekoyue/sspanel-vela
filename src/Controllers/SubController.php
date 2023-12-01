@@ -172,7 +172,7 @@ class SubController extends BaseController
         ]);
     }
 
-    public static function getUniversalSub($user)
+    public static function getUniversalSub($user): string
     {
         $userid = $user->id;
         $token = Link::where('userid', $userid)->first();

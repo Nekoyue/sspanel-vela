@@ -2,6 +2,7 @@
 
 namespace App\Controllers;
 
+use Psr\Http\Message\ResponseInterface;
 use App\Models\{
     User,
     PasswordReset
@@ -22,10 +23,12 @@ class PasswordController extends BaseController
 {
     /**
      * @param ServerRequest $request
-     * @param Response  $response
-     * @param array     $args
+     * @param Response $response
+     * @param array $args
+     * @return Response|ResponseInterface
+     * @throws \SmartyException
      */
-    public function reset($request, $response, $args)
+    public function reset(ServerRequest $request, Response $response, array $args): Response|\Psr\Http\Message\ResponseInterface
     {
         return $response->write(
             $this->view()->fetch('password/reset.tpl')
@@ -34,10 +37,11 @@ class PasswordController extends BaseController
 
     /**
      * @param ServerRequest $request
-     * @param Response  $response
-     * @param array     $args
+     * @param Response $response
+     * @param array $args
+     * @return Response|ResponseInterface
      */
-    public function handleReset($request, $response, $args)
+    public function handleReset(ServerRequest $request, Response $response, array $args): Response|\Psr\Http\Message\ResponseInterface
     {
         $email = strtolower($request->getParam('email'));
         $user  = User::where('email', $email)->first();
@@ -60,10 +64,12 @@ class PasswordController extends BaseController
 
     /**
      * @param ServerRequest $request
-     * @param Response  $response
-     * @param array     $args
+     * @param Response $response
+     * @param array $args
+     * @return ResponseInterface|Response
+     * @throws \SmartyException
      */
-    public function token($request, $response, $args)
+    public function token(ServerRequest $request, Response $response, array $args)
     {
         $token = PasswordReset::where('token', $args['token'])->where('expire_time', '>', time())->orderBy('id', 'desc')->first();
         if ($token == null) return $response->withStatus(302)->withHeader('Location', '/password/reset');
@@ -74,10 +80,11 @@ class PasswordController extends BaseController
 
     /**
      * @param ServerRequest $request
-     * @param Response  $response
-     * @param array     $args
+     * @param Response $response
+     * @param array $args
+     * @return Response|ResponseInterface
      */
-    public function handleToken($request, $response, $args)
+    public function handleToken(ServerRequest $request, Response $response, array $args): Response|\Psr\Http\Message\ResponseInterface
     {
         $tokenStr = $args['token'];
         $password = $request->getParam('password');

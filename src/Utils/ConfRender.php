@@ -14,7 +14,7 @@ use App\Services\Config;
 
 class ConfRender
 {
-    public static function getTemplateRender()
+    public static function getTemplateRender(): Smarty
     {
         $smarty = new smarty();
 

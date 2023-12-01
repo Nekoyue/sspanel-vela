@@ -10,24 +10,27 @@ use App\Services\Gateway\CoinPay\CoinPayApi;
 use App\Services\Gateway\CoinPay\CoinPayConfig;
 use App\Services\Gateway\CoinPay\CoinPayException;
 use App\Services\Gateway\CoinPay\CoinPayUnifiedOrder;
+use Slim\Http\Response;
+use Slim\Http\ServerRequest;
 
 class CoinPay extends AbstractPayment
 {
-    private $coinPaySecret;
-    private $coinPayGatewayUrl;
-    private $coinPayAppId;
+    private mixed $coinPaySecret;
+    private string $coinPayGatewayUrl;
+    private mixed $coinPayAppId;
 
-    public static function _name()
+    public static function _name(): string
     {
         return 'coinpay';
     }
 
-    public static function _enable()
+    public static function _enable(): bool
     {
         return self::getActiveGateway('coinpay');
     }
 
-    public static function _readableName() {
+    public static function _readableName(): string
+    {
         return "CoinPay 支持BTC、ETH、USDT等数十种数字货币";
     }
 
@@ -40,7 +43,7 @@ class CoinPay extends AbstractPayment
     }
 
 
-    public function purchase($request, $response, $args)
+    public function purchase(ServerRequest $request, Response $response, array $args)
     {
         // set timezone
         date_default_timezone_set('Asia/Hong_Kong');
@@ -80,7 +83,7 @@ class CoinPay extends AbstractPayment
         }
     }
 
-    private function Sign($value, $secret)
+    private function Sign($value, $secret): string
     {
         ksort($value);
         reset($value);
@@ -94,7 +97,7 @@ class CoinPay extends AbstractPayment
      * @param $sign
      * @return bool
      */
-    public function verify($data, $sign)
+    public function verify($data, $sign): bool
     {
         $payConfig = new CoinPayConfig();
         if ($sign === self::Sign($data, $payConfig->GetSecret())) {
@@ -105,11 +108,11 @@ class CoinPay extends AbstractPayment
 
     /**
      * 异步通知
-     * @param \Slim\Http\ServerRequest $request
-     * @param \Slim\Http\Response $response
+     * @param ServerRequest $request
+     * @param Response $response
      * @param array $args
      */
-    public function notify($request, $response, $args)
+    public function notify(ServerRequest $request, Response $response, array $args): void
     {
         $raw = file_get_contents("php://input");
         file_put_contents(BASE_PATH . '/coinpay_purchase.log', $raw . "\r\n", FILE_APPEND);
@@ -140,17 +143,17 @@ class CoinPay extends AbstractPayment
         die();
     }
 
-    public function getReturnHTML($request, $response, $args)
+    public function getReturnHTML(ServerRequest $request, Response $response, array $args)
     {
         // TODO: Implement getStatus() method.
     }
 
-    public function getStatus($request, $response, $args)
+    public function getStatus(ServerRequest $request, Response $response, array $args)
     {
         // TODO: Implement getStatus() method.
     }
 
-    public static function getPurchaseHTML()
+    public static function getPurchaseHTML(): string
     {
         return '<div class="card-inner">
                         <div class="form-group pull-left">
