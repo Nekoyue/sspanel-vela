@@ -5,13 +5,13 @@ use App\Controllers\BaseController;
 use Psr\Http\Message\ResponseInterface;
 use App\Models\Node;
 use Slim\Http\{
-    Request,
+    ServerRequest,
     Response
 };
 
 class ApiController extends BaseController {
     /**
-     * @param Request   $request
+     * @param ServerRequest $request
      * @param Response  $response
      * @param array     $args
      */
@@ -23,7 +23,7 @@ class ApiController extends BaseController {
     }
 
     /**
-     * @param Request   $request
+     * @param ServerRequest $request
      * @param Response  $response
      * @param array     $args
      */
@@ -37,7 +37,7 @@ class ApiController extends BaseController {
     }
 
     /**
-     * @param Request   $request
+     * @param ServerRequest $request
      * @param Response  $response
      * @param array     $args
      */

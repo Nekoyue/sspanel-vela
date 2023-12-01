@@ -9,7 +9,7 @@ use App\Models\{
 use App\Utils\Hash;
 use App\Services\Password;
 use Slim\Http\{
-    Request,
+    ServerRequest,
     Response
 };
 
@@ -21,7 +21,7 @@ use Slim\Http\{
 class PasswordController extends BaseController
 {
     /**
-     * @param Request   $request
+     * @param ServerRequest $request
      * @param Response  $response
      * @param array     $args
      */
@@ -33,7 +33,7 @@ class PasswordController extends BaseController
     }
 
     /**
-     * @param Request   $request
+     * @param ServerRequest $request
      * @param Response  $response
      * @param array     $args
      */
@@ -59,7 +59,7 @@ class PasswordController extends BaseController
     }
 
     /**
-     * @param Request   $request
+     * @param ServerRequest $request
      * @param Response  $response
      * @param array     $args
      */
@@ -73,7 +73,7 @@ class PasswordController extends BaseController
     }
 
     /**
-     * @param Request   $request
+     * @param ServerRequest $request
      * @param Response  $response
      * @param array     $args
      */
@@ -125,7 +125,7 @@ class PasswordController extends BaseController
         } else {
             $rs['ret'] = 1;
             $rs['msg'] = '重置成功';
-            
+
             if ($_ENV['enable_forced_replacement'] == true) {
                 $user->clean_link();
             }

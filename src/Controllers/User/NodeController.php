@@ -23,7 +23,7 @@ use Psr\Http\Message\ResponseInterface;
 class NodeController extends UserController
 {
     /**
-     * @param Request   $request
+     * @param ServerRequest $request
      * @param Response  $response
      * @param array     $args
      */

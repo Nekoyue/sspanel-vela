@@ -19,7 +19,7 @@ use App\Utils\{
 use voku\helper\AntiXSS;
 use Psr\Http\Message\ResponseInterface;
 use Slim\Http\{
-    Request,
+    ServerRequest,
     Response
 };
 
@@ -59,7 +59,7 @@ class LinkController extends BaseController
     }
 
     /**
-     * @param Request   $request
+     * @param ServerRequest $request
      * @param Response  $response
      * @param array     $args
      */

@@ -10,7 +10,7 @@ use App\Models\{
 };
 use Psr\Http\Message\ResponseInterface;
 use Slim\Http\{
-    Request,
+    ServerRequest,
     Response
 };
 

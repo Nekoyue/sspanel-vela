@@ -9,7 +9,7 @@ use App\Models\{
 };
 use App\Utils\Telegram;
 use Slim\Http\{
-    Request,
+    ServerRequest,
     Response
 };
 
@@ -18,7 +18,7 @@ class AnnController extends AdminController
     /**
      * 后台公告页面
      *
-     * @param Request   $request
+     * @param ServerRequest $request
      * @param Response  $response
      * @param array     $args
      */
@@ -44,7 +44,7 @@ class AnnController extends AdminController
     /**
      * 后台公告页面 AJAX
      *
-     * @param Request   $request
+     * @param ServerRequest $request
      * @param Response  $response
      * @param array     $args
      */
@@ -83,7 +83,7 @@ class AnnController extends AdminController
     /**
      * 后台公告创建页面
      *
-     * @param Request   $request
+     * @param ServerRequest $request
      * @param Response  $response
      * @param array     $args
      */
@@ -98,7 +98,7 @@ class AnnController extends AdminController
     /**
      * 后台添加公告
      *
-     * @param Request   $request
+     * @param ServerRequest $request
      * @param Response  $response
      * @param array     $args
      */
@@ -159,7 +159,7 @@ class AnnController extends AdminController
     /**
      * 后台编辑公告页面
      *
-     * @param Request   $request
+     * @param ServerRequest $request
      * @param Response  $response
      * @param array     $args
      */
@@ -176,7 +176,7 @@ class AnnController extends AdminController
     /**
      * 后台编辑公告提交
      *
-     * @param Request   $request
+     * @param ServerRequest $request
      * @param Response  $response
      * @param array     $args
      */
@@ -202,7 +202,7 @@ class AnnController extends AdminController
     /**
      * 后台删除公告
      *
-     * @param Request   $request
+     * @param ServerRequest $request
      * @param Response  $response
      * @param array     $args
      */

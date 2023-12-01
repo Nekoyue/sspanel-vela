@@ -6,14 +6,14 @@ use App\Controllers\AdminController;
 use App\Models\GConfig;
 use Psr\Http\Message\ResponseInterface;
 use Slim\Http\{
-    Request,
+    ServerRequest,
     Response
 };
 
 class GConfigController extends AdminController
 {
     /**
-     * @param Request   $request
+     * @param ServerRequest $request
      * @param Response  $response
      * @param array     $args
      */
@@ -35,7 +35,7 @@ class GConfigController extends AdminController
     }
 
     /**
-     * @param Request   $request
+     * @param ServerRequest $request
      * @param Response  $response
      * @param array     $args
      */
@@ -49,9 +49,9 @@ class GConfigController extends AdminController
                 ->fetch('admin/config/edit.tpl')
         );
     }
-    
+
     /**
-     * @param Request   $request
+     * @param ServerRequest $request
      * @param Response  $response
      * @param array     $args
      */
@@ -80,7 +80,7 @@ class GConfigController extends AdminController
     }
 
     /**
-     * @param Request   $request
+     * @param ServerRequest $request
      * @param Response  $response
      * @param array     $args
      */

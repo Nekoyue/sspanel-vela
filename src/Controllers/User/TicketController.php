@@ -10,7 +10,7 @@ use App\Models\{
 use App\Utils\Tools;
 use voku\helper\AntiXSS;
 use Slim\Http\{
-    Request,
+    ServerRequest,
     Response
 };
 use Psr\Http\Message\ResponseInterface;
@@ -21,7 +21,7 @@ use Psr\Http\Message\ResponseInterface;
 class TicketController extends UserController
 {
     /**
-     * @param Request   $request
+     * @param ServerRequest $request
      * @param Response  $response
      * @param array     $args
      */
@@ -51,7 +51,7 @@ class TicketController extends UserController
     }
 
     /**
-     * @param Request   $request
+     * @param ServerRequest $request
      * @param Response  $response
      * @param array     $args
      */
@@ -64,7 +64,7 @@ class TicketController extends UserController
     }
 
     /**
-     * @param Request   $request
+     * @param ServerRequest $request
      * @param Response  $response
      * @param array     $args
      */
@@ -132,7 +132,7 @@ class TicketController extends UserController
     }
 
     /**
-     * @param Request   $request
+     * @param ServerRequest $request
      * @param Response  $response
      * @param array     $args
      */
@@ -239,7 +239,7 @@ class TicketController extends UserController
     }
 
     /**
-     * @param Request   $request
+     * @param ServerRequest $request
      * @param Response  $response
      * @param array     $args
      */

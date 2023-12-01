@@ -15,7 +15,7 @@ use App\Services\{
 };
 use Ozdemir\Datatables\Datatables;
 use Slim\Http\{
-    Request,
+    ServerRequest,
     Response
 };
 
@@ -27,7 +27,7 @@ class AdminController extends UserController
     /**
      * 后台首页
      *
-     * @param Request   $request
+     * @param ServerRequest $request
      * @param Response  $response
      * @param array     $args
      */
@@ -43,7 +43,7 @@ class AdminController extends UserController
     /**
      * 统计信息
      *
-     * @param Request   $request
+     * @param ServerRequest $request
      * @param Response  $response
      * @param array     $args
      */
@@ -58,7 +58,7 @@ class AdminController extends UserController
     /**
      * 后台邀请返利页面
      *
-     * @param Request   $request
+     * @param ServerRequest $request
      * @param Response  $response
      * @param array     $args
      */
@@ -89,7 +89,7 @@ class AdminController extends UserController
     /**
      * 后台邀请返利页面 AJAX
      *
-     * @param Request   $request
+     * @param ServerRequest $request
      * @param Response  $response
      * @param array     $args
      */
@@ -108,7 +108,7 @@ class AdminController extends UserController
     /**
      * 更改用户邀请者
      *
-     * @param Request   $request
+     * @param ServerRequest $request
      * @param Response  $response
      * @param array     $args
      */
@@ -143,7 +143,7 @@ class AdminController extends UserController
     /**
      * 为用户添加邀请次数
      *
-     * @param Request   $request
+     * @param ServerRequest $request
      * @param Response  $response
      * @param array     $args
      */
@@ -183,7 +183,7 @@ class AdminController extends UserController
     /**
      * 后台商品优惠码页面
      *
-     * @param Request   $request
+     * @param ServerRequest $request
      * @param Response  $response
      * @param array     $args
      */
@@ -212,7 +212,7 @@ class AdminController extends UserController
     /**
      * 后台商品优惠码页面 AJAX
      *
-     * @param Request   $request
+     * @param ServerRequest $request
      * @param Response  $response
      * @param array     $args
      */
@@ -231,7 +231,7 @@ class AdminController extends UserController
     /**
      * 添加优惠码
      *
-     * @param Request   $request
+     * @param ServerRequest $request
      * @param Response  $response
      * @param array     $args
      */

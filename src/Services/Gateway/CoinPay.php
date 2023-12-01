@@ -17,15 +17,15 @@ class CoinPay extends AbstractPayment
     private $coinPayGatewayUrl;
     private $coinPayAppId;
 
-    public static function _name() 
+    public static function _name()
     {
         return 'coinpay';
     }
 
-    public static function _enable() 
+    public static function _enable()
     {
         return self::getActiveGateway('coinpay');
-    }   
+    }
 
     public static function _readableName() {
         return "CoinPay 支持BTC、ETH、USDT等数十种数字货币";
@@ -105,7 +105,7 @@ class CoinPay extends AbstractPayment
 
     /**
      * 异步通知
-     * @param \Slim\Http\Request $request
+     * @param \Slim\Http\ServerRequest $request
      * @param \Slim\Http\Response $response
      * @param array $args
      */

@@ -12,7 +12,7 @@ use App\Utils\{
 use App\Services\Config;
 use Exception;
 use Slim\Http\{
-    Request,
+    ServerRequest,
     Response
 };
 use Psr\Http\Message\ResponseInterface;
@@ -22,7 +22,7 @@ class NodeController extends AdminController
     /**
      * 后台节点页面
      *
-     * @param Request   $request
+     * @param ServerRequest $request
      * @param Response  $response
      * @param array     $args
      */
@@ -62,7 +62,7 @@ class NodeController extends AdminController
     /**
      * 后台创建节点页面
      *
-     * @param Request   $request
+     * @param ServerRequest $request
      * @param Response  $response
      * @param array     $args
      */
@@ -77,7 +77,7 @@ class NodeController extends AdminController
     /**
      * 后台添加节点
      *
-     * @param Request   $request
+     * @param ServerRequest $request
      * @param Response  $response
      * @param array     $args
      */
@@ -157,7 +157,7 @@ class NodeController extends AdminController
     /**
      * 后台编辑指定节点页面
      *
-     * @param Request   $request
+     * @param ServerRequest $request
      * @param Response  $response
      * @param array     $args
      */
@@ -175,7 +175,7 @@ class NodeController extends AdminController
     /**
      * 后台更新指定节点内容
      *
-     * @param Request   $request
+     * @param ServerRequest $request
      * @param Response  $response
      * @param array     $args
      */
@@ -250,7 +250,7 @@ class NodeController extends AdminController
     /**
      * 后台删除指定节点
      *
-     * @param Request   $request
+     * @param ServerRequest $request
      * @param Response  $response
      * @param array     $args
      */
@@ -292,7 +292,7 @@ class NodeController extends AdminController
     /**
      * 后台节点页面 AJAX
      *
-     * @param Request   $request
+     * @param ServerRequest $request
      * @param Response  $response
      * @param array     $args
      */

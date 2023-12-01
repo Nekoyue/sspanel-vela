@@ -61,11 +61,12 @@ class Mail
      * @param $template
      * @param $ary
      * @param $files
-     * @return bool|void
+     * @return void
+     * @throws \Exception
      */
-    public static function send($to, $subject, $template, $ary = [], $files = [])
+    public static function send($to, $subject, $template, $ary = [], $files = []): void
     {
         $text = self::genHtml($template, $ary);
-        return self::getClient()->send($to, $subject, $text, $files);
+        self::getClient()->send($to, $subject, $text, $files);
     }
 }

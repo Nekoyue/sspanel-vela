@@ -7,14 +7,14 @@ use App\Models\DetectLog;
 use App\Models\DetectRule;
 use App\Utils\Telegram;
 use Slim\Http\{
-    Request,
+    ServerRequest,
     Response
 };
 
 class DetectController extends AdminController
 {
     /**
-     * @param Request   $request
+     * @param ServerRequest $request
      * @param Response  $response
      * @param array     $args
      */
@@ -38,7 +38,7 @@ class DetectController extends AdminController
     }
 
     /**
-     * @param Request   $request
+     * @param ServerRequest $request
      * @param Response  $response
      * @param array     $args
      */
@@ -77,7 +77,7 @@ class DetectController extends AdminController
     }
 
     /**
-     * @param Request   $request
+     * @param ServerRequest $request
      * @param Response  $response
      * @param array     $args
      */
@@ -90,7 +90,7 @@ class DetectController extends AdminController
     }
 
     /**
-     * @param Request   $request
+     * @param ServerRequest $request
      * @param Response  $response
      * @param array     $args
      */
@@ -117,7 +117,7 @@ class DetectController extends AdminController
     }
 
     /**
-     * @param Request   $request
+     * @param ServerRequest $request
      * @param Response  $response
      * @param array     $args
      */
@@ -133,7 +133,7 @@ class DetectController extends AdminController
     }
 
     /**
-     * @param Request   $request
+     * @param ServerRequest $request
      * @param Response  $response
      * @param array     $args
      */
@@ -161,7 +161,7 @@ class DetectController extends AdminController
     }
 
     /**
-     * @param Request   $request
+     * @param ServerRequest $request
      * @param Response  $response
      * @param array     $args
      */
@@ -182,7 +182,7 @@ class DetectController extends AdminController
     }
 
     /**
-     * @param Request   $request
+     * @param ServerRequest $request
      * @param Response  $response
      * @param array     $args
      */
@@ -211,7 +211,7 @@ class DetectController extends AdminController
     }
 
     /**
-     * @param Request   $request
+     * @param ServerRequest $request
      * @param Response  $response
      * @param array     $args
      */

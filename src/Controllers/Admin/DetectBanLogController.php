@@ -6,14 +6,14 @@ use App\Controllers\AdminController;
 use App\Models\DetectBanLog;
 use Psr\Http\Message\ResponseInterface;
 use Slim\Http\{
-    Request,
+    ServerRequest,
     Response
 };
 
 class DetectBanLogController extends AdminController
 {
     /**
-     * @param Request   $request
+     * @param ServerRequest $request
      * @param Response  $response
      * @param array     $args
      */
@@ -41,7 +41,7 @@ class DetectBanLogController extends AdminController
     }
 
     /**
-     * @param Request   $request
+     * @param ServerRequest $request
      * @param Response  $response
      * @param array     $args
      */

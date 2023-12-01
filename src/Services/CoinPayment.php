@@ -15,12 +15,12 @@ class CoinPayment
 
     public static function notify($request, $response, $args)
     {
-        return self::getClient()->notify($request, $response, $args);
+        self::getClient()->notify($request, $response, $args);
     }
 
     public static function returnHTML($request, $response, $args)
     {
-        return self::getClient()->getReturnHTML($request, $response, $args);
+        self::getClient()->getReturnHTML($request, $response, $args);
     }
 
     public static function purchaseHTML()
@@ -35,7 +35,7 @@ class CoinPayment
 
     public static function getStatus($request, $response, $args)
     {
-        return self::getClient()->getStatus($request, $response, $args);
+        self::getClient()->getStatus($request, $response, $args);
     }
 
     public static function purchase($request, $response, $args)

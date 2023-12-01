@@ -9,7 +9,7 @@ use App\Models\{
     Bought
 };
 use Slim\Http\{
-    Request,
+    ServerRequest,
     Response
 };
 use Psr\Http\Message\ResponseInterface;
@@ -17,7 +17,7 @@ use Psr\Http\Message\ResponseInterface;
 class BoughtLogController extends AdminController
 {
     /**
-     * @param Request   $request
+     * @param ServerRequest $request
      * @param Response  $response
      * @param array     $args
      */
@@ -50,7 +50,7 @@ class BoughtLogController extends AdminController
     }
 
     /**
-     * @param Request   $request
+     * @param ServerRequest $request
      * @param Response  $response
      * @param array     $args
      */
@@ -107,7 +107,7 @@ class BoughtLogController extends AdminController
     }
 
     /**
-     * @param Request   $request
+     * @param ServerRequest $request
      * @param Response  $response
      * @param array     $args
      */
@@ -128,7 +128,7 @@ class BoughtLogController extends AdminController
     }
 
     /**
-     * @param Request   $request
+     * @param ServerRequest $request
      * @param Response  $response
      * @param array     $args
      */

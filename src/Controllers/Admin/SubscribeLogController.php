@@ -7,7 +7,7 @@ use App\Models\UserSubscribeLog;
 use App\Utils\QQWry;
 use Psr\Http\Message\ResponseInterface;
 use Slim\Http\{
-    Request,
+    ServerRequest,
     Response
 };
 
@@ -16,7 +16,7 @@ class SubscribeLogController extends AdminController
     /**
      * 后台订阅记录页面
      *
-     * @param Request   $request
+     * @param ServerRequest $request
      * @param Response  $response
      * @param array     $args
      */
@@ -45,7 +45,7 @@ class SubscribeLogController extends AdminController
     /**
      * 后台订阅记录页面 AJAX
      *
-     * @param Request   $request
+     * @param ServerRequest $request
      * @param Response  $response
      * @param array     $args
      */

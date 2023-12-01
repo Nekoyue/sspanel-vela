@@ -10,7 +10,7 @@ use App\Models\{
 use App\Utils\Tools;
 use voku\helper\AntiXSS;
 use Slim\Http\{
-    Request,
+    ServerRequest,
     Response
 };
 
@@ -19,7 +19,7 @@ class TicketController extends AdminController
     /**
      * 后台工单页面
      *
-     * @param Request   $request
+     * @param ServerRequest $request
      * @param Response  $response
      * @param array     $args
      */
@@ -49,7 +49,7 @@ class TicketController extends AdminController
     /**
      * 後臺創建新工單
      *
-     * @param Request   $request
+     * @param ServerRequest $request
      * @param Response  $response
      * @param array     $args
      */
@@ -100,7 +100,7 @@ class TicketController extends AdminController
     /**
      * 后台 更新工单内容
      *
-     * @param Request   $request
+     * @param ServerRequest $request
      * @param Response  $response
      * @param array     $args
      */
@@ -152,7 +152,7 @@ class TicketController extends AdminController
     /**
      * 后台 查看指定工单
      *
-     * @param Request   $request
+     * @param ServerRequest $request
      * @param Response  $response
      * @param array     $args
      */
@@ -181,7 +181,7 @@ class TicketController extends AdminController
     /**
      * 后台工单页面 AJAX
      *
-     * @param Request   $request
+     * @param ServerRequest $request
      * @param Response  $response
      * @param array     $args
      */

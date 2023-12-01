@@ -24,14 +24,14 @@ use App\Utils\{
 use Exception;
 use Ramsey\Uuid\Uuid;
 use Slim\Http\{
-    Request,
+    ServerRequest,
     Response
 };
 
 class UserController extends AdminController
 {
     /**
-     * @param Request   $request
+     * @param ServerRequest $request
      * @param Response  $response
      * @param array     $args
      */
@@ -80,7 +80,7 @@ class UserController extends AdminController
     }
 
     /**
-     * @param Request   $request
+     * @param ServerRequest $request
      * @param Response  $response
      * @param array     $args
      */
@@ -187,7 +187,7 @@ class UserController extends AdminController
     }
 
     /**
-     * @param Request   $request
+     * @param ServerRequest $request
      * @param Response  $response
      * @param array     $args
      */
@@ -202,7 +202,7 @@ class UserController extends AdminController
     }
 
     /**
-     * @param Request   $request
+     * @param ServerRequest $request
      * @param Response  $response
      * @param array     $args
      */
@@ -284,7 +284,7 @@ class UserController extends AdminController
     }
 
     /**
-     * @param Request   $request
+     * @param ServerRequest $request
      * @param Response  $response
      * @param array     $args
      */
@@ -304,7 +304,7 @@ class UserController extends AdminController
     }
 
     /**
-     * @param Request   $request
+     * @param ServerRequest $request
      * @param Response  $response
      * @param array     $args
      */
@@ -344,7 +344,7 @@ class UserController extends AdminController
     }
 
     /**
-     * @param Request   $request
+     * @param ServerRequest $request
      * @param Response  $response
      * @param array     $args
      */

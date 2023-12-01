@@ -45,7 +45,7 @@ use App\Utils\{
 use voku\helper\AntiXSS;
 use Ramsey\Uuid\Uuid;
 use Slim\Http\{
-    Request,
+    ServerRequest,
     Response
 };
 
@@ -82,7 +82,7 @@ class UserController extends BaseController
     }
 
     /**
-     * @param Request   $request
+     * @param ServerRequest $request
      * @param Response  $response
      * @param array     $args
      */
@@ -142,7 +142,7 @@ class UserController extends BaseController
     }
 
     /**
-     * @param Request   $request
+     * @param ServerRequest $request
      * @param Response  $response
      * @param array     $args
      */
@@ -168,7 +168,7 @@ class UserController extends BaseController
     }
 
     /**
-     * @param Request   $request
+     * @param ServerRequest $request
      * @param Response  $response
      * @param array     $args
      */
@@ -224,7 +224,7 @@ class UserController extends BaseController
     }
 
     /**
-     * @param Request   $request
+     * @param ServerRequest $request
      * @param Response  $response
      * @param array     $args
      */
@@ -246,7 +246,7 @@ class UserController extends BaseController
     }
 
     /**
-     * @param Request   $request
+     * @param ServerRequest $request
      * @param Response  $response
      * @param array     $args
      */
@@ -328,7 +328,7 @@ class UserController extends BaseController
     }
 
     /**
-     * @param Request   $request
+     * @param ServerRequest $request
      * @param Response  $response
      * @param array     $args
      */
@@ -357,7 +357,7 @@ class UserController extends BaseController
     }
 
     /**
-     * @param Request   $request
+     * @param ServerRequest $request
      * @param Response  $response
      * @param array     $args
      */
@@ -380,7 +380,7 @@ class UserController extends BaseController
     }
 
     /**
-     * @param Request   $request
+     * @param ServerRequest $request
      * @param Response  $response
      * @param array     $args
      */
@@ -394,7 +394,7 @@ class UserController extends BaseController
     }
 
     /**
-     * @param Request   $request
+     * @param ServerRequest $request
      * @param Response  $response
      * @param array     $args
      */
@@ -408,7 +408,7 @@ class UserController extends BaseController
     }
 
     /**
-     * @param Request   $request
+     * @param ServerRequest $request
      * @param Response  $response
      * @param array     $args
      */
@@ -423,7 +423,7 @@ class UserController extends BaseController
     }
 
     /**
-     * @param Request   $request
+     * @param ServerRequest $request
      * @param Response  $response
      * @param array     $args
      */
@@ -477,7 +477,7 @@ class UserController extends BaseController
     }
 
     /**
-     * @param Request   $request
+     * @param ServerRequest $request
      * @param Response  $response
      * @param array     $args
      */
@@ -500,7 +500,7 @@ class UserController extends BaseController
     }
 
     /**
-     * @param Request   $request
+     * @param ServerRequest $request
      * @param Response  $response
      * @param array     $args
      */
@@ -570,7 +570,7 @@ class UserController extends BaseController
     }
 
     /**
-     * @param Request   $request
+     * @param ServerRequest $request
      * @param Response  $response
      * @param array     $args
      */
@@ -604,7 +604,7 @@ class UserController extends BaseController
     }
 
     /**
-     * @param Request   $request
+     * @param ServerRequest $request
      * @param Response  $response
      * @param array     $args
      */
@@ -641,7 +641,7 @@ class UserController extends BaseController
     }
 
     /**
-     * @param Request   $request
+     * @param ServerRequest $request
      * @param Response  $response
      * @param array     $args
      */
@@ -681,7 +681,7 @@ class UserController extends BaseController
     }
 
     /**
-     * @param Request   $request
+     * @param ServerRequest $request
      * @param Response  $response
      * @param array     $args
      */
@@ -726,7 +726,7 @@ class UserController extends BaseController
     }
 
     /**
-     * @param Request   $request
+     * @param ServerRequest $request
      * @param Response  $response
      * @param array     $args
      */
@@ -736,7 +736,7 @@ class UserController extends BaseController
     }
 
     /**
-     * @param Request   $request
+     * @param ServerRequest $request
      * @param Response  $response
      * @param array     $args
      */
@@ -776,7 +776,7 @@ class UserController extends BaseController
     }
 
     /**
-     * @param Request   $request
+     * @param ServerRequest $request
      * @param Response  $response
      * @param array     $args
      */
@@ -836,7 +836,7 @@ class UserController extends BaseController
     }
 
     /**
-     * @param Request   $request
+     * @param ServerRequest $request
      * @param Response  $response
      * @param array     $args
      */
@@ -854,7 +854,7 @@ class UserController extends BaseController
     }
 
     /**
-     * @param Request   $request
+     * @param ServerRequest $request
      * @param Response  $response
      * @param array     $args
      */
@@ -871,7 +871,7 @@ class UserController extends BaseController
     }
 
     /**
-     * @param Request   $request
+     * @param ServerRequest $request
      * @param Response  $response
      * @param array     $args
      */
@@ -895,7 +895,7 @@ class UserController extends BaseController
     }
 
     /**
-     * @param Request   $request
+     * @param ServerRequest $request
      * @param Response  $response
      * @param array     $args
      */
@@ -906,7 +906,7 @@ class UserController extends BaseController
     }
 
     /**
-     * @param Request   $request
+     * @param ServerRequest $request
      * @param Response  $response
      * @param array     $args
      */
@@ -973,7 +973,7 @@ class UserController extends BaseController
     }
 
     /**
-     * @param Request   $request
+     * @param ServerRequest $request
      * @param Response  $response
      * @param array     $args
      */
@@ -1033,7 +1033,7 @@ class UserController extends BaseController
     }
 
     /**
-     * @param Request   $request
+     * @param ServerRequest $request
      * @param Response  $response
      * @param array     $args
      */
@@ -1156,7 +1156,7 @@ class UserController extends BaseController
     }
 
     /**
-     * @param Request   $request
+     * @param ServerRequest $request
      * @param Response  $response
      * @param array     $args
      */
@@ -1183,7 +1183,7 @@ class UserController extends BaseController
     }
 
     /**
-     * @param Request   $request
+     * @param ServerRequest $request
      * @param Response  $response
      * @param array     $args
      */
@@ -1213,7 +1213,7 @@ class UserController extends BaseController
     }
 
     /**
-     * @param Request   $request
+     * @param ServerRequest $request
      * @param Response  $response
      * @param array     $args
      */
@@ -1256,7 +1256,7 @@ class UserController extends BaseController
 
 
     /**
-     * @param Request   $request
+     * @param ServerRequest $request
      * @param Response  $response
      * @param array     $args
      */
@@ -1281,7 +1281,7 @@ class UserController extends BaseController
     }
 
     /**
-     * @param Request   $request
+     * @param ServerRequest $request
      * @param Response  $response
      * @param array     $args
      */
@@ -1307,7 +1307,7 @@ class UserController extends BaseController
     }
 
     /**
-     * @param Request   $request
+     * @param ServerRequest $request
      * @param Response  $response
      * @param array     $args
      */
@@ -1344,7 +1344,7 @@ class UserController extends BaseController
     }
 
     /**
-     * @param Request   $request
+     * @param ServerRequest $request
      * @param Response  $response
      * @param array     $args
      */
@@ -1358,7 +1358,7 @@ class UserController extends BaseController
     }
 
     /**
-     * @param Request   $request
+     * @param ServerRequest $request
      * @param Response  $response
      * @param array     $args
      */
@@ -1369,7 +1369,7 @@ class UserController extends BaseController
     }
 
     /**
-     * @param Request   $request
+     * @param ServerRequest $request
      * @param Response  $response
      * @param array     $args
      */
@@ -1417,7 +1417,7 @@ class UserController extends BaseController
     }
 
     /**
-     * @param Request   $request
+     * @param ServerRequest $request
      * @param Response  $response
      * @param array     $args
      */
@@ -1427,7 +1427,7 @@ class UserController extends BaseController
     }
 
     /**
-     * @param Request   $request
+     * @param ServerRequest $request
      * @param Response  $response
      * @param array     $args
      */
@@ -1459,7 +1459,7 @@ class UserController extends BaseController
     }
 
     /**
-     * @param Request   $request
+     * @param ServerRequest $request
      * @param Response  $response
      * @param array     $args
      */
@@ -1483,7 +1483,7 @@ class UserController extends BaseController
     }
 
     /**
-     * @param Request   $request
+     * @param ServerRequest $request
      * @param Response  $response
      * @param array     $args
      */
@@ -1524,7 +1524,7 @@ class UserController extends BaseController
     }
 
     /**
-     * @param Request   $request
+     * @param ServerRequest $request
      * @param Response  $response
      * @param array     $args
      */
@@ -1534,7 +1534,7 @@ class UserController extends BaseController
     }
 
     /**
-     * @param Request   $request
+     * @param ServerRequest $request
      * @param Response  $response
      * @param array     $args
      */
@@ -1546,7 +1546,7 @@ class UserController extends BaseController
     }
 
     /**
-     * @param Request   $request
+     * @param ServerRequest $request
      * @param Response  $response
      * @param array     $args
      */
@@ -1558,7 +1558,7 @@ class UserController extends BaseController
     }
 
     /**
-     * @param Request   $request
+     * @param ServerRequest $request
      * @param Response  $response
      * @param array     $args
      */
@@ -1573,7 +1573,7 @@ class UserController extends BaseController
     }
 
     /**
-     * @param Request   $request
+     * @param ServerRequest $request
      * @param Response  $response
      * @param array     $args
      */
@@ -1620,7 +1620,7 @@ class UserController extends BaseController
     /**
      * 订阅记录
      *
-     * @param Request  $request
+     * @param ServerRequest $request
      * @param Response $response
      * @param array    $args
      */
@@ -1645,7 +1645,7 @@ class UserController extends BaseController
     /**
      * 获取包含订阅信息的客户端压缩档，PHP 需安装 zip 扩展
      *
-     * @param Request  $request
+     * @param ServerRequest $request
      * @param Response $response
      * @param array    $args
      */
@@ -1687,7 +1687,7 @@ class UserController extends BaseController
     /**
      * 从使用同数据库的其他面板下载客户端[内置节点]
      *
-     * @param Request  $request
+     * @param ServerRequest $request
      * @param Response $response
      * @param array    $args
      */

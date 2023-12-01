@@ -7,7 +7,7 @@ use App\Models\{
     Setting
 };
 use Slim\Http\{
-    Request,
+    ServerRequest,
     Response
 };
 use App\Services\{

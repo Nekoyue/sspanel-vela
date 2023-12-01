@@ -25,7 +25,7 @@ use voku\helper\AntiXSS;
 use Exception;
 use Ramsey\Uuid\Uuid;
 use Slim\Http\{
-    Request,
+    ServerRequest,
     Response
 };
 
@@ -35,9 +35,10 @@ use Slim\Http\{
 class AuthController extends BaseController
 {
     /**
-     * @param Request   $request
-     * @param Response  $response
-     * @param array     $args
+     * @param ServerRequest $request
+     * @param Response $response
+     * @param array $args
+     * @throws \SmartyException
      */
     public function login($request, $response, $args)
     {
@@ -70,7 +71,7 @@ class AuthController extends BaseController
     }
 
     /**
-     * @param Request   $request
+     * @param ServerRequest $request
      * @param Response  $response
      * @param array     $args
      */
@@ -85,7 +86,7 @@ class AuthController extends BaseController
     }
 
     /**
-     * @param Request   $request
+     * @param ServerRequest $request
      * @param Response  $response
      * @param array     $args
      */
@@ -151,7 +152,7 @@ class AuthController extends BaseController
     }
 
     /**
-     * @param Request   $request
+     * @param ServerRequest $request
      * @param Response  $response
      * @param array     $args
      */
@@ -181,7 +182,7 @@ class AuthController extends BaseController
     }
 
     /**
-     * @param Request   $request
+     * @param ServerRequest $request
      * @param Response  $response
      * @param array     $args
      */
@@ -225,7 +226,7 @@ class AuthController extends BaseController
     }
 
     /**
-     * @param Request   $request
+     * @param ServerRequest $request
      * @param Response  $response
      * @param array     $args
      */
@@ -302,7 +303,7 @@ class AuthController extends BaseController
     }
 
     /**
-     * @param Request   $request
+     * @param ServerRequest $request
      * @param Response  $response
      * @param array     $args
      */
@@ -420,7 +421,7 @@ class AuthController extends BaseController
     }
 
     /**
-     * @param Request   $request
+     * @param ServerRequest $request
      * @param Response  $response
      * @param array     $args
      */
@@ -524,7 +525,7 @@ class AuthController extends BaseController
     }
 
     /**
-     * @param Request   $request
+     * @param ServerRequest $request
      * @param Response  $response
      * @param array     $args
      */
@@ -535,7 +536,7 @@ class AuthController extends BaseController
     }
 
     /**
-     * @param Request   $request
+     * @param ServerRequest $request
      * @param Response  $response
      * @param array     $args
      */
@@ -560,7 +561,7 @@ class AuthController extends BaseController
     }
 
     /**
-     * @param Request   $request
+     * @param ServerRequest $request
      * @param Response  $response
      * @param array     $args
      */
@@ -601,7 +602,7 @@ class AuthController extends BaseController
     }
 
     /**
-     * @param Request   $request
+     * @param ServerRequest $request
      * @param Response  $response
      * @param array     $args
      */

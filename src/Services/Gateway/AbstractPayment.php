@@ -14,19 +14,19 @@ use App\Models\Paylist;
 use App\Models\Payback;
 use App\Models\Setting;
 use App\Utils\Telegram;
-use Slim\Http\{Request, Response};
+use Slim\Http\{ServerRequest, Response};
 
 abstract class AbstractPayment
 {
     /**
-     * @param Request   $request
+     * @param ServerRequest $request
      * @param Response  $response
      * @param array     $args
      */
     abstract public function purchase($request, $response, $args);
 
     /**
-     * @param Request   $request
+     * @param ServerRequest $request
      * @param Response  $response
      * @param array     $args
      */
@@ -39,7 +39,7 @@ abstract class AbstractPayment
 
     /**
      * 是否启用支付网关
-     * 
+     *
      * TODO: 传入目前用户信, etc..
      */
     abstract public static function _enable();
@@ -50,16 +50,16 @@ abstract class AbstractPayment
     public static function _readableName() {
         return (get_called_class())::_name() . ' 充值';
     }
-    
+
     /**
-     * @param Request   $request
+     * @param ServerRequest $request
      * @param Response  $response
      * @param array     $args
      */
     abstract public function getReturnHTML($request, $response, $args);
 
     /**
-     * @param Request   $request
+     * @param ServerRequest $request
      * @param Response  $response
      * @param array     $args
      */

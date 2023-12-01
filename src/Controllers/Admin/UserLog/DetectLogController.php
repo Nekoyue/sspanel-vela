@@ -8,7 +8,7 @@ use App\Models\{
     DetectLog
 };
 use Slim\Http\{
-    Request,
+    ServerRequest,
     Response
 };
 use Psr\Http\Message\ResponseInterface;
@@ -16,7 +16,7 @@ use Psr\Http\Message\ResponseInterface;
 class DetectLogController extends AdminController
 {
     /**
-     * @param Request   $request
+     * @param ServerRequest $request
      * @param Response  $response
      * @param array     $args
      */
@@ -47,7 +47,7 @@ class DetectLogController extends AdminController
     }
 
     /**
-     * @param Request   $request
+     * @param ServerRequest $request
      * @param Response  $response
      * @param array     $args
      */

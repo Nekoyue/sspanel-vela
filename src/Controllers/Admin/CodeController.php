@@ -9,7 +9,7 @@ use App\Utils\Tools;
 use App\Services\Auth;
 use App\Services\Mail;
 use Slim\Http\{
-    Request,
+    ServerRequest,
     Response
 };
 
@@ -18,7 +18,7 @@ class CodeController extends AdminController
     /**
      * 后台充值码及充值记录页面
      *
-     * @param Request   $request
+     * @param ServerRequest $request
      * @param Response  $response
      * @param array     $args
      */
@@ -44,7 +44,7 @@ class CodeController extends AdminController
     }
 
     /**
-     * @param Request   $request
+     * @param ServerRequest $request
      * @param Response  $response
      * @param array     $args
      */
@@ -85,7 +85,7 @@ class CodeController extends AdminController
     }
 
     /**
-     * @param Request   $request
+     * @param ServerRequest $request
      * @param Response  $response
      * @param array     $args
      */
@@ -98,7 +98,7 @@ class CodeController extends AdminController
     }
 
     /**
-     * @param Request   $request
+     * @param ServerRequest $request
      * @param Response  $response
      * @param array     $args
      */
@@ -111,7 +111,7 @@ class CodeController extends AdminController
     }
 
     /**
-     * @param Request   $request
+     * @param ServerRequest $request
      * @param Response  $response
      * @param array     $args
      */
@@ -164,14 +164,14 @@ class CodeController extends AdminController
         *    );
         *}
         */
-        
+
         $rs['ret'] = 1;
         $rs['msg'] = '充值码添加成功';
         return $response->withJson($rs);
     }
 
     /**
-     * @param Request   $request
+     * @param ServerRequest $request
      * @param Response  $response
      * @param array     $args
      */

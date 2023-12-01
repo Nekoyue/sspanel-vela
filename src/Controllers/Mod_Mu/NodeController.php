@@ -2,7 +2,7 @@
 namespace App\Controllers\Mod_Mu;
 
 use Slim\Http\{
-    Request,
+    ServerRequest,
     Response
 };
 use App\Models\{
@@ -18,7 +18,7 @@ use Psr\Http\Message\ResponseInterface;
 class NodeController extends BaseController
 {
     /**
-     * @param Request   $request
+     * @param ServerRequest $request
      * @param Response  $response
      * @param array     $args
      */
@@ -38,7 +38,7 @@ class NodeController extends BaseController
             $report->save();
             die('ok');
         } */
-        
+
         $report = new StreamMedia;
         $report->node_id = $node_id;
         $report->result = json_encode($result);
@@ -46,9 +46,9 @@ class NodeController extends BaseController
         $report->save();
         die('ok');
     }
-    
+
     /**
-     * @param Request   $request
+     * @param ServerRequest $request
      * @param Response  $response
      * @param array     $args
      */
@@ -81,7 +81,7 @@ class NodeController extends BaseController
     }
 
     /**
-     * @param Request   $request
+     * @param ServerRequest $request
      * @param Response  $response
      * @param array     $args
      */
@@ -133,7 +133,7 @@ class NodeController extends BaseController
     }
 
     /**
-     * @param Request   $request
+     * @param ServerRequest $request
      * @param Response  $response
      * @param array     $args
      */
@@ -163,7 +163,7 @@ class NodeController extends BaseController
     }
 
     /**
-     * @param Request   $request
+     * @param ServerRequest $request
      * @param Response  $response
      * @param array     $args
      */

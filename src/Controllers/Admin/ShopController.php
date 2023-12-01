@@ -8,7 +8,7 @@ use App\Models\{
     Bought
 };
 use Slim\Http\{
-    Request,
+    ServerRequest,
     Response
 };
 
@@ -17,7 +17,7 @@ class ShopController extends AdminController
     /**
      * 后台商品页面
      *
-     * @param Request   $request
+     * @param ServerRequest $request
      * @param Response  $response
      * @param array     $args
      */
@@ -49,7 +49,7 @@ class ShopController extends AdminController
     /**
      * 后台创建新商品页面
      *
-     * @param Request   $request
+     * @param ServerRequest $request
      * @param Response  $response
      * @param array     $args
      */
@@ -64,7 +64,7 @@ class ShopController extends AdminController
     /**
      * 后台添加新商品
      *
-     * @param Request   $request
+     * @param ServerRequest $request
      * @param Response  $response
      * @param array     $args
      */
@@ -131,7 +131,7 @@ class ShopController extends AdminController
     /**
      * 后台编辑指定商品
      *
-     * @param Request   $request
+     * @param ServerRequest $request
      * @param Response  $response
      * @param array     $args
      */
@@ -149,7 +149,7 @@ class ShopController extends AdminController
     /**
      * 后台更新指定商品内容
      *
-     * @param Request   $request
+     * @param ServerRequest $request
      * @param Response  $response
      * @param array     $args
      */
@@ -225,7 +225,7 @@ class ShopController extends AdminController
     /**
      * 后台下架指定商品
      *
-     * @param Request   $request
+     * @param ServerRequest $request
      * @param Response  $response
      * @param array     $args
      */
@@ -254,7 +254,7 @@ class ShopController extends AdminController
     /**
      * 后台购买记录页面
      *
-     * @param Request   $request
+     * @param ServerRequest $request
      * @param Response  $response
      * @param array     $args
      */
@@ -286,7 +286,7 @@ class ShopController extends AdminController
     /**
      * 后台退订指定购买记录的自动续费
      *
-     * @param Request   $request
+     * @param ServerRequest $request
      * @param Response  $response
      * @param array     $args
      */
@@ -310,7 +310,7 @@ class ShopController extends AdminController
     /**
      * 后台商品页面 AJAX
      *
-     * @param Request   $request
+     * @param ServerRequest $request
      * @param Response  $response
      * @param array     $args
      */
@@ -354,7 +354,7 @@ class ShopController extends AdminController
     /**
      * 后台购买记录 AJAX
      *
-     * @param Request   $request
+     * @param ServerRequest $request
      * @param Response  $response
      * @param array     $args
      */

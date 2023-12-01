@@ -12,7 +12,7 @@ use App\Models\{
 };
 use App\Utils\Tools;
 use Slim\Http\{
-    Request,
+    ServerRequest,
     Response
 };
 use Psr\Http\Message\ResponseInterface;
@@ -22,7 +22,7 @@ class UserController extends BaseController
     /**
      * User List
      *
-     * @param \Slim\Http\Request    $request
+     * @param \Slim\Http\ServerRequest $request
      * @param \Slim\Http\Response   $response
      * @param array                 $args
      *
@@ -132,7 +132,7 @@ class UserController extends BaseController
     }
 
     /**
-     * @param Request   $request
+     * @param ServerRequest $request
      * @param Response  $response
      * @param array     $args
      */
@@ -197,7 +197,7 @@ class UserController extends BaseController
     }
 
     /**
-     * @param Request   $request
+     * @param ServerRequest $request
      * @param Response  $response
      * @param array     $args
      */
@@ -242,7 +242,7 @@ class UserController extends BaseController
     }
 
     /**
-     * @param Request   $request
+     * @param ServerRequest $request
      * @param Response  $response
      * @param array     $args
      */

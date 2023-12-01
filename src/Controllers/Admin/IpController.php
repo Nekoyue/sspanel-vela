@@ -14,7 +14,7 @@ use App\Utils\{
     Tools
 };
 use Slim\Http\{
-    Request,
+    ServerRequest,
     Response
 };
 
@@ -23,7 +23,7 @@ class IpController extends AdminController
     /**
      * 后台登录记录页面
      *
-     * @param Request   $request
+     * @param ServerRequest $request
      * @param Response  $response
      * @param array     $args
      */
@@ -50,7 +50,7 @@ class IpController extends AdminController
     /**
      * 后台登录记录页面 AJAX
      *
-     * @param Request   $request
+     * @param ServerRequest $request
      * @param Response  $response
      * @param array     $args
      */
@@ -100,7 +100,7 @@ class IpController extends AdminController
     /**
      * 后台在线 IP 页面
      *
-     * @param Request   $request
+     * @param ServerRequest $request
      * @param Response  $response
      * @param array     $args
      */
@@ -129,7 +129,7 @@ class IpController extends AdminController
     /**
      * 后台在线 IP 页面 AJAX
      *
-     * @param Request   $request
+     * @param ServerRequest $request
      * @param Response  $response
      * @param array     $args
      */
@@ -183,7 +183,7 @@ class IpController extends AdminController
     /**
      * 节点被封IP
      *
-     * @param Request   $request
+     * @param ServerRequest $request
      * @param Response  $response
      * @param array     $args
      */
@@ -208,7 +208,7 @@ class IpController extends AdminController
     /**
      * 节点被封IP AJAX
      *
-     * @param Request   $request
+     * @param ServerRequest $request
      * @param Response  $response
      * @param array     $args
      */
@@ -252,7 +252,7 @@ class IpController extends AdminController
     /**
      * 解封IP
      *
-     * @param Request   $request
+     * @param ServerRequest $request
      * @param Response  $response
      * @param array     $args
      */
@@ -275,7 +275,7 @@ class IpController extends AdminController
     /**
      * 解封IP记录
      *
-     * @param Request   $request
+     * @param ServerRequest $request
      * @param Response  $response
      * @param array     $args
      */
@@ -301,7 +301,7 @@ class IpController extends AdminController
     /**
      * 解封IP记录 AJAX
      *
-     * @param Request   $request
+     * @param ServerRequest $request
      * @param Response  $response
      * @param array     $args
      */
